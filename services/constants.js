@@ -1,0 +1,14 @@
+export const LOGIN_USER = "login_user";
+export const LOGOUT_USER = "logout_user";
+export const REGISTRATION = "registration";
+export const VERIFICATION = "verification";
+export const FORGOTPASSWORD = "forgotpassword";
+export const RESETPASSWORD = "resetPassword";
+export const GET_STAMP = "getStamp";
+export const PLAN = "plan";
+export const SUBCRIBTION = "subcribtion";
+export const GET_TRANS = "get_trans";
+export const GET_SUBSCRIPTION = "get_subscription";
+export const GET_USERS = "get_users";
+export const DASHBOARD = "dashboard";
+export const DASHBOARD_STAMP = "dashboard_stamp";
