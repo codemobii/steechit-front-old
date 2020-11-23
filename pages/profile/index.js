@@ -6,6 +6,7 @@ import store from "../../services/store";
 import ProfileLoader from "../../components/profile_loader";
 import EmptyList from "../../components/empty_list";
 import ProfileLayout from "../../components/profile_layout";
+import { useRouter } from "next/router";
 
 export default function Orders() {
   // Getting auth state and user data for structuring the navbar
@@ -14,10 +15,15 @@ export default function Orders() {
   const token = store.getState().auth.token;
   const id = auth._id;
 
+  const router = useRouter();
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!token) {
+      router.push("/?auth=true");
+    }
     const getUserItems = async () => {
       console.log(orders);
       await Axios({

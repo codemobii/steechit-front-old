@@ -7,6 +7,7 @@ import ProfileLoader from "../../components/profile_loader";
 import EmptyList from "../../components/empty_list";
 import ProfileLayout from "../../components/profile_layout";
 import FundWallet from "../../components/fund_wallet";
+import { useRouter } from "next/router";
 
 export default function Wallet() {
   // Getting auth state and user data for structuring the navbar
@@ -15,12 +16,17 @@ export default function Wallet() {
   const token = store.getState().auth.token;
   const id = auth._id;
 
+  const router = useRouter();
+
   const [orders, setOrders] = useState([]);
   const [wallet, setWallet] = useState("");
   const [loading, setLoading] = useState(true);
   const [showFunder, setShowFunder] = useState(false);
 
   useEffect(() => {
+    if (!token) {
+      router.push("/?auth=true");
+    }
     const getUserItems = async () => {
       await Axios({
         headers: {

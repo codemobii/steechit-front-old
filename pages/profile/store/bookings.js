@@ -7,6 +7,7 @@ import ProfileLoader from "../../../components/profile_loader";
 import EmptyList from "../../../components/empty_list";
 import store from "../../../services/store";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Bookings() {
   // Getting auth state and user data for structuring the navbar
@@ -15,11 +16,16 @@ export default function Bookings() {
   const token = store.getState().auth.token;
   const id = auth._id;
 
+  const router = useRouter();
+
   const [orders, setOrders] = useState([]);
   const [hasStore, setHasStore] = useState(true);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!token) {
+      router.push("/?auth=true");
+    }
     const getUserItems = async () => {
       await Axios({
         headers: {

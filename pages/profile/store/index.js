@@ -8,6 +8,7 @@ import EmptyList from "../../../components/empty_list";
 import store from "../../../services/store";
 import Link from "next/link";
 import DeleteProduct from "../../../components/delete_product";
+import { useRouter } from "next/router";
 
 export default function Store() {
   // Getting auth state and user data for structuring the navbar
@@ -16,6 +17,8 @@ export default function Store() {
   const token = store.getState().auth.token;
   const id = auth._id;
 
+  const router = useRouter();
+
   const [products, setProducts] = useState([]);
   const [hasStore, setHasStore] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -23,6 +26,9 @@ export default function Store() {
   const [product, setProduct] = useState({});
 
   useEffect(() => {
+    if (!token) {
+      router.push("/?auth=true");
+    }
     const getUserItems = async () => {
       await Axios({
         headers: {

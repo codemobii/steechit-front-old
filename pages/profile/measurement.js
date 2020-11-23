@@ -6,6 +6,7 @@ import store from "../../services/store";
 import ProfileLoader from "../../components/profile_loader";
 import ProfileLayout from "../../components/profile_layout";
 import AddMeasurement from "../../components/add_measurement";
+import { useRouter } from "next/router";
 
 export default function Measurement() {
   const [loading, setLoading] = useState(true);
@@ -16,6 +17,8 @@ export default function Measurement() {
   const auth = useSelector((state) => state.auth);
   const token = store.getState().auth.token;
   const id = auth._id;
+
+  const router = useRouter();
 
   const getMeasurement = async () => {
     await Axios({
@@ -60,6 +63,9 @@ export default function Measurement() {
   };
 
   useEffect(() => {
+    if (!token) {
+      router.push("/?auth=true");
+    }
     getMeasurement();
   }, []);
 

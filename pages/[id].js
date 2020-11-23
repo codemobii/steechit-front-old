@@ -11,8 +11,8 @@ import {
 } from "atomize";
 import Axios from "axios";
 import ReactStars from "react-rating-stars-component";
-import Layout from "../../components/layout";
-import OrderModal from "../../components/order_modal";
+import Layout from "../components/layout";
+import OrderModal from "../components/order_modal";
 
 export default class Tailor extends Component {
   constructor(props) {
@@ -113,6 +113,7 @@ export default class Tailor extends Component {
                     }}
                     border="2px solid"
                     borderColor="#fff"
+                    bg="#fff"
                   />
                 </Div>
                 <Text
@@ -145,14 +146,20 @@ export default class Tailor extends Component {
                         m={{ r: "0.5rem" }}
                       />
                     }
-                    bg="warning700"
-                    hoverBg="warning800"
+                    bg="danger700"
+                    hoverBg="danger800"
                     rounded="circle"
                     p={{ r: "1.5rem", l: "1rem" }}
                     hoverShadow="4"
                     onClick={() => {
                       if (success) {
                         this.setState({ showNumber: !showNumber });
+                      } else {
+                        this.setState({
+                          message:
+                            "Please book first, then you can contact tailor to take your measurement and follow up subsequently",
+                          error: true,
+                        });
                       }
                     }}
                   >
@@ -196,21 +203,35 @@ export default class Tailor extends Component {
                         <Image
                           src={p.productPictures[0].url}
                           w="100%"
-                          h="260px"
-                          objectFit="cover"
-                          objectPosition="center"
+                          h="150px"
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: "center",
+                          }}
                         />
                         <Div p="20px">
-                          <Text
-                            tag="h6"
-                            textSize="subheader"
-                            fontFamily="primary"
-                          >
+                          <Text tag="header" textSize="title">
                             {p.productName}
                           </Text>
-                          <Text tag="label" fontFamily="primary">
-                            N{p.availableOptions[0].price}
+                          <Text m={{ b: "1rem", t: "1rem" }}>
+                            {p.productDescription}
                           </Text>
+                          <Div d="flex" align="center" justify="space-between">
+                            <Text textSize="title">
+                              ₦{p.availableOptions[0].price}
+                              {p.availableOptions[0].percentageDiscount !==
+                              0 ? (
+                                <Text
+                                  textColor="danger500"
+                                  tag="sup"
+                                  textSize="subheader"
+                                >
+                                  {p.availableOptions[0].percentageDiscount}%
+                                </Text>
+                              ) : null}
+                            </Text>
+                            <Button bg="warning800">Book now</Button>
+                          </Div>
                         </Div>
                       </Div>
                     </Col>
@@ -235,9 +256,13 @@ export default class Tailor extends Component {
         {/** All notifications */}
 
         <Notification
-          bg="danger700"
+          bg="warning700"
           isOpen={error}
-          onClose={() => this.setState({ error: false })}
+          onClose={() => {
+            setTimeout(() => {
+              this.setState({ error: false });
+            }, 3000);
+          }}
           prefix={
             <Icon
               name="CloseSolid"

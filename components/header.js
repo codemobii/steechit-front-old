@@ -1,4 +1,5 @@
 import { Anchor, Button, Container, Div, Icon, Image, Text } from "atomize";
+import Link from "next/link";
 import React from "react";
 import store from "../services/store";
 import AuthBox from "./auth_box";
@@ -44,42 +45,47 @@ export default function Header({ fixed, onOpen }) {
               cursor="pointer"
               name="Menu"
               color="gray100"
-              size="32px"
+              size="24px"
             />
-            <Anchor
-              d={{
-                xs: "block",
-                sm: "block",
-                md: "block",
-                lg: "none",
-                xl: "none",
-              }}
-              href="/"
-            >
-              <Image
-                src="https://www.openphone.co/images/open-phone.svg"
-                w={{
-                  xs: "150px",
-                  sm: "150px",
-                  md: "200px",
-                  lg: "200px",
-                  xl: "200px",
+            <Link href="/">
+              <Anchor
+                d={{
+                  xs: "block",
+                  sm: "block",
+                  md: "block",
+                  lg: "none",
+                  xl: "none",
                 }}
-              />
-            </Anchor>
+              >
+                <Image
+                  src="https://www.openphone.co/images/open-phone.svg"
+                  w={{
+                    xs: "150px",
+                    sm: "150px",
+                    md: "200px",
+                    lg: "200px",
+                    xl: "200px",
+                  }}
+                />
+              </Anchor>
+            </Link>
             <Div
               d={{ xs: "none", sm: "none", md: "none", lg: "flex", xl: "flex" }}
               align="center"
             >
-              <Anchor m={{ l: "-0.3rem" }} href="/">
-                <Image
-                  src="https://www.openphone.co/images/open-phone.svg"
-                  w="200px"
-                />
-              </Anchor>
-              <Anchor href="/" d="block" textColor="#fff" m={{ l: "3rem" }}>
-                Tailors
-              </Anchor>
+              <Link href="/">
+                <Anchor m={{ l: "-0.3rem" }}>
+                  <Image
+                    src="https://www.openphone.co/images/open-phone.svg"
+                    w="200px"
+                  />
+                </Anchor>
+              </Link>
+              <Link href="/">
+                <Anchor d="block" textColor="#fff" m={{ l: "3rem" }}>
+                  Tailors
+                </Anchor>
+              </Link>
               <Anchor d="block" textColor="#fff" m={{ l: "2rem" }}>
                 Fabric Stores
               </Anchor>
@@ -89,27 +95,21 @@ export default function Header({ fixed, onOpen }) {
             </Div>
 
             {token ? (
-              <Button
-                onClick={() => {
-                  window.location.href = "/profile";
-                }}
-                h="2.3rem"
-                w="2.3rem"
-                bg="info700"
-                hoverBg="info600"
-                rounded="circle"
-                shadow="2"
-                d={{
-                  xs: "flex",
-                  sm: "flex",
-                  md: "flex",
-                  lg: "none",
-                  xl: "none",
-                }}
-                hoverShadow="4"
-              >
-                <Icon name="UserSolid" size="24px" color="white" />
-              </Button>
+              <Link href="/profile">
+                <Icon
+                  d={{
+                    xs: "flex",
+                    sm: "flex",
+                    md: "flex",
+                    lg: "none",
+                    xl: "none",
+                  }}
+                  name="UserCircle"
+                  size="24px"
+                  color="white"
+                  cursor="pointer"
+                />
+              </Link>
             ) : (
               <Button
                 d={{
@@ -137,22 +137,15 @@ export default function Header({ fixed, onOpen }) {
                 }}
                 align="center"
               >
-                <Button
-                  onClick={() => {
-                    window.location.href = "/profile";
-                  }}
-                  h="2.3rem"
-                  w="2.3rem"
-                  bg="info700"
-                  hoverBg="info600"
-                  rounded="circle"
-                  m={{ r: "1rem" }}
-                  shadow="2"
-                  hoverShadow="4"
-                  d="flex"
-                >
-                  <Icon name="UserSolid" size="24px" color="white" />
-                </Button>
+                <Link href="/profile">
+                  <Icon
+                    name="UserCircle"
+                    size="38px"
+                    color="white"
+                    cursor="pointer"
+                    m={{ r: "1rem" }}
+                  />
+                </Link>
                 <Button
                   bg="warning700"
                   hoverBg="warning800"

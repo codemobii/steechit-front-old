@@ -1,7 +1,6 @@
-import { Button, Div, Icon, Text } from "atomize";
+import { Div, Text } from "atomize";
 import Axios from "axios";
 import { get } from "lodash";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,6 +35,9 @@ export default function Settings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!token) {
+      router.push("/?auth=true");
+    }
     const getUser = async () => {
       try {
         await Axios({

@@ -183,13 +183,6 @@ export default function OrderModal({
           setMeasurement(false);
           setSuccess(false);
         }}
-        align={{
-          xs: "flex-start",
-          sm: "flex-start",
-          md: "flex-start",
-          lg: "center",
-          xl: "center",
-        }}
         rounded="md"
         maxW="25rem"
         bg="#fff"
@@ -253,17 +246,20 @@ export default function OrderModal({
               <Image
                 src={product.image}
                 w="100%"
-                h="260px"
+                h="auto"
                 objectFit="cover"
                 objectPosition="center"
               />
               <Div p="20px">
-                <Text tag="header" textSize="heading">
-                  {product.name}
-                </Text>
-                <Text tag="header" textSize="subheader">
-                  N {product.price}
-                </Text>
+                <Div d="flex" align="center" style={{ flexFlow: "wrap" }}>
+                  <Text tag="header" textSize="heading">
+                    {product.name}
+                  </Text>
+                  <Icon m={{ l: "1rem", r: "1rem" }} name="Minus" size="20px" />
+                  <Text tag="header" textSize="subheader">
+                    ₦{product.price}
+                  </Text>
+                </Div>
                 <form onSubmit={bookOrder}>
                   <Label align="center" m={{ b: "1rem", t: "1rem" }}>
                     <Radiobox

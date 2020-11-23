@@ -10,20 +10,21 @@ import {
   Label,
   Radiobox,
 } from "atomize";
-import ReactStars from "react-rating-stars-component";
 import Link from "next/link";
 import Layout from "../components/layout";
 import MapModal from "../components/mobile_map_modal";
 import MapView from "../components/map_view";
 import store from "../services/store";
 import Axios from "axios";
+import Image from "next/image";
 import EmptyList from "../components/empty_list";
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
     this.category = "";
-    this.gender = "";
+    this.gender = "Both";
+    this.category_name = "All category";
     this.state = {
       openMap: false,
       position: [],
@@ -57,7 +58,6 @@ export default class Home extends Component {
     })
       .then((res) => {
         this.setState({ tailors: res.data });
-        console.log(res);
       })
       .catch((error) => {
         console.log(error);
@@ -75,7 +75,6 @@ export default class Home extends Component {
           lng: current.coords.longitude,
         };
         this.setState({ position: currentPosition });
-        console.log(currentPosition);
       });
     }
   };
@@ -105,40 +104,50 @@ export default class Home extends Component {
       <>
         <Layout fixed={true}>
           <Div m={{ r: { xs: "0", sm: "0", md: "0", lg: "45%", xl: "45%" } }}>
-            <Div d="flex" justify="space-between">
+            <Div
+              d="flex"
+              justify="space-between"
+              m={{ b: "1rem" }}
+              p={{ b: "0.5rem" }}
+              border={{ b: "1px solid" }}
+              borderColor="gray500"
+              align="center"
+            >
               <Button
-                h="2.5rem"
-                p={{ x: "1rem" }}
-                textSize="body"
-                textColor="info700"
-                hoverTextColor="info900"
+                p={{ x: "0" }}
                 bg="transparent"
-                hoverBg="info200"
-                border="1px solid"
-                borderColor="info700"
-                hoverBorderColor="info900"
-                m={{ b: "1rem" }}
-                w="100%"
+                textColor="black800"
                 onClick={() => this.setState({ filter: true })}
+                prefix={
+                  <Icon name="Settings" size="20px" m={{ r: "0.5rem" }} />
+                }
+                align="center"
               >
-                FILTER
+                Filter{" "}
+                <Label
+                  d={{
+                    xs: "none",
+                    sm: "none",
+                    md: "inline-block",
+                    lg: "inline-block",
+                    xl: "inline-block",
+                  }}
+                  m={{ l: "5px" }}
+                >
+                  (Category: {this.category_name})
+                </Label>
               </Button>
               <Button
-                m={{ l: "1rem" }}
-                w="100%"
-                bg="info700"
-                hoverBg="info900"
-                /**
-              d={{
-                xs: "block",
-                sm: "block",
-                md: "block",
-                lg: "none",
-                xl: "none",
-              }} */
+                p={{ x: "0" }}
+                bg="transparent"
+                textColor="black800"
                 onClick={() => this.setState({ openMap: true })}
+                prefix={
+                  <Icon name="Location" size="20px" m={{ r: "0.5rem" }} />
+                }
+                align="center"
               >
-                MAPVIEW
+                Map View
               </Button>
             </Div>
             <Row>
@@ -157,7 +166,7 @@ export default class Home extends Component {
                       xl: "6",
                     }}
                   >
-                    <a href={`tailors/${t._id}`}>
+                    <Link href={`/${t._id}`}>
                       <Div
                         rounded="md"
                         overflow="hidden"
@@ -170,9 +179,6 @@ export default class Home extends Component {
                         transition="all 0.4s ease-in-out"
                       >
                         <Div
-                          bgImg={t.storeBanner.url}
-                          bgSize="cover"
-                          bgPos="center"
                           w="100%"
                           h={{
                             xs: "150px",
@@ -182,31 +188,59 @@ export default class Home extends Component {
                             xl: "180px",
                           }}
                           bg="#fff"
-                        />
-                        <Div p="20px" d="flex" align="flex-start">
-                          <Div>
-                            <Text
-                              tag="h6"
-                              textSize="subheader"
-                              fontFamily="primary"
-                            >
+                          pos="relative"
+                        >
+                          <Image
+                            alt={t.storeName}
+                            src={t.storeBanner.url}
+                            className="store_image"
+                            layout="fill"
+                          />
+                          <Div
+                            bg="rgba(0,0,0,0.5)"
+                            pos="absolute"
+                            top="0"
+                            left="0"
+                            w="100%"
+                            h="100%"
+                          />
+                          <Div pos="absolute" bottom="0" left="0" p="15px">
+                            <Text textSize="subheader" textColor="#fff">
+                              {t.city}
+                            </Text>
+                            <Text textSize="title" textColor="#fff">
                               {t.storeName}
                             </Text>
-                            <Text tag="label" fontFamily="primary">
-                              {t.address}
-                            </Text>
-                            <Div>
-                              <ReactStars
-                                count={5}
-                                value={3}
-                                size={16}
-                                activeColor="#ffd700"
-                              />
-                            </Div>
                           </Div>
                         </Div>
+                        <Div p={{ t: "1rem", b: "1rem", l: "15px", r: "15px" }}>
+                          <Label d="flex" textSize="paragraph" align="center">
+                            <Icon
+                              name="StarSolid"
+                              color="warning800"
+                              size="20px"
+                              m={{ t: "-3px", r: "6px", l: "-3px" }}
+                            />
+                            4.21{" "}
+                            <Text m={{ l: "5px" }} textColor="black300">
+                              (129)
+                            </Text>
+                            <Text
+                              m={{ l: "6px", t: "-5px" }}
+                              textColor="black300"
+                            >
+                              .
+                            </Text>
+                            <Text m={{ l: "6px" }} textColor="black300">
+                              Lagos, Nigeria
+                            </Text>
+                          </Label>
+                          <Text tag="label" fontFamily="primary">
+                            {t.address}
+                          </Text>
+                        </Div>
                       </Div>
-                    </a>
+                    </Link>
                   </Col>
                 ))
               )}
@@ -294,6 +328,7 @@ export default class Home extends Component {
                 <Radiobox
                   onChange={() => {
                     this.category = "";
+                    this.category_name = "All category";
                     this.setState({ tailors: [], filter: false });
                     this.getTailors();
                   }}
@@ -307,6 +342,7 @@ export default class Home extends Component {
                   <Radiobox
                     onChange={() => {
                       this.category = c._id;
+                      this.category_name = c.categoryName;
                       this.setState({ tailors: [], filter: false });
                       this.getTailors();
                     }}
