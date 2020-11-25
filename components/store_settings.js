@@ -62,16 +62,21 @@ export default function StoreSettings({ user }) {
         },
       });
       const store = res.data[0];
-      setStoreName(store.storeName);
-      setImageUrlBanner(store.storeBanner.url);
-      setImageUrlLogo(store.storeLogo.url);
-      setEmail(store.email);
-      setPhone(store.phone);
-      setStateU(store.state);
-      setCity(store.city);
-      setZipCode(store.zipCode);
-      setCategory(store.productCategories[0]);
-      setAddress(store.address);
+      if (store === undefined) {
+        router.push("/profile/store/start");
+      } else {
+        setStoreName(store.storeName);
+        setImageUrlBanner(store.storeBanner.url);
+        setImageUrlLogo(store.storeLogo.url);
+        setEmail(store.email);
+        setPhone(store.phone);
+        setStateU(store.state);
+        setCity(store.city);
+        setZipCode(store.zipCode);
+        setCategory(store.productCategories[0]);
+        setAddress(store.address);
+      }
+      console.log(store);
     };
 
     const getCountries = async () => {

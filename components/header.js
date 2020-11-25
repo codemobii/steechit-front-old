@@ -58,26 +58,21 @@ export default function Header({ fixed, onOpen }) {
                 }}
               >
                 <Image
-                  src="https://www.openphone.co/images/open-phone.svg"
-                  w={{
-                    xs: "150px",
-                    sm: "150px",
-                    md: "200px",
-                    lg: "200px",
-                    xl: "200px",
-                  }}
+                  src="https://github.com/ijelechimaobi/steechit-front/blob/main/LOGO%203D%20Icon_3%20PNG.png?raw=true"
+                  w="40px"
                 />
               </Anchor>
             </Link>
             <Div
               d={{ xs: "none", sm: "none", md: "none", lg: "flex", xl: "flex" }}
               align="center"
+              pos="relative"
             >
               <Link href="/">
                 <Anchor m={{ l: "-0.3rem" }}>
                   <Image
-                    src="https://www.openphone.co/images/open-phone.svg"
-                    w="200px"
+                    src="https://github.com/ijelechimaobi/steechit-front/blob/main/LOGO%203D%20Icon_3%20PNG.png?raw=true"
+                    w="50px"
                   />
                 </Anchor>
               </Link>

@@ -58,6 +58,7 @@ export default class Home extends Component {
     })
       .then((res) => {
         this.setState({ tailors: res.data });
+        console.log(res);
       })
       .catch((error) => {
         console.log(error);
@@ -89,6 +90,7 @@ export default class Home extends Component {
 
   componentDidMount() {
     this.getUserLocation();
+    console.log(this.props.initial_tailors);
   }
 
   render() {

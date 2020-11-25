@@ -53,7 +53,6 @@ export default function Settings() {
           url: `https://steechit-api.herokuapp.com/users/${id}`,
         }).then((res) => {
           setLoading(false);
-          console.log(res);
         });
       } catch (e) {
         const msg = get(e, "response.data.message") || e.message;
