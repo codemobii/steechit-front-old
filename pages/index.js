@@ -11,13 +11,13 @@ import {
   Radiobox,
 } from "atomize";
 import Link from "next/link";
-import Layout from "../components/layout";
-import MapModal from "../components/mobile_map_modal";
-import MapView from "../components/map_view";
+import Layout from "../app-components/layout";
+import MapModal from "../app-components/mobile_map_modal";
+import MapView from "../app-components/map_view";
 import store from "../services/store";
-import Axios from "axios";
+import axios from "axios";
 import Image from "next/image";
-import EmptyList from "../components/empty_list";
+import EmptyList from "../app-components/empty_list";
 
 export default class Home extends Component {
   constructor(props) {
@@ -40,7 +40,7 @@ export default class Home extends Component {
   getTailors = async () => {
     const token = store.getState().auth.token;
     this.setState({ loading: true });
-    await Axios({
+    await axios({
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,

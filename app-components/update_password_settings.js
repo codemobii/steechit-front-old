@@ -8,7 +8,7 @@ import {
   Row,
   Text,
 } from "atomize";
-import Axios from "axios";
+import axios from "axios";
 import { get } from "lodash";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -55,7 +55,7 @@ export default function UpdatePasswordSettings() {
     if (password === newPassword) {
       setLoading(true);
       try {
-        const res = await Axios({
+        const res = await axios({
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,

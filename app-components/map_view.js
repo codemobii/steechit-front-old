@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from "google-maps-react";
-import Axios from "axios";
+import axios from "axios";
 import { Div } from "atomize";
 import Link from "next/link";
 import MapCard from "./map_card";

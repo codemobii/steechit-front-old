@@ -1,12 +1,12 @@
 import { Button, Div, Image, Tag, Text } from "atomize";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Axios from "axios";
+import axios from "axios";
 import store from "../../services/store";
-import ProfileLoader from "../../components/profile_loader";
-import EmptyList from "../../components/empty_list";
-import ProfileLayout from "../../components/profile_layout";
-import FundWallet from "../../components/fund_wallet";
+import ProfileLoader from "../../app-components/profile_loader";
+import EmptyList from "../../app-components/empty_list";
+import ProfileLayout from "../../app-components/profile_layout";
+import FundWallet from "../../app-components/fund_wallet";
 import { useRouter } from "next/router";
 
 export default function Wallet() {
@@ -25,7 +25,7 @@ export default function Wallet() {
 
   useEffect(() => {
     const getUserItems = async () => {
-      await Axios({
+      await axios({
         headers: {
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${token}`,
@@ -43,7 +43,7 @@ export default function Wallet() {
         .then(async (res) => {
           console.log(res.data);
           setWallet(res.data[0].bal);
-          const orders_res = await Axios({
+          const orders_res = await axios({
             headers: {
               "Access-Control-Allow-Origin": "*",
               Authorization: `Bearer ${token}`,

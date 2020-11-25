@@ -1,5 +1,5 @@
 import { Button, Icon, Input, Label, Modal, Text } from "atomize";
-import Axios from "axios";
+import axios from "axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -43,7 +43,7 @@ export default function FundWallet({ isOpen, onClose }) {
       callback: async (d) => {
         console.log(d.flw_ref);
         try {
-          await Axios({
+          await axios({
             headers: {
               "Access-Control-Allow-Origin": "*",
               Authorization: `Bearer ${token}`,

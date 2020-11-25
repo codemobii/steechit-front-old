@@ -1,11 +1,11 @@
 import { Col, Div, Icon, Notification, Row, Text } from "atomize";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import Axios from "axios";
+import axios from "axios";
 import store from "../../services/store";
-import ProfileLoader from "../../components/profile_loader";
-import ProfileLayout from "../../components/profile_layout";
-import AddMeasurement from "../../components/add_measurement";
+import ProfileLoader from "../../app-components/profile_loader";
+import ProfileLayout from "../../app-components/profile_layout";
+import AddMeasurement from "../../app-components/add_measurement";
 import { useRouter } from "next/router";
 
 export default function Measurement() {
@@ -21,7 +21,7 @@ export default function Measurement() {
   const router = useRouter();
 
   const getMeasurement = async () => {
-    await Axios({
+    await axios({
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ export default function Measurement() {
       },
     })
       .then(async (res) => {
-        const getGender = await Axios({
+        const getGender = await axios({
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,

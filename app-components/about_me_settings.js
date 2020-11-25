@@ -12,7 +12,7 @@ import {
 import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import store from "../services/store";
-import Axios from "axios";
+import axios from "axios";
 import { get } from "lodash";
 
 export default function AboutMeSettings({ user }) {
@@ -75,13 +75,13 @@ export default function AboutMeSettings({ user }) {
       console.log(image);
       const formData = new FormData();
       formData.append("image", image, image.name, image.size, image.type);
-      let save = await Axios.post(
+      let save = await axios.post(
         "https://steechit-image-manager.herokuapp.com/upload",
         formData
       );
       const Img_url = save.data.link;
       try {
-        const res = await Axios({
+        const res = await axios({
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,
@@ -123,7 +123,7 @@ export default function AboutMeSettings({ user }) {
     evt.preventDefault();
     setLoading(true);
     try {
-      const res = await Axios({
+      const res = await axios({
         headers: {
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${token}`,

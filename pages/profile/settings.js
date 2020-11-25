@@ -1,17 +1,17 @@
 import { Div, Text } from "atomize";
-import Axios from "axios";
+import axios from "axios";
 import { get } from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import AboutMeSettings from "../../components/about_me_settings";
-import ContactSettings from "../../components/contact_settings";
-import Layout from "../../components/layout";
-import ProfileLoader from "../../components/profile_loader";
-import ProfileMobileMenu from "../../components/profile_mobile_menu";
-import SettingSidebar from "../../components/settings_sidebar";
-import StoreSettings from "../../components/store_settings";
-import UpdatePasswordSettings from "../../components/update_password_settings";
+import AboutMeSettings from "../../app-components/about_me_settings";
+import ContactSettings from "../../app-components/contact_settings";
+import Layout from "../../app-components/layout";
+import ProfileLoader from "../../app-components/profile_loader";
+import ProfileMobileMenu from "../../app-components/profile_mobile_menu";
+import SettingSidebar from "../../app-components/settings_sidebar";
+import StoreSettings from "../../app-components/store_settings";
+import UpdatePasswordSettings from "../../app-components/update_password_settings";
 import { profileRequest } from "../../services/profile_action";
 import store from "../../services/store";
 
@@ -40,7 +40,7 @@ export default function Settings() {
   useEffect(() => {
     const getUser = async () => {
       try {
-        await Axios({
+        await axios({
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,

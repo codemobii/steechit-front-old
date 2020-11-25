@@ -1,12 +1,12 @@
 import { Button, Div, Icon, Image, Tag, Text } from "atomize";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Axios from "axios";
-import ProfileLayout from "../../../components/profile_layout";
-import ProfileLoader from "../../../components/profile_loader";
+import axios from "axios";
+import ProfileLayout from "../../../app-components/profile_layout";
+import ProfileLoader from "../../../app-components/profile_loader";
 import store from "../../../services/store";
 import { useRouter } from "next/router";
-import CreateStoreForm from "../../../components/create_store_form";
+import CreateStoreForm from "../../../app-components/create_store_form";
 import { profileRequest } from "../../../services/profile_action";
 
 export default function Bookings() {
@@ -22,7 +22,7 @@ export default function Bookings() {
 
   useEffect(() => {
     const getUserItems = async () => {
-      await Axios({
+      await axios({
         headers: {
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${token}`,

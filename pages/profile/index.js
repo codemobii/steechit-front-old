@@ -1,11 +1,11 @@
 import { Div, Image, Tag, Text } from "atomize";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Axios from "axios";
+import axios from "axios";
 import store from "../../services/store";
-import ProfileLoader from "../../components/profile_loader";
-import EmptyList from "../../components/empty_list";
-import ProfileLayout from "../../components/profile_layout";
+import ProfileLoader from "../../app-components/profile_loader";
+import EmptyList from "../../app-components/empty_list";
+import ProfileLayout from "../../app-components/profile_layout";
 import { useRouter } from "next/router";
 
 export default function Orders() {
@@ -23,7 +23,7 @@ export default function Orders() {
   useEffect(() => {
     const getUserItems = async () => {
       console.log(orders);
-      await Axios({
+      await axios({
         headers: {
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${token}`,

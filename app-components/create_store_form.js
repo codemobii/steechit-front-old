@@ -9,13 +9,13 @@ import {
   Notification,
   Row,
 } from "atomize";
-import Axios from "Axios";
+import axios from "axios";
 import { get } from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-export default function StoreSettings({ user }) {
+export default function CreateStoreForm({ user }) {
   const auth = useSelector((state) => state.auth);
 
   const token = auth.token;
@@ -23,16 +23,16 @@ export default function StoreSettings({ user }) {
 
   const router = useRouter();
 
-  const [storeName, setStoreName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [storeName, setStoreName] = useState(user.storeName);
+  const [email, setEmail] = useState(user.email);
+  const [phone, setPhone] = useState(user.phone);
   const [country, setCountry] = useState("");
   const [category, setCategory] = useState([]);
   const [categoryState, setCategoryState] = useState([]);
   const [stateU, setStateU] = useState("");
   const [getState, setGetState] = useState([]);
-  const [address, setAddress] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const [address, setAddress] = useState(user.address);
+  const [zipCode, setZipCode] = useState(user.zipCode);
   const [city, setCity] = useState("");
   const [loading, setLoading] = useState(false);
   const [uploadingBanner, setUploadingBanner] = useState(false);
@@ -45,42 +45,17 @@ export default function StoreSettings({ user }) {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const getUserStore = async () => {
-      const res = await Axios({
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${token}`,
-        },
-        proxy: {
-          host: "104.236.174.88",
-          port: 3128,
-        },
-        method: "GET",
-        url: `https://steechit-api.herokuapp.com/stores/`,
-        params: {
-          user: id,
-        },
-      });
-      const store = res.data[0];
-      if (store === undefined) {
-        router.push("/profile/store/start");
-      } else {
-        setStoreName(store.storeName);
-        setImageUrlBanner(store.storeBanner.url);
-        setImageUrlLogo(store.storeLogo.url);
-        setEmail(store.email);
-        setPhone(store.phone);
-        setStateU(store.state);
-        setCity(store.city);
-        setZipCode(store.zipCode);
-        setCategory(store.productCategories[0]);
-        setAddress(store.address);
+    const getPosition = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((current) => {
+          setLatitude(current.coords.latitude);
+          setLongitude(current.coords.longitude);
+        });
       }
-      console.log(store);
     };
 
     const getCountries = async () => {
-      const res = await Axios({
+      const res = await axios({
         headers: {
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${token}`,
@@ -96,7 +71,7 @@ export default function StoreSettings({ user }) {
     };
 
     const getStates = async () => {
-      const res = await Axios({
+      const res = await axios({
         headers: {
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${token}`,
@@ -112,7 +87,7 @@ export default function StoreSettings({ user }) {
     };
 
     const getCategory = async () => {
-      const res = await Axios({
+      const res = await axios({
         headers: {
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${token}`,
@@ -125,12 +100,13 @@ export default function StoreSettings({ user }) {
         url: `https://steechit-api.herokuapp.com/categories/`,
       });
       setCategoryState(res.data);
+      console.log(res.data);
     };
 
-    getUserStore();
     getCountries();
     getStates();
     getCategory();
+    getPosition();
   }, [token, latitude, longitude]);
 
   let handleStoreName = (e) => {
@@ -172,10 +148,8 @@ export default function StoreSettings({ user }) {
     setUploadingLogo(true);
     const formData = new FormData();
     formData.append("image", image, image.name, image.size, image.type);
-    await Axios.post(
-      "https://steechit-image-manager.herokuapp.com/upload",
-      formData
-    )
+    await axios
+      .post("https://steechit-image-manager.herokuapp.com/upload", formData)
       .then((saved) => {
         setMessage("Logo upload was successful.");
         setShow(true);
@@ -195,10 +169,8 @@ export default function StoreSettings({ user }) {
     setUploadingBanner(true);
     const formData = new FormData();
     formData.append("image", image, image.name, image.size, image.type);
-    await Axios.post(
-      "https://steechit-image-manager.herokuapp.com/upload",
-      formData
-    )
+    await axios
+      .post("https://steechit-image-manager.herokuapp.com/upload", formData)
       .then((save) => {
         setImageUrlBanner(save.data.link);
         setMessage("Store banner uploaded successfully");
@@ -217,7 +189,7 @@ export default function StoreSettings({ user }) {
     evt.preventDefault();
     setLoading(true);
     try {
-      const res = await Axios({
+      const res = await axios({
         headers: {
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${token}`,
@@ -226,9 +198,10 @@ export default function StoreSettings({ user }) {
           host: "104.236.174.88",
           port: 3128,
         },
-        method: "PUT",
-        url: `https://steechit-api.herokuapp.com/stores/${id}`,
+        method: "POST",
+        url: `https://steechit-api.herokuapp.com/stores/`,
         data: {
+          user: id,
           storeName: storeName,
           phone: phone,
           email: email,
@@ -242,6 +215,10 @@ export default function StoreSettings({ user }) {
           },
           country: country,
           state: stateU,
+          geolocation: {
+            long: longitude,
+            lat: latitude,
+          },
           city: city,
           address: address,
           zipCode: zipCode,
@@ -252,14 +229,14 @@ export default function StoreSettings({ user }) {
       setLoading(false);
       setMessage("Store created successfully");
       setShow(true);
-      setLoading(false);
+
+      router.push("/profile/store");
       console.log(res);
     } catch (e) {
       const msg = get(e, "response.data.message") || e.message;
-      console.log(e);
+      console.log(msg);
       setMessage(msg);
       setShow(true);
-      setLoading(false);
     }
   };
 
@@ -517,7 +494,7 @@ export default function StoreSettings({ user }) {
             ) : null
           }
         >
-          {loading ? "Saving" : "Save Changes"}
+          {loading ? "Creating store" : "Create Store"}
         </Button>
       </form>
       <Notification

@@ -14,7 +14,7 @@ import {
 import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import store from "../services/store";
-import Axios from "axios";
+import axios from "axios";
 
 export default function OrderModal({
   isOpen,
@@ -40,7 +40,7 @@ export default function OrderModal({
 
   const getMeasurement = async () => {
     setChecking(true);
-    await Axios({
+    await axios({
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ export default function OrderModal({
         if (res.statusText === "OK") {
           setMeasurement(true);
         } else {
-          await Axios({
+          await axios({
             headers: {
               "Access-Control-Allow-Origin": "*",
               Authorization: `Bearer ${token}`,
@@ -100,7 +100,7 @@ export default function OrderModal({
   const bookOrder = async (e) => {
     e.preventDefault();
     setOrdering(true);
-    await Axios({
+    await axios({
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
@@ -141,7 +141,7 @@ export default function OrderModal({
           setError(true);
         } else {
           console.log(data);
-          await Axios({
+          await axios({
             headers: {
               "Access-Control-Allow-Origin": "*",
               Authorization: `Bearer ${token}`,

@@ -9,10 +9,10 @@ import {
   Row,
   Text,
 } from "atomize";
-import Axios from "axios";
+import axios from "axios";
 import ReactStars from "react-rating-stars-component";
-import Layout from "../components/layout";
-import OrderModal from "../components/order_modal";
+import Layout from "../app-components/layout";
+import OrderModal from "../app-components/order_modal";
 
 export default class Tailor extends Component {
   constructor(props) {
@@ -33,7 +33,8 @@ export default class Tailor extends Component {
 
   getProduct = async () => {
     this.setState({ loading: true });
-    await Axios.get(`https://steechit-api.herokuapp.com/products/${this.id}`)
+    await axios
+      .get(`https://steechit-api.herokuapp.com/products/${this.id}`)
       .then((res) => {
         this.setState({
           product: {
