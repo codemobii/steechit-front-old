@@ -166,9 +166,6 @@ export default function Header({ fixed, onOpen }) {
                 <Anchor d="block" textColor="#fff" m={{ l: "2rem" }}>
                   About
                 </Anchor>
-                <Anchor d="block" textColor="#fff" m={{ l: "2rem" }}>
-                  Help
-                </Anchor>
                 <Button
                   prefix={
                     <Icon

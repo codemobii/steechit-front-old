@@ -50,7 +50,7 @@ export default class Home extends Component {
         port: 3128,
       },
       method: "GET",
-      url: "https://steechit-api.herokuapp.com/stores/",
+      url: `https://steechit-api.herokuapp.com/stores/`,
       params:
         this.category !== ""
           ? { productCategories: { $oid: this.category } }
@@ -399,9 +399,9 @@ export default class Home extends Component {
 
 export async function getStaticProps() {
   const categories_res = await fetch(
-    "https://steechit-api.herokuapp.com/categories/"
+    `https://steechit-api.herokuapp.com/categories/`
   );
-  const tailors_res = await fetch("https://steechit-api.herokuapp.com/stores");
+  const tailors_res = await fetch(`https://steechit-api.herokuapp.com/stores`);
 
   const initial_tailors = await tailors_res.json();
   const initial_categories = await categories_res.json();

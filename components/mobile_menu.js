@@ -51,7 +51,7 @@ export default function MobileMenu({ isOpen, onClose }) {
           m={{ b: "1rem" }}
           fontFamily="primary"
         >
-          Losgistics
+          Logistics
         </Anchor>
         <Anchor
           href="https://www.google.com"

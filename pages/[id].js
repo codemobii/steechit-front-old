@@ -286,7 +286,7 @@ export async function getStaticProps({ params }) {
     `https://steechit-api.herokuapp.com/stores/${id}`
   );
   const products_res = await fetch(
-    "https://steechit-api.herokuapp.com/products"
+    `https://steechit-api.herokuapp.com/products`
   );
 
   const tailor = await tailor_res.json();
@@ -301,7 +301,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const tailors_res = await fetch("https://steechit-api.herokuapp.com/stores");
+  const tailors_res = await fetch(`https://steechit-api.herokuapp.com/stores`);
 
   const tailors = await tailors_res.json();
 

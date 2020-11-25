@@ -7,4 +7,7 @@ module.exports = {
   images: {
     domains: ["assets.vercel.com", "storage.googleapis.com"],
   },
+  env: {
+    apiUrl: "https://steechit-api.herokuapp.com",
+  },
 };
