@@ -18,7 +18,7 @@ export default function ResetPassword() {
   const resetPassword = useSelector((state) => state.resetPassword);
 
   if (resetPassword.success === true) {
-    return (window.location.href = "/");
+    router.push("/profile");
   }
 
   var handleCode = (e) => {

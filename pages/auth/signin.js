@@ -11,6 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import React, { useState } from "react";
 import { LoginRequest } from "../../services/login_action";
+import { useRouter } from "next/router";
 
 export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,24 +35,31 @@ export default function Signin() {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     setLoading(true);
-    dispatch(LoginRequest({ email, password }));
-    auth.message !== "login successful" ? setError(true) : setError(false);
-    setEmail("");
-    setPassword("");
-    setLoading(false);
+    if (dispatch(LoginRequest({ email, password }))) {
+      setEmail("");
+      setPassword("");
+      setLoading(false);
+    } else {
+      auth.message !== "login successful" ? setError(true) : setError(false);
+      setEmail("");
+      setPassword("");
+      setLoading(false);
+    }
   };
 
+  const router = useRouter();
+
   if (auth.role === 1) {
-    return window.location.reload();
+    router.push("/profile");
   }
   if (auth.role === 2) {
-    return window.location.reload();
+    router.push("/profile");
   }
   if (auth.role === 3) {
-    return window.location.reload();
+    router.push("/profile");
   }
   if (auth.role === 4) {
-    return window.location.reload();
+    router.push("/profile");
   }
 
   return (

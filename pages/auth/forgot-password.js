@@ -26,7 +26,7 @@ export default function ForgotPassword() {
     setLoading(false);
 
     if (forgetPassword.success === true) {
-      return (window.location.href = "/auth/reset-password");
+      router.push("/auth/reset-password");
     }
   };
 

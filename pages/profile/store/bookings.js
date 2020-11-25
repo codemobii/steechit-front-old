@@ -23,9 +23,6 @@ export default function Bookings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) {
-      router.push("/?auth=true");
-    }
     const getUserItems = async () => {
       await Axios({
         headers: {
@@ -77,7 +74,7 @@ export default function Bookings() {
         });
     };
     getUserItems();
-  }, [id, token, dispatch, orders]);
+  }, [id, token, dispatch]);
 
   return (
     <ProfileLayout>

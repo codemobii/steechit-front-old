@@ -33,7 +33,7 @@ export default function Signup() {
   };
 
   if (aUser.is_created === true) {
-    return (window.location.href = "/auth/verify");
+    router.push("/auth/verify");
   }
 
   const handleSubmit = async (evt) => {

@@ -20,15 +20,12 @@ export default function Store() {
   const router = useRouter();
 
   const [products, setProducts] = useState([]);
-  const [hasStore, setHasStore] = useState(true);
+  const [hasStore, setHasStore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
   const [product, setProduct] = useState({});
 
   useEffect(() => {
-    if (!token) {
-      router.push("/?auth=true");
-    }
     const getUserItems = async () => {
       await Axios({
         headers: {
@@ -66,7 +63,6 @@ export default function Store() {
             })
               .then((res) => {
                 setProducts(res.data);
-                console.log(res);
               })
               .catch((error) => {
                 console.log(error);
@@ -81,7 +77,7 @@ export default function Store() {
         });
     };
     getUserItems();
-  }, [id, token, dispatch, products]);
+  }, [id, token, dispatch]);
 
   return (
     <>
@@ -202,35 +198,44 @@ export default function Store() {
               </table>
             )
           ) : (
-            <Div w="100%" h="300px" d="flex" align="center" justify="center">
+            <Div
+              w="100%"
+              h="auto"
+              p="30px"
+              d="flex"
+              align="center"
+              justify="center"
+            >
               <Div textAlign="center">
                 <Image
-                  src="https://assets.jiji.ng/static/img/profile-redesign/adverts/no-adverts-images/no-adverts-active.svg"
+                  src="https://assets.jiji.ng/static/img/profile-redesign/adverts/no-adverts-images/no-adverts-moderation.svg"
                   width="300px"
                   m={{ b: "20px" }}
                 />
                 <Text tag="header" textSize="title">
                   You don't have a store
                 </Text>
-                <Button
-                  prefix={
-                    <Icon
-                      name="Store"
-                      size="16px"
-                      color="white"
-                      m={{ r: "0.5rem" }}
-                    />
-                  }
-                  bg="warning700"
-                  hoverBg="warning800"
-                  rounded="circle"
-                  p={{ r: "1.5rem", l: "1rem" }}
-                  shadow="3"
-                  hoverShadow="4"
-                  m={{ t: "2rem", r: "auto", l: "auto" }}
-                >
-                  Create your store
-                </Button>
+                <Link href="/profile/store/start">
+                  <Button
+                    prefix={
+                      <Icon
+                        name="Store"
+                        size="16px"
+                        color="white"
+                        m={{ r: "0.5rem" }}
+                      />
+                    }
+                    bg="warning700"
+                    hoverBg="warning800"
+                    rounded="circle"
+                    p={{ r: "1.5rem", l: "1rem" }}
+                    shadow="3"
+                    hoverShadow="4"
+                    m={{ t: "2rem", r: "auto", l: "auto" }}
+                  >
+                    Create your store
+                  </Button>
+                </Link>
               </Div>
             </Div>
           )}

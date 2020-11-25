@@ -63,9 +63,6 @@ export default function Measurement() {
   };
 
   useEffect(() => {
-    if (!token) {
-      router.push("/?auth=true");
-    }
     getMeasurement();
   }, []);
 

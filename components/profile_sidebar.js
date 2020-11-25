@@ -19,10 +19,9 @@ export default function ProfileSidebar() {
 
   useEffect(() => {
     const getUser = () => {
-      dispatch(profileRequest(token, id));
-      setTimeout(() => {
+      if (dispatch(profileRequest(token, id))) {
         setLoading(false);
-      }, 2000);
+      }
     };
     getUser();
   }, [user]);

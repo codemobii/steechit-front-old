@@ -24,9 +24,6 @@ export default function Wallet() {
   const [showFunder, setShowFunder] = useState(false);
 
   useEffect(() => {
-    if (!token) {
-      router.push("/?auth=true");
-    }
     const getUserItems = async () => {
       await Axios({
         headers: {
@@ -72,7 +69,7 @@ export default function Wallet() {
         });
     };
     getUserItems();
-  }, [id, token, dispatch, orders, wallet]);
+  }, [id, token, dispatch]);
 
   return (
     <ProfileLayout>

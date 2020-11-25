@@ -21,9 +21,6 @@ export default function Orders() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) {
-      router.push("/?auth=true");
-    }
     const getUserItems = async () => {
       console.log(orders);
       await Axios({
@@ -53,7 +50,7 @@ export default function Orders() {
         });
     };
     getUserItems();
-  }, [id, token, dispatch, orders]);
+  }, [id, token, dispatch]);
 
   return (
     <ProfileLayout>

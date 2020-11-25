@@ -1,6 +1,5 @@
 import axios from "axios";
 import { get } from "lodash";
-import { Router } from "next/router";
 
 import { LOGIN_USER, LOGOUT_USER } from "./constants";
 export const LoginRequest = (data) => async (dispatch) => {
@@ -47,6 +46,4 @@ export const LogOutRequest = (data) => async (dispatch) => {
       success: false,
     },
   });
-
-  Router.push("/?auth=true");
 };

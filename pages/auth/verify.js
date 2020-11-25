@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import { VerificationRequest } from "../../services/verification_action";
+import { useRouter } from "next/router";
 
 export default function Verify() {
   const [code, setCode] = useState("");
@@ -13,12 +14,13 @@ export default function Verify() {
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const aUser = useSelector((state) => state.newUser);
   const verifiedUser = useSelector((state) => state.verificationReducer);
 
   if (verifiedUser.is_verified === true) {
-    return (window.location.href = "/");
+    router.push("/profile");
   }
 
   useEffect(() => {

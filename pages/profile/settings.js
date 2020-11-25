@@ -10,6 +10,7 @@ import Layout from "../../components/layout";
 import ProfileLoader from "../../components/profile_loader";
 import ProfileMobileMenu from "../../components/profile_mobile_menu";
 import SettingSidebar from "../../components/settings_sidebar";
+import StoreSettings from "../../components/store_settings";
 import UpdatePasswordSettings from "../../components/update_password_settings";
 import { profileRequest } from "../../services/profile_action";
 import store from "../../services/store";
@@ -23,6 +24,8 @@ export default function Settings() {
       ? "Contact"
       : router.query.q === "update-password"
       ? "Update Password"
+      : router.query.q === "store"
+      ? "My store"
       : null;
 
   // Getting auth state and user data for structuring the navbar
@@ -35,9 +38,6 @@ export default function Settings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) {
-      router.push("/?auth=true");
-    }
     const getUser = async () => {
       try {
         await Axios({
@@ -63,7 +63,7 @@ export default function Settings() {
     };
     dispatch(profileRequest(token, id));
     getUser();
-  }, [id, token, user, dispatch]);
+  }, [id, token, dispatch]);
 
   return (
     <>
@@ -117,6 +117,8 @@ export default function Settings() {
                 <div id="update-password">
                   <UpdatePasswordSettings user={user} />
                 </div>
+              ) : router.query.q === "store" ? (
+                <StoreSettings user={user} />
               ) : null}
             </Div>
           </Div>
