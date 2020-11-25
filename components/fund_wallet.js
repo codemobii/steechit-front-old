@@ -11,7 +11,7 @@ export default function FundWallet({ isOpen, onClose }) {
   const auth = useSelector((state) => state.auth);
 
   const token = auth.token;
-
+  //
   function makeRef(length) {
     var result = "";
     var characters =
