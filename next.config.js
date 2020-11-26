@@ -5,6 +5,7 @@ module.exports = {
     return config;
   },
   images: {
+    loader: "imgix",
     domains: ["assets.vercel.com", "storage.googleapis.com"],
   },
   env: {
