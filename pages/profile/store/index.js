@@ -20,6 +20,7 @@ export default function Store() {
   const router = useRouter();
 
   const [products, setProducts] = useState([]);
+  const [verified, setVerified] = useState(false);
   const [hasStore, setHasStore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
@@ -37,7 +38,7 @@ export default function Store() {
           port: 3128,
         },
         method: "GET",
-        url: `https://steechit-api.herokuapp.com/stores/`,
+        url: `${process.env.apiUrl}stores/`,
         params: {
           user: id,
         },
@@ -46,6 +47,7 @@ export default function Store() {
           console.log(store_res);
           if (store_res.data.length !== 0) {
             setHasStore(true);
+            console.log(store_res.data[0]);
             await axios({
               headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -56,7 +58,7 @@ export default function Store() {
                 port: 3128,
               },
               method: "GET",
-              url: `https://steechit-api.herokuapp.com/products/`,
+              url: `${process.env.apiUrl}products/`,
               params: {
                 user: id,
               },
@@ -77,7 +79,7 @@ export default function Store() {
         });
     };
     getUserItems();
-  }, [id, token, dispatch]);
+  }, [id, token]);
 
   return (
     <>
@@ -152,7 +154,31 @@ export default function Store() {
             <ProfileLoader />
           ) : hasStore ? (
             products.length === 0 ? (
-              <EmptyList />
+              <>
+                <EmptyList />
+
+                <Link href="/profile/store/sell">
+                  <Button
+                    prefix={
+                      <Icon
+                        name="Store"
+                        size="16px"
+                        color="white"
+                        m={{ r: "0.5rem" }}
+                      />
+                    }
+                    bg="warning700"
+                    hoverBg="warning800"
+                    rounded="circle"
+                    p={{ r: "1.5rem", l: "1rem" }}
+                    shadow="3"
+                    hoverShadow="4"
+                    m={{ t: "2rem", r: "auto", l: "auto" }}
+                  >
+                    Sell a product
+                  </Button>
+                </Link>
+              </>
             ) : (
               <table className="table">
                 <thead>

@@ -14,6 +14,7 @@ import { get } from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import ProfileLoader from "./profile_loader";
 
 export default function StoreSettings({ user }) {
   const auth = useSelector((state) => state.auth);
@@ -23,6 +24,7 @@ export default function StoreSettings({ user }) {
 
   const router = useRouter();
 
+  const [storeId, setStoreId] = useState("");
   const [storeName, setStoreName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -43,6 +45,7 @@ export default function StoreSettings({ user }) {
   const [longitude, setLongitude] = useState("");
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
+  const [initiating, setInitiating] = useState(true);
 
   useEffect(() => {
     const getUserStore = async () => {
@@ -56,7 +59,7 @@ export default function StoreSettings({ user }) {
           port: 3128,
         },
         method: "GET",
-        url: `https://steechit-api.herokuapp.com/stores/`,
+        url: `${process.env.apiUrl}stores/`,
         params: {
           user: id,
         },
@@ -65,6 +68,7 @@ export default function StoreSettings({ user }) {
       if (store === undefined) {
         router.push("/profile/store/start");
       } else {
+        setStoreId(store._id);
         setStoreName(store.storeName);
         setImageUrlBanner(store.storeBanner.url);
         setImageUrlLogo(store.storeLogo.url);
@@ -75,6 +79,7 @@ export default function StoreSettings({ user }) {
         setZipCode(store.zipCode);
         setCategory(store.productCategories[0]);
         setAddress(store.address);
+        setInitiating(false);
       }
       console.log(store);
     };
@@ -90,7 +95,7 @@ export default function StoreSettings({ user }) {
           port: 3128,
         },
         method: "GET",
-        url: `https://steechit-api.herokuapp.com/countries/`,
+        url: `${process.env.apiUrl}countries/`,
       });
       setCountry(res.data[0]._id);
     };
@@ -106,7 +111,7 @@ export default function StoreSettings({ user }) {
           port: 3128,
         },
         method: "GET",
-        url: `https://steechit-api.herokuapp.com/states/`,
+        url: `${process.env.apiUrl}states/`,
       });
       setGetState(res.data);
     };
@@ -122,7 +127,7 @@ export default function StoreSettings({ user }) {
           port: 3128,
         },
         method: "GET",
-        url: `https://steechit-api.herokuapp.com/categories/`,
+        url: `${process.env.apiUrl}categories/`,
       });
       setCategoryState(res.data);
     };
@@ -223,7 +228,7 @@ export default function StoreSettings({ user }) {
           port: 3128,
         },
         method: "PUT",
-        url: `https://steechit-api.herokuapp.com/stores/${id}`,
+        url: `${process.env.apiUrl}stores/${storeId}`,
         data: {
           storeName: storeName,
           phone: phone,
@@ -246,7 +251,7 @@ export default function StoreSettings({ user }) {
       });
 
       setLoading(false);
-      setMessage("Store created successfully");
+      setMessage("Store edited successfully");
       setShow(true);
       setLoading(false);
       console.log(res);
@@ -261,261 +266,269 @@ export default function StoreSettings({ user }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <Row>
-          <Col size="12">
-            <Div
-              d="flex"
-              align="center"
-              justify="center"
-              m={{ t: "1rem", b: "3rem" }}
-              pos="relative"
-            >
-              <Image
-                src={imageUrlBanner}
-                w="100%"
-                h="150px"
-                rounded="lg"
-                pos="absolute"
-                top="0"
-                left="0"
-                style={{ objectFit: "cover" }}
-              />
-
+      {initiating ? (
+        <ProfileLoader />
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <Row>
+            <Col size="12">
               <Div
-                pos="absolute"
-                top="0"
-                left="0"
-                w="100%"
-                h="150"
-                rounded="lg"
-                bg="red"
-              />
-              <div
-                className="selectImageIcon"
-                style={{ bottom: 20, right: 10 }}
-              >
-                <input
-                  type="file"
-                  ml={10}
-                  className="selectImage"
-                  onChange={handleStoreBannerUpload}
-                />
-              </div>
-              <Div
-                m={{ t: "3rem" }}
-                rounded="circle"
+                d="flex"
+                align="center"
+                justify="center"
+                m={{ t: "1rem", b: "3rem" }}
                 pos="relative"
-                bg="gray200"
-                w="120px"
-                h="120px"
               >
                 <Image
-                  pos="absolute"
-                  rounded="circle"
-                  overflow="hidden"
+                  src={imageUrlBanner}
                   w="100%"
-                  h="100%"
-                  style={{ objectFit: "cover" }}
+                  h="150px"
+                  rounded="lg"
+                  pos="absolute"
+                  top="0"
                   left="0"
-                  right="0"
-                  src={imageUrlLogo}
-                  shadow="3"
+                  style={{ objectFit: "cover" }}
                 />
-                {uploadingLogo ? (
-                  <Div
-                    rounded="circle"
-                    className="overlay_light"
-                    d="flex"
-                    align="center"
-                    justify="center"
-                  >
-                    <Icon name="Loading3" size="32px" />
-                  </Div>
-                ) : null}
-                <div className="selectImageIcon">
+
+                <Div
+                  pos="absolute"
+                  top="0"
+                  left="0"
+                  w="100%"
+                  h="150"
+                  rounded="lg"
+                  bg="red"
+                />
+                <div
+                  className="selectImageIcon"
+                  style={{ bottom: 20, right: 10 }}
+                >
                   <input
                     type="file"
+                    ml={10}
                     className="selectImage"
-                    onChange={handleStoreLogoUpload}
-                    src={imageUrlLogo}
+                    onChange={handleStoreBannerUpload}
                   />
                 </div>
+                <Div
+                  m={{ t: "3rem" }}
+                  rounded="circle"
+                  pos="relative"
+                  bg="gray200"
+                  w="120px"
+                  h="120px"
+                >
+                  <Image
+                    pos="absolute"
+                    rounded="circle"
+                    overflow="hidden"
+                    w="100%"
+                    h="100%"
+                    style={{ objectFit: "cover" }}
+                    left="0"
+                    right="0"
+                    src={imageUrlLogo}
+                    shadow="3"
+                  />
+                  {uploadingLogo ? (
+                    <Div
+                      rounded="circle"
+                      className="overlay_light"
+                      d="flex"
+                      align="center"
+                      justify="center"
+                    >
+                      <Icon name="Loading3" size="32px" />
+                    </Div>
+                  ) : null}
+                  <div className="selectImageIcon">
+                    <input
+                      type="file"
+                      className="selectImage"
+                      onChange={handleStoreLogoUpload}
+                      src={imageUrlLogo}
+                    />
+                  </div>
+                </Div>
               </Div>
-            </Div>
-          </Col>
-          <Col
-            size={{
-              xs: "12",
-              sm: "12",
-              md: "12",
-              lg: "6",
-              xl: "6",
-            }}
+            </Col>
+            <Col
+              size={{
+                xs: "12",
+                sm: "12",
+                md: "12",
+                lg: "6",
+                xl: "6",
+              }}
+            >
+              <Label d="block" m={{ b: "1rem" }}>
+                Store name
+                <Input
+                  placeholder="Store name"
+                  value={storeName}
+                  onChange={handleStoreName}
+                />
+              </Label>
+            </Col>
+            <Col
+              size={{
+                xs: "12",
+                sm: "12",
+                md: "12",
+                lg: "6",
+                xl: "6",
+              }}
+            >
+              <Label d="block" m={{ b: "1rem" }}>
+                Email address
+                <Input
+                  placeholder="Email address"
+                  value={email}
+                  onChange={handleEmail}
+                />
+              </Label>
+            </Col>
+            <Col
+              size={{
+                xs: "12",
+                sm: "12",
+                md: "12",
+                lg: "6",
+                xl: "6",
+              }}
+            >
+              <Label d="block" m={{ b: "1rem" }}>
+                Phone number
+                <Input
+                  placeholder="070********"
+                  value={phone}
+                  onChange={handlePhone}
+                  type="number"
+                />
+              </Label>
+            </Col>
+            <Col
+              size={{
+                xs: "12",
+                sm: "12",
+                md: "12",
+                lg: "6",
+                xl: "6",
+              }}
+            >
+              <Label d="block" m={{ b: "1rem" }}>
+                State
+                <select class="select" onChange={handleState} value={stateU}>
+                  <option>Select state</option>
+                  {getState.map((item, key) => (
+                    <option key={item._id} value={item._id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </Label>
+            </Col>
+            <Col
+              size={{
+                xs: "12",
+                sm: "12",
+                md: "12",
+                lg: "6",
+                xl: "6",
+              }}
+            >
+              <Label d="block" m={{ b: "1rem" }}>
+                City
+                <Input
+                  placeholder="Lagos"
+                  type="text"
+                  value={city}
+                  onChange={handleCity}
+                />
+              </Label>
+            </Col>
+            <Col
+              size={{
+                xs: "12",
+                sm: "12",
+                md: "12",
+                lg: "6",
+                xl: "6",
+              }}
+            >
+              <Label d="block" m={{ b: "1rem" }}>
+                Zip Code
+                <Input
+                  placeholder="1001010"
+                  value={zipCode}
+                  onChange={handleZipCode}
+                />
+              </Label>
+            </Col>
+            <Col
+              size={{
+                xs: "12",
+                sm: "12",
+                md: "12",
+                lg: "6",
+                xl: "6",
+              }}
+            >
+              <Label d="block" m={{ b: "1rem" }}>
+                Category
+                <select
+                  class="select"
+                  onChange={handleCategory}
+                  value={category}
+                >
+                  <option>Select category</option>
+                  {categoryState.map((value) => (
+                    <option key={value._id} value={value._id}>
+                      {value.categoryName}
+                    </option>
+                  ))}
+                </select>
+              </Label>
+            </Col>
+            <Col
+              size={{
+                xs: "12",
+                sm: "12",
+                md: "12",
+                lg: "6",
+                xl: "6",
+              }}
+            >
+              <Label d="block" m={{ b: "1rem" }}>
+                Address
+                <Input
+                  placeholder="Somewhere, somethere"
+                  value={address}
+                  onChange={handleAddress}
+                />
+              </Label>
+            </Col>
+          </Row>
+          <Button
+            fontFamily="primary"
+            bg="warning700"
+            justify="center"
+            m={{ t: "1rem" }}
+            prefix={
+              loading ? (
+                <Icon
+                  name="Loading3"
+                  size="18px"
+                  color="white"
+                  m={{ r: "0.5rem" }}
+                />
+              ) : null
+            }
           >
-            <Label d="block" m={{ b: "1rem" }}>
-              Store name
-              <Input
-                placeholder="Store name"
-                value={storeName}
-                onChange={handleStoreName}
-              />
-            </Label>
-          </Col>
-          <Col
-            size={{
-              xs: "12",
-              sm: "12",
-              md: "12",
-              lg: "6",
-              xl: "6",
-            }}
-          >
-            <Label d="block" m={{ b: "1rem" }}>
-              Email address
-              <Input
-                placeholder="Email address"
-                value={email}
-                onChange={handleEmail}
-              />
-            </Label>
-          </Col>
-          <Col
-            size={{
-              xs: "12",
-              sm: "12",
-              md: "12",
-              lg: "6",
-              xl: "6",
-            }}
-          >
-            <Label d="block" m={{ b: "1rem" }}>
-              Phone number
-              <Input
-                placeholder="070********"
-                value={phone}
-                onChange={handlePhone}
-                type="number"
-              />
-            </Label>
-          </Col>
-          <Col
-            size={{
-              xs: "12",
-              sm: "12",
-              md: "12",
-              lg: "6",
-              xl: "6",
-            }}
-          >
-            <Label d="block" m={{ b: "1rem" }}>
-              State
-              <select class="select" onChange={handleState} value={stateU}>
-                <option>Select state</option>
-                {getState.map((item, key) => (
-                  <option key={item._id} value={item._id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </Label>
-          </Col>
-          <Col
-            size={{
-              xs: "12",
-              sm: "12",
-              md: "12",
-              lg: "6",
-              xl: "6",
-            }}
-          >
-            <Label d="block" m={{ b: "1rem" }}>
-              City
-              <Input
-                placeholder="Lagos"
-                type="text"
-                value={city}
-                onChange={handleCity}
-              />
-            </Label>
-          </Col>
-          <Col
-            size={{
-              xs: "12",
-              sm: "12",
-              md: "12",
-              lg: "6",
-              xl: "6",
-            }}
-          >
-            <Label d="block" m={{ b: "1rem" }}>
-              Zip Code
-              <Input
-                placeholder="1001010"
-                value={zipCode}
-                onChange={handleZipCode}
-              />
-            </Label>
-          </Col>
-          <Col
-            size={{
-              xs: "12",
-              sm: "12",
-              md: "12",
-              lg: "6",
-              xl: "6",
-            }}
-          >
-            <Label d="block" m={{ b: "1rem" }}>
-              Category
-              <select class="select" onChange={handleCategory} value={category}>
-                <option>Select category</option>
-                {categoryState.map((value) => (
-                  <option key={value._id} value={value._id}>
-                    {value.categoryName}
-                  </option>
-                ))}
-              </select>
-            </Label>
-          </Col>
-          <Col
-            size={{
-              xs: "12",
-              sm: "12",
-              md: "12",
-              lg: "6",
-              xl: "6",
-            }}
-          >
-            <Label d="block" m={{ b: "1rem" }}>
-              Address
-              <Input
-                placeholder="Somewhere, somethere"
-                value={address}
-                onChange={handleAddress}
-              />
-            </Label>
-          </Col>
-        </Row>
-        <Button
-          fontFamily="primary"
-          bg="warning700"
-          justify="center"
-          m={{ t: "1rem" }}
-          prefix={
-            loading ? (
-              <Icon
-                name="Loading3"
-                size="18px"
-                color="white"
-                m={{ r: "0.5rem" }}
-              />
-            ) : null
-          }
-        >
-          {loading ? "Saving" : "Save Changes"}
-        </Button>
-      </form>
+            {loading ? "Saving" : "Save Changes"}
+          </Button>
+        </form>
+      )}
       <Notification
         bg="warning700"
         isOpen={show}

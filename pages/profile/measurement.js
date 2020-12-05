@@ -31,7 +31,7 @@ export default function Measurement() {
         port: 3128,
       },
       method: "GET",
-      url: `https://steechit-api.herokuapp.com/measurements`,
+      url: `${process.env.apiUrl}measurements`,
       data: {
         user: id,
       },
@@ -47,7 +47,7 @@ export default function Measurement() {
             port: 3128,
           },
           method: "GET",
-          url: `https://steechit-api.herokuapp.com/menMeasurement/`,
+          url: `${process.env.apiUrl}menMeasurement/`,
           params: {
             user: id,
           },
@@ -68,7 +68,7 @@ export default function Measurement() {
 
   return (
     <>
-      <ProfileLayout>
+      <ProfileLayout title="Measurement | Steechit">
         <Div
           p="20px"
           style={{ borderBottom: "1px solid #ccc" }}

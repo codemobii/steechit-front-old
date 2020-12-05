@@ -35,7 +35,7 @@ export default function Wallet() {
           port: 3128,
         },
         method: "GET",
-        url: `https://steechit-api.herokuapp.com/wallet/`,
+        url: `${process.env.apiUrl}wallet/`,
         params: {
           user: id,
         },
@@ -53,13 +53,11 @@ export default function Wallet() {
               port: 3128,
             },
             method: "GET",
-            url: `https://steechit-api.herokuapp.com/contract/`,
+            url: `${process.env.apiUrl}contract/`,
             data: {
               user: id,
             },
           });
-          // setOrders(orders_res.data);
-          console.log(orders_res);
         })
         .catch((error) => {
           console.log(error);
@@ -69,10 +67,10 @@ export default function Wallet() {
         });
     };
     getUserItems();
-  }, [id, token, dispatch]);
+  }, [id, token]);
 
   return (
-    <ProfileLayout>
+    <ProfileLayout title="My Wallet | Steechit">
       <Div
         p="20px"
         style={{ borderBottom: "1px solid #ccc" }}

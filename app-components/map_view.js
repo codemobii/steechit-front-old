@@ -43,7 +43,7 @@ export class Mapview extends Component {
       <Map
         google={this.props.google}
         mapTypeId="roadmap"
-        zoom={15}
+        zoom={18}
         style={mapStyles}
         initialCenter={this.props.position}
         styles={mapStyle}

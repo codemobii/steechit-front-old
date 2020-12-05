@@ -83,7 +83,7 @@ export default function AddMeasurement({ isOpen, onClose }) {
         port: 3128,
       },
       method: "POST",
-      url: `https://steechit-api.herokuapp.com/measurements/`,
+      url: `${process.env.apiUrl}measurements/`,
       data: {
         user: id,
         measurementType: measurementType,
@@ -228,7 +228,7 @@ export default function AddMeasurement({ isOpen, onClose }) {
             port: 3128,
           },
           method: "POST",
-          url: `https://steechit-api.herokuapp.com/menMeasurement/`,
+          url: `${process.env.apiUrl}menMeasurement/`,
           data: {
             user: id,
             measurement: measurementID,
@@ -274,7 +274,7 @@ export default function AddMeasurement({ isOpen, onClose }) {
             port: 3128,
           },
           method: "POST",
-          url: `https://steechit-api.herokuapp.com/womenMeasurement/`,
+          url: `${process.env.apiUrl}womenMeasurement/`,
           data: {
             user: id,
             measurement: measurementID,

@@ -13,14 +13,25 @@ import axios from "axios";
 import ReactStars from "react-rating-stars-component";
 import Layout from "../app-components/layout";
 import OrderModal from "../app-components/order_modal";
+import store from "../services/store";
+import { useRouter } from "next/router";
 
-export default class Tailor extends Component {
+const token = store.getState().auth.token;
+
+export default function Fabrics(props) {
+  const router = useRouter();
+  return <Tailor {...props} router={router} />;
+}
+
+export class Tailor extends Component {
   constructor(props) {
     super(props);
     this.id = "";
     this.state = {
+      router: props.router.query.product,
       tailor: this.props.tailor,
       products: this.props.products,
+      loading_pro: false,
       openModal: false,
       product: {},
       loading: false,
@@ -34,13 +45,13 @@ export default class Tailor extends Component {
   getProduct = async () => {
     this.setState({ loading: true });
     await axios
-      .get(`https://steechit-api.herokuapp.com/products/${this.id}`)
+      .get(`${process.env.apiUrl}products/${this.id}`)
       .then((res) => {
         this.setState({
           product: {
             id: res.data._id,
             name: res.data.productName,
-            image: res.data.productPictures[0].url,
+            image: res.data.productPictures,
             price: res.data.availableOptions[0].price,
             discount: res.data.availableOptions[0].percentageDiscount,
           },
@@ -55,6 +66,42 @@ export default class Tailor extends Component {
         this.setState({ loading: false });
       });
   };
+
+  /** 
+  getProducts = async () => {
+    await axios({
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+      proxy: {
+        host: "104.236.174.88",
+        port: 3128,
+      },
+      method: "GET",
+      url: `https://steechit-api.herokuapp.com/products/`,
+      params: {
+        store: this.state.tailor._id,
+      },
+    })
+      .then((res) => {
+        this.setState({ products: res.data });
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => this.setState({ loading_pro: false }));
+  }; */
+
+  componentDidMount() {
+    console.log(this.state.router);
+    if (this.state.router !== undefined) {
+      this.id = this.state.router;
+      this.setState({ openModal: true });
+      this.getProduct();
+    }
+  }
 
   render() {
     const {
@@ -173,71 +220,78 @@ export default class Tailor extends Component {
               w={{ xs: "100%", sm: "100%", md: "63%", lg: "63%", xl: "63%" }}
             >
               <Row>
-                {products.map((p) =>
-                  p.store === this.state.tailor._id ? (
-                    <Col
-                      size={{
-                        xs: "12",
-                        sm: "12",
-                        md: "12",
-                        lg: "6",
-                        xl: "6",
-                      }}
-                    >
-                      <Div
-                        cursor="pointer"
-                        onClick={() => {
-                          this.id = p._id;
-                          this.setState({ openModal: true });
-                          this.getProduct();
-                        }}
-                        rounded="md"
-                        overflow="hidden"
-                        m={{ b: "1.5rem" }}
-                        bg="#fff"
-                        border="1px solid"
-                        borderColor="gray300"
-                        position="relative"
-                        hoverShadow="5"
-                        transition="all 0.4s ease-in-out"
-                      >
-                        <Image
-                          src={p.productPictures[0].url}
-                          w="100%"
-                          h="150px"
-                          style={{
-                            objectFit: "cover",
-                            objectPosition: "center",
+                {products.length !== 0
+                  ? products.map((p) =>
+                      p.store === tailor._id ? (
+                        <Col
+                          size={{
+                            xs: "12",
+                            sm: "12",
+                            md: "12",
+                            lg: "6",
+                            xl: "6",
                           }}
-                        />
-                        <Div p="20px">
-                          <Text tag="header" textSize="title">
-                            {p.productName}
-                          </Text>
-                          <Text m={{ b: "1rem", t: "1rem" }}>
-                            {p.productDescription}
-                          </Text>
-                          <Div d="flex" align="center" justify="space-between">
-                            <Text textSize="title">
-                              ₦{p.availableOptions[0].price}
-                              {p.availableOptions[0].percentageDiscount !==
-                              0 ? (
-                                <Text
-                                  textColor="danger500"
-                                  tag="sup"
-                                  textSize="subheader"
-                                >
-                                  {p.availableOptions[0].percentageDiscount}%
+                        >
+                          <Div
+                            cursor="pointer"
+                            onClick={() => {
+                              this.id = p._id;
+                              this.setState({ openModal: true });
+                              this.getProduct();
+                            }}
+                            rounded="md"
+                            overflow="hidden"
+                            m={{ b: "1.5rem" }}
+                            bg="#fff"
+                            border="1px solid"
+                            borderColor="gray300"
+                            position="relative"
+                            hoverShadow="5"
+                            transition="all 0.4s ease-in-out"
+                          >
+                            <Image
+                              src={p.productPictures[0].url}
+                              w="100%"
+                              h="150px"
+                              style={{
+                                objectFit: "cover",
+                                objectPosition: "center",
+                              }}
+                            />
+                            <Div p="20px">
+                              <Text tag="header" textSize="title">
+                                {p.productName}
+                              </Text>
+                              <Text m={{ b: "1rem", t: "1rem" }}>
+                                {p.productDescription}
+                              </Text>
+                              <Div
+                                d="flex"
+                                align="center"
+                                justify="space-between"
+                              >
+                                <Text textSize="title">
+                                  ₦{p.availableOptions[0].price}
+                                  {p.availableOptions[0].percentageDiscount !==
+                                  0 ? (
+                                    <Text
+                                      textColor="danger500"
+                                      tag="sup"
+                                      textSize="subheader"
+                                    >
+                                      {p.availableOptions[0].percentageDiscount}
+                                      %
+                                    </Text>
+                                  ) : null}
                                 </Text>
-                              ) : null}
-                            </Text>
-                            <Button bg="warning800">Book now</Button>
+                                <Button bg="warning800">Book now</Button>
+                              </Div>
+                            </Div>
                           </Div>
-                        </Div>
-                      </Div>
-                    </Col>
-                  ) : null
-                )}
+                        </Col>
+                      ) : null
+                    )
+                  : null}
               </Row>
             </Div>
           </Div>
@@ -283,13 +337,8 @@ export default class Tailor extends Component {
 export async function getStaticProps({ params }) {
   const id = params.id;
 
-  const tailor_res = await fetch(
-    `https://steechit-api.herokuapp.com/stores/${id}`
-  );
-  const products_res = await fetch(
-    `https://steechit-api.herokuapp.com/products`
-  );
-
+  const tailor_res = await fetch(`${process.env.apiUrl}stores/${id}`);
+  const products_res = await fetch(`${process.env.apiUrl}products/`);
   const tailor = await tailor_res.json();
   const products = await products_res.json();
 
@@ -302,7 +351,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const tailors_res = await fetch(`https://steechit-api.herokuapp.com/stores`);
+  const tailors_res = await fetch(`${process.env.apiUrl}stores`);
 
   const tailors = await tailors_res.json();
 

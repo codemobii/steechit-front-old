@@ -13,7 +13,7 @@ export default function ProfileMobileMenu() {
       d={{ xs: "flex", sm: "flex", md: "none", lg: "none", xl: "none" }}
       shadow="5"
     >
-      <Link href="/profile">
+      <Link href="/profile/orders">
         <Div w="20%" d="flex" h="60px" align="center" justify="center">
           <Div textAlign="center">
             <Icon

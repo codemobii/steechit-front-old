@@ -57,10 +57,15 @@ export default function Header({ fixed, onOpen }) {
                   xl: "none",
                 }}
               >
-                <Image
-                  src="https://github.com/ijelechimaobi/steechit-front/blob/main/LOGO%203D%20Icon_3%20PNG.png?raw=true"
-                  w="40px"
-                />
+                <Div d="flex" align="center">
+                  <Image
+                    src="https://github.com/ijelechimaobi/steechit-front/blob/main/LOGO%203D%20Icon_3%20PNG.png?raw=true"
+                    w="40px"
+                  />
+                  <Text m={{ l: "10px" }} textColor="#fff" textSize="subheader">
+                    STEECHIT
+                  </Text>
+                </Div>
               </Anchor>
             </Link>
             <Div
@@ -70,10 +75,19 @@ export default function Header({ fixed, onOpen }) {
             >
               <Link href="/">
                 <Anchor m={{ l: "-0.3rem" }}>
-                  <Image
-                    src="https://github.com/ijelechimaobi/steechit-front/blob/main/LOGO%203D%20Icon_3%20PNG.png?raw=true"
-                    w="50px"
-                  />
+                  <Div d="flex" align="center">
+                    <Image
+                      src="https://github.com/ijelechimaobi/steechit-front/blob/main/LOGO%203D%20Icon_3%20PNG.png?raw=true"
+                      w="40px"
+                    />
+                    <Text
+                      m={{ l: "10px" }}
+                      textColor="#fff"
+                      textSize="subheader"
+                    >
+                      STEECHIT
+                    </Text>
+                  </Div>
                 </Anchor>
               </Link>
               <Link href="/">
@@ -81,9 +95,11 @@ export default function Header({ fixed, onOpen }) {
                   Tailors
                 </Anchor>
               </Link>
-              <Anchor d="block" textColor="#fff" m={{ l: "2rem" }}>
-                Fabric Stores
-              </Anchor>
+              <Link href="/fabrics">
+                <Anchor d="block" textColor="#fff" m={{ l: "2rem" }}>
+                  Fabrics
+                </Anchor>
+              </Link>
               <Anchor d="block" textColor="#fff" m={{ l: "2rem" }}>
                 Logistics
               </Anchor>
@@ -141,16 +157,18 @@ export default function Header({ fixed, onOpen }) {
                     m={{ r: "1rem" }}
                   />
                 </Link>
-                <Button
-                  bg="warning700"
-                  hoverBg="warning800"
-                  rounded="circle"
-                  p={{ r: "2rem", l: "2rem" }}
-                  shadow="3"
-                  hoverShadow="4"
-                >
-                  SELL
-                </Button>
+                <Link href="/profile/store/sell">
+                  <Button
+                    bg="warning700"
+                    hoverBg="warning800"
+                    rounded="circle"
+                    p={{ r: "2rem", l: "2rem" }}
+                    shadow="3"
+                    hoverShadow="4"
+                  >
+                    SELL
+                  </Button>
+                </Link>
               </Div>
             ) : (
               <Div

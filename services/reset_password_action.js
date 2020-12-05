@@ -14,7 +14,7 @@ export const ResetPasswordRequest = (data) => async (dispatch) => {
         port: 3128,
       },
       method: "POST",
-      url: `https://steechit-api.herokuapp.com/recover_password`,
+      url: `${process.env.apiUrl}recover_password`,
       data,
     });
 

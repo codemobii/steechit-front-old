@@ -66,7 +66,12 @@ export default function Signup() {
     }
     if (password === _password && password.length > 4) {
       dispatch(RegisterRequest({ email, password, phone }));
-      aUser.is_created !== true ? setError_au(true) : setError_au(false);
+      if (!aUser.success) {
+        setError_au(true);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      }
       setTimeout(() => {
         setLoading(false);
       }, 2000);

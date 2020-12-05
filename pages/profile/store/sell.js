@@ -6,10 +6,10 @@ import ProfileLayout from "../../../app-components/profile_layout";
 import ProfileLoader from "../../../app-components/profile_loader";
 import store from "../../../services/store";
 import { useRouter } from "next/router";
-import CreateStoreForm from "../../../app-components/create_store_form";
 import { profileRequest } from "../../../services/profile_action";
+import SellProductForm from "../../../app-components/sell_product_form";
 
-export default function Bookings() {
+export default function Sell() {
   // Getting auth state and user data for structuring the navbar
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
@@ -38,10 +38,10 @@ export default function Bookings() {
         },
       })
         .then(async (store_res) => {
-          if (store_res.data.length === 0) {
+          if (store_res.data.length !== 0) {
             return;
           } else {
-            router.push("/profile/store");
+            router.push("/profile/store/start");
           }
         })
         .catch((error) => {
@@ -56,7 +56,7 @@ export default function Bookings() {
   }, [id, token, dispatch]);
 
   return (
-    <ProfileLayout title="Create your store today | Steechit">
+    <ProfileLayout title="Sell a product | Steechit">
       <Div
         p="20px"
         style={{ borderBottom: "1px solid #ccc" }}
@@ -75,14 +75,14 @@ export default function Bookings() {
           }}
           textSize="title"
         >
-          Create your store
+          Upload a product
         </Text>
       </Div>
       {loading ? (
         <ProfileLoader />
       ) : (
         <Div p="20px" pos="relative">
-          <CreateStoreForm user={user} />
+          <SellProductForm user={user} />
         </Div>
       )}
     </ProfileLayout>

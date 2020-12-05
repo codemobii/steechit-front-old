@@ -15,16 +15,11 @@ export default function ProfileSidebar() {
 
   //user state
   const user = useSelector((state) => state.user);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const getUser = () => {
-      if (dispatch(profileRequest(token, id))) {
-        setLoading(false);
-      }
-    };
-    getUser();
-  }, [user]);
+    dispatch(profileRequest(token, id));
+  }, [id, token]);
 
   return (
     <>
@@ -52,7 +47,7 @@ export default function ProfileSidebar() {
             {user.firstName} {user.lastName}
           </Text>
           <Div m={{ t: "20px", b: "20px" }}>
-            <Link href="/profile">
+            <Link href="/profile/orders">
               <Button
                 w="100%"
                 h="65px"
@@ -67,15 +62,13 @@ export default function ProfileSidebar() {
                   />
                 }
                 suffix={
-                  <Tag
-                    bg={`danger700`}
-                    textColor="white"
+                  <Icon
                     pos="absolute"
                     right="1.5rem"
-                    style={{ fontSize: "14px" }}
-                  >
-                    10
-                  </Tag>
+                    name="DownArrowCircle"
+                    size="24px"
+                    style={{ transform: "rotate(-90deg)" }}
+                  />
                 }
                 bg="white"
                 textColor="black800"
@@ -102,15 +95,13 @@ export default function ProfileSidebar() {
                   />
                 }
                 suffix={
-                  <Tag
-                    bg={`danger700`}
-                    textColor="white"
+                  <Icon
                     pos="absolute"
                     right="1.5rem"
-                    style={{ fontSize: "14px" }}
-                  >
-                    5
-                  </Tag>
+                    name="DownArrowCircle"
+                    size="24px"
+                    style={{ transform: "rotate(-90deg)" }}
+                  />
                 }
                 bg="white"
                 textColor="black800"
@@ -132,6 +123,15 @@ export default function ProfileSidebar() {
                     size="28px"
                     color="black800"
                     m={{ r: "1.5rem" }}
+                  />
+                }
+                suffix={
+                  <Icon
+                    pos="absolute"
+                    right="1.5rem"
+                    name="DownArrowCircle"
+                    size="24px"
+                    style={{ transform: "rotate(-90deg)" }}
                   />
                 }
                 bg="white"
@@ -156,6 +156,15 @@ export default function ProfileSidebar() {
                     m={{ r: "1.5rem" }}
                   />
                 }
+                suffix={
+                  <Icon
+                    pos="absolute"
+                    right="1.5rem"
+                    name="DownArrowCircle"
+                    size="24px"
+                    style={{ transform: "rotate(-90deg)" }}
+                  />
+                }
                 bg="white"
                 textColor="black800"
                 textSize="subheader"
@@ -176,6 +185,15 @@ export default function ProfileSidebar() {
                     size="28px"
                     color="black800"
                     m={{ r: "1.5rem" }}
+                  />
+                }
+                suffix={
+                  <Icon
+                    pos="absolute"
+                    right="1.5rem"
+                    name="DownArrowCircle"
+                    size="24px"
+                    style={{ transform: "rotate(-90deg)" }}
                   />
                 }
                 bg="white"

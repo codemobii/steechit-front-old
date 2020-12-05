@@ -44,7 +44,7 @@ export default function ContactSettings({ user }) {
           port: 3128,
         },
         method: "PUT",
-        url: `https://steechit-api.herokuapp.com/users/${id}`,
+        url: `${process.env.apiUrl}users/${id}`,
         data: {
           phone: phone,
           contact: {

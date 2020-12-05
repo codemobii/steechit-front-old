@@ -15,7 +15,7 @@ export const profileRequest = (token, id) => async (dispatch) => {
         port: 3128,
       },
       method: "GET",
-      url: `https://steechit-api.herokuapp.com/users/${id}`,
+      url: `${process.env.apiUrl}users/${id}`,
     });
 
     dispatch({

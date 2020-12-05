@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import store from "../services/store";
 import axios from "axios";
+import Carousel from "nuka-carousel";
 
 export default function OrderModal({
   isOpen,
@@ -26,7 +27,7 @@ export default function OrderModal({
 }) {
   const [checking, setChecking] = useState(false);
   const [measurement, setMeasurement] = useState(false);
-  const [quantity, setQuantity] = useState("2");
+  const [quantity, setQuantity] = useState("1");
   const [message, setMessage] = useState("");
   const [ordering, setOrdering] = useState(false);
   const [error, setError] = useState(false);
@@ -50,7 +51,7 @@ export default function OrderModal({
         port: 3128,
       },
       method: "GET",
-      url: `https://steechit-api.herokuapp.com/menMeasurement/`,
+      url: `${process.env.apiUrl}menMeasurement/`,
       params: {
         user: id,
       },
@@ -69,7 +70,7 @@ export default function OrderModal({
               port: 3128,
             },
             method: "GET",
-            url: `https://steechit-api.herokuapp.com/womenMeasurement/`,
+            url: `${process.env.apiUrl}womenMeasurement/`,
             params: {
               user: id,
             },
@@ -97,6 +98,8 @@ export default function OrderModal({
       .finally(() => setChecking(false));
   };
 
+  console.log(product.image);
+
   const bookOrder = async (e) => {
     e.preventDefault();
     setOrdering(true);
@@ -110,7 +113,7 @@ export default function OrderModal({
         port: 3128,
       },
       method: "GET",
-      url: `https://steechit-api.herokuapp.com/wallet/`,
+      url: `${process.env.apiUrl}wallet/`,
       params: {
         user: id,
       },
@@ -118,7 +121,7 @@ export default function OrderModal({
       .then(async (res) => {
         const pro_price = parseInt(product.price);
         const wallet_bal = parseInt(res.data[0].bal);
-        const price = product.price;
+        const price = parseInt(product.price * quantity);
 
         const data = {
           customer: id,
@@ -134,7 +137,7 @@ export default function OrderModal({
           },
         };
         console.log(res);
-        if (pro_price < wallet_bal) {
+        if (pro_price > wallet_bal) {
           setErrorMsg(
             "You don't have enough funds to continue, fund your wallet"
           );
@@ -151,7 +154,7 @@ export default function OrderModal({
               port: 3128,
             },
             method: "POST",
-            url: `https://steechit-api.herokuapp.com/contract`,
+            url: `${process.env.apiUrl}contract`,
             data,
           })
             .then((ress) => {
@@ -201,6 +204,7 @@ export default function OrderModal({
           pos="absolute"
           top="1rem"
           right="1rem"
+          zIndex="1000"
         >
           <Icon name="Cross" size="32px" />
         </Button>
@@ -243,13 +247,19 @@ export default function OrderModal({
             </Div>
           ) : (
             <>
-              <Image
-                src={product.image}
-                w="100%"
-                h="auto"
-                objectFit="cover"
-                objectPosition="center"
-              />
+              <Carousel>
+                {product.image === undefined
+                  ? null
+                  : product.image.map((i) => (
+                      <Image
+                        src={i.url}
+                        w="100%"
+                        h="auto"
+                        objectFit="cover"
+                        objectPosition="center"
+                      />
+                    ))}
+              </Carousel>
               <Div p="20px">
                 <Div d="flex" align="center" style={{ flexFlow: "wrap" }}>
                   <Text tag="header" textSize="heading">
@@ -269,19 +279,25 @@ export default function OrderModal({
                     />
                     Send my measurement?
                   </Label>
+
+                  <Label align="center" m={{ b: "1rem", t: "1rem" }}>
+                    Amount to pay : ({parseInt(product.price * quantity)})
+                  </Label>
                   <Div m={{ t: "1rem" }}>
                     <Label d="block" m={{ b: "1rem" }}>
                       Quantity
                       <Input
                         type="number"
                         value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
+                        onChange={(e) => {
+                          setQuantity(e.target.value);
+                        }}
                       />
                     </Label>
                     <Label d="block">
-                      Message?
+                      Contact details?
                       <Textarea
-                        placeholder="Message"
+                        placeholder="Your contact details"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                       />

@@ -16,7 +16,7 @@ export const RegisterRequest = (data) => async (dispatch) => {
         port: 3128,
       },
       method: "POST",
-      url: `https://steechit-api.herokuapp.com/users`,
+      url: `${process.env.apiUrl}users`,
       data,
     });
 
@@ -32,7 +32,7 @@ export const RegisterRequest = (data) => async (dispatch) => {
       },
     });
   } catch (e) {
-    console.log("action");
+    console.log(e);
     const msg = get(e, "response.data.message") || e.message;
     dispatch({
       type: REGISTRATION,

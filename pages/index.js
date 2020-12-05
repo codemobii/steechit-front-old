@@ -9,6 +9,7 @@ import {
   Modal,
   Label,
   Radiobox,
+  Image,
 } from "atomize";
 import Link from "next/link";
 import Layout from "../app-components/layout";
@@ -16,7 +17,6 @@ import MapModal from "../app-components/mobile_map_modal";
 import MapView from "../app-components/map_view";
 import store from "../services/store";
 import axios from "axios";
-import Image from "next/image";
 import EmptyList from "../app-components/empty_list";
 
 export default class Home extends Component {
@@ -50,7 +50,7 @@ export default class Home extends Component {
         port: 3128,
       },
       method: "GET",
-      url: `https://steechit-api.herokuapp.com/stores/`,
+      url: `${process.env.apiUrl}stores/`,
       params:
         this.category !== ""
           ? { productCategories: { $oid: this.category } }
@@ -191,12 +191,12 @@ export default class Home extends Component {
                           }}
                           bg="#fff"
                           pos="relative"
+                          overflow="hidden"
                         >
                           <Image
                             alt={t.storeName}
                             src={t.storeBanner.url}
                             className="store_image"
-                            layout="fill"
                           />
                           <Div
                             bg="rgba(0,0,0,0.5)"
@@ -215,7 +215,10 @@ export default class Home extends Component {
                             </Text>
                           </Div>
                         </Div>
-                        <Div p={{ t: "1rem", b: "1rem", l: "15px", r: "15px" }}>
+                        <Div
+                          p={{ t: "1rem", b: "1rem", l: "15px", r: "15px" }}
+                          zIndex="100"
+                        >
                           <Label d="flex" textSize="paragraph" align="center">
                             <Icon
                               name="StarSolid"
@@ -320,7 +323,7 @@ export default class Home extends Component {
               fontFamily="primary"
               m={{ b: "2rem" }}
             >
-              FILTER RESULT
+              FILTER
             </Text>
             <Div m={{ t: "1rem" }}>
               <Text tag="label" textColor="black200" fontFamily="primary">
@@ -398,10 +401,8 @@ export default class Home extends Component {
 }
 
 export async function getStaticProps() {
-  const categories_res = await fetch(
-    `https://steechit-api.herokuapp.com/categories/`
-  );
-  const tailors_res = await fetch(`https://steechit-api.herokuapp.com/stores`);
+  const categories_res = await fetch(`${process.env.apiUrl}categories/`);
+  const tailors_res = await fetch(`${process.env.apiUrl}stores`);
 
   const initial_tailors = await tailors_res.json();
   const initial_categories = await categories_res.json();

@@ -13,7 +13,7 @@ export const ForgotPasswordRequest = (data) => async (dispatch) => {
         port: 3128,
       },
       method: "POST",
-      url: `https://steechit-api.herokuapp.com/forgotten_password`,
+      url: `${process.env.apiUrl}forgotten_password`,
       data,
     });
 

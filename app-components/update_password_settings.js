@@ -65,7 +65,7 @@ export default function UpdatePasswordSettings() {
             port: 3128,
           },
           method: "PUT",
-          url: `https://steechit-api.herokuapp.com/users/${id}`,
+          url: `${process.env.apiUrl}users/${id}`,
           data: {
             password: newPassword,
           },

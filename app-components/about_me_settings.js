@@ -91,7 +91,7 @@ export default function AboutMeSettings({ user }) {
             port: 3128,
           },
           method: "PUT",
-          url: `https://steechit-api.herokuapp.com/users/${id}`,
+          url: `${process.env.apiUrl}users/${id}`,
           data: {
             avatar: {
               url: Img_url,
@@ -133,7 +133,7 @@ export default function AboutMeSettings({ user }) {
           port: 3128,
         },
         method: "PUT",
-        url: `https://steechit-api.herokuapp.com/users/${id}`,
+        url: `${process.env.apiUrl}users/${id}`,
         data: {
           firstName: firstName,
           lastName: lastName,
@@ -258,6 +258,7 @@ export default function AboutMeSettings({ user }) {
                 placeholder="070********"
                 value={phone}
                 onChange={handlePhone}
+                disabled
               />
             </Label>
           </Col>
@@ -276,6 +277,7 @@ export default function AboutMeSettings({ user }) {
                 placeholder="johndoe@gmail.com"
                 value={email}
                 onChange={handleEmail}
+                disabled
               />
             </Label>
           </Col>

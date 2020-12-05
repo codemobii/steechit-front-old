@@ -5,6 +5,7 @@ import { ThemeProvider, StyleReset, Div, Container } from "atomize";
 import Footer from "./footer";
 import AuthBox from "./auth_box";
 import { Router, useRouter } from "next/router";
+import HomeHero from "./home_hero";
 
 const theme = {
   colors: {
@@ -20,6 +21,7 @@ export default function Layout({
   children,
   title = "Steechit - Find the Best Tailors Anywhere, Anytime",
   fixed,
+  home = false,
 }) {
   const [openLogin, setOpenLogin] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,7 +29,6 @@ export default function Layout({
   const auth = router.query.auth;
 
   useEffect(() => {
-    console.log(auth);
     if (auth) {
       setOpenLogin(true);
     }
@@ -50,11 +51,14 @@ export default function Layout({
       {loading ? (
         <Div pos="fixed" top="0" left="0" w="100%" h="100%" bg="black100" />
       ) : null}
-      <Div bg="gray200" p={{ t: fixed ? "6.5rem" : "3rem", b: "3rem" }}>
-        <Container>
-          {children}
-          <AuthBox isOpen={openLogin} onClose={() => setOpenLogin(false)} />
-        </Container>
+      <Div bg="gray200">
+        {home ? <HomeHero /> : null}
+        <Div p={{ t: fixed ? "6.5rem" : "3rem", b: "3rem" }}>
+          <Container>
+            {children}
+            <AuthBox isOpen={openLogin} onClose={() => setOpenLogin(false)} />
+          </Container>
+        </Div>
       </Div>
       <Footer />
     </ThemeProvider>

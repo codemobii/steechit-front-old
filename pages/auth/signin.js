@@ -33,17 +33,15 @@ export default function Signin() {
   };
 
   const handleSubmit = async (evt) => {
-    evt.preventDefault();
     setLoading(true);
+    evt.preventDefault();
     if (dispatch(LoginRequest({ email, password }))) {
-      setEmail("");
-      setPassword("");
-      setLoading(false);
-    } else {
-      auth.message !== "login successful" ? setError(true) : setError(false);
-      setEmail("");
-      setPassword("");
-      setLoading(false);
+      if (!auth.success) {
+        setError(true);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      }
     }
   };
 
@@ -96,6 +94,7 @@ export default function Signin() {
               top="0"
               right="0"
               rounded={{ r: "md" }}
+              type="button"
             >
               <Icon
                 name={showPassword ? "EyeSolid" : "Eye"}
@@ -141,9 +140,13 @@ export default function Signin() {
         </Button>
       </form>
       <Notification
-        bg="danger700"
+        bg="info700"
         isOpen={error}
-        onClose={() => setError(false)}
+        onClose={() =>
+          setTimeout(() => {
+            setError(false);
+          }, 2000)
+        }
         prefix={
           <Icon
             name="CloseSolid"

@@ -1,4 +1,5 @@
 import { Anchor, Button, Div, Icon, Image, SideDrawer, Text } from "atomize";
+import Link from "next/link";
 import React from "react";
 
 export default function MobileMenu({ isOpen, onClose }) {
@@ -19,9 +20,17 @@ export default function MobileMenu({ isOpen, onClose }) {
         cursor="pointer"
         color="gray100"
       />
-      <Anchor>
-        <Image src="https://www.openphone.co/images/open-phone.svg" w="160px" />
-      </Anchor>
+      <Link href="/">
+        <Div d="flex" align="center">
+          <Image
+            src="https://github.com/ijelechimaobi/steechit-front/blob/main/LOGO%203D%20Icon_3%20PNG.png?raw=true"
+            w="40px"
+          />
+          <Text m={{ l: "10px" }} textColor="#fff" textSize="subheader">
+            STEECHIT
+          </Text>
+        </Div>
+      </Link>
       <Div m={{ t: "30px" }}>
         <Anchor
           href="https://www.google.com"
@@ -62,16 +71,6 @@ export default function MobileMenu({ isOpen, onClose }) {
           fontFamily="primary"
         >
           About
-        </Anchor>
-        <Anchor
-          href="https://www.google.com"
-          target="_blank"
-          d="block"
-          textColor="#fff"
-          m={{ b: "1rem" }}
-          fontFamily="primary"
-        >
-          Help
         </Anchor>
       </Div>
     </SideDrawer>

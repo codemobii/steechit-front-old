@@ -4,7 +4,7 @@ import React from "react";
 
 export default function MapCard({ store, image }) {
   return (
-    <a href={`tailors/${store._id}`}>
+    <a href={`/${store._id}`}>
       <div style={{ width: "160px", position: "relative", cursor: "pointer" }}>
         <img
           src={image}

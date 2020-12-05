@@ -34,7 +34,7 @@ export default function Bookings() {
           port: 3128,
         },
         method: "GET",
-        url: `https://steechit-api.herokuapp.com/stores/`,
+        url: `${process.env.apiUrl}stores/`,
         params: {
           user: id,
         },
@@ -52,7 +52,7 @@ export default function Bookings() {
                 port: 3128,
               },
               method: "GET",
-              url: `https://steechit-api.herokuapp.com/contract`,
+              url: `${process.env.apiUrl}contract`,
               params: {
                 store: store_res.data[0]._id,
               },
@@ -77,7 +77,7 @@ export default function Bookings() {
   }, [id, token, dispatch]);
 
   return (
-    <ProfileLayout>
+    <ProfileLayout title="My Bookings | Steechit">
       <Div
         p="20px"
         style={{ borderBottom: "1px solid #ccc" }}

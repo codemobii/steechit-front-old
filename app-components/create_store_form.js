@@ -65,7 +65,7 @@ export default function CreateStoreForm({ user }) {
           port: 3128,
         },
         method: "GET",
-        url: `https://steechit-api.herokuapp.com/countries/`,
+        url: `${process.env.apiUrl}countries/`,
       });
       setCountry(res.data[0]._id);
     };
@@ -81,7 +81,7 @@ export default function CreateStoreForm({ user }) {
           port: 3128,
         },
         method: "GET",
-        url: `https://steechit-api.herokuapp.com/states/`,
+        url: `${process.env.apiUrl}states/`,
       });
       setGetState(res.data);
     };
@@ -97,7 +97,7 @@ export default function CreateStoreForm({ user }) {
           port: 3128,
         },
         method: "GET",
-        url: `https://steechit-api.herokuapp.com/categories/`,
+        url: `${process.env.apiUrl}categories/`,
       });
       setCategoryState(res.data);
       console.log(res.data);
@@ -199,7 +199,7 @@ export default function CreateStoreForm({ user }) {
           port: 3128,
         },
         method: "POST",
-        url: `https://steechit-api.herokuapp.com/stores/`,
+        url: `${process.env.apiUrl}stores/`,
         data: {
           user: id,
           storeName: storeName,

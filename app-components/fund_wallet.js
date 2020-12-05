@@ -4,13 +4,14 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function FundWallet({ isOpen, onClose }) {
-  const [amount, setAmount] = useState(null);
+  const [amount, setAmount] = useState("");
 
   //user state
   const user = useSelector((state) => state.user);
   const auth = useSelector((state) => state.auth);
 
   const token = auth.token;
+  const id = auth._id;
   //
   function makeRef(length) {
     var result = "";
@@ -29,7 +30,7 @@ export default function FundWallet({ isOpen, onClose }) {
     console.log(user.email + user.phone + user.firstName);
     // eslint-disable-next-line no-undef
     FlutterwaveCheckout({
-      public_key: "FLWPUBK_TEST-31d61a13026483fc38f15f0e90232374-X",
+      public_key: "FLWPUBK_TEST-c4c676322706278c4e45b09eb8ac0e4b-X",
       tx_ref: formRef,
       amount: amount,
       currency: "NGN",
@@ -42,6 +43,7 @@ export default function FundWallet({ isOpen, onClose }) {
       },
       callback: async (d) => {
         console.log(d.flw_ref);
+        let trans_id = d.flw_ref;
         try {
           await axios({
             headers: {
@@ -53,9 +55,9 @@ export default function FundWallet({ isOpen, onClose }) {
               port: 3128,
             },
             method: "POST",
-            url: `https://steechit-api.herokuapp.com/wallet`,
+            url: `${process.env.apiUrl}wallet`,
             data: {
-              trnsId: d.flw_ref,
+              trnsId: formRef,
             },
           })
             .then((res) => {
@@ -71,7 +73,8 @@ export default function FundWallet({ isOpen, onClose }) {
       customizations: {
         title: "Steechit",
         description: "Fund your wallet",
-        logo: "https://assets.piedpiper.com/logo.png",
+        logo:
+          "https://github.com/ijelechimaobi/steechit-front/blob/main/LOGO%203D%20Icon_3%20PNG.png?raw=true",
       },
     });
   }

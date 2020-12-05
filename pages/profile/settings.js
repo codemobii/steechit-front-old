@@ -50,7 +50,7 @@ export default function Settings() {
             port: 3128,
           },
           method: "PUT",
-          url: `https://steechit-api.herokuapp.com/users/${id}`,
+          url: `${process.env.apiUrl}users/${id}`,
         }).then((res) => {
           setLoading(false);
         });
@@ -62,11 +62,11 @@ export default function Settings() {
     };
     dispatch(profileRequest(token, id));
     getUser();
-  }, [id, token, dispatch]);
+  }, [id, token]);
 
   return (
     <>
-      <Layout>
+      <Layout title="Settings | Steechit">
         <Div
           w="100%"
           d={{ xs: "block", sm: "block", md: "flex", lg: "flex", xl: "flex" }}

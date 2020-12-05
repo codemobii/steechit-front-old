@@ -11,7 +11,7 @@ export default function Footer() {
         >
           <Div maxW="600px">
             <Text tag="header" textSize="title" m={{ b: "10px" }}>
-              About steechit
+              About Steechit
             </Text>
             <Text>
               Steechit is a platform that connects you to skilled fashion
@@ -48,15 +48,6 @@ export default function Footer() {
             fontFamily="primary"
           >
             Logistics
-          </Anchor>
-          <Anchor
-            href="https://www.google.com"
-            target="_blank"
-            d="inline-block"
-            m={{ r: "2rem" }}
-            fontFamily="primary"
-          >
-            Help
           </Anchor>
         </Div>
       </Container>
