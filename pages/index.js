@@ -68,6 +68,33 @@ export default class Home extends Component {
       });
   };
 
+  initialGetTailors = async () => {
+    const token = store.getState().auth.token;
+    this.setState({ loading: true });
+    await axios({
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+      proxy: {
+        host: "104.236.174.88",
+        port: 3128,
+      },
+      method: "GET",
+      url: `${process.env.apiUrl}stores/`,
+    })
+      .then((res) => {
+        this.setState({ tailors: res.data });
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
+  };
+
   getUserLocation = async () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((current) => {
@@ -90,6 +117,7 @@ export default class Home extends Component {
 
   componentDidMount() {
     this.getUserLocation();
+    this.initialGetTailors();
     console.log(this.props.initial_tailors);
   }
 
