@@ -15,6 +15,7 @@ import Layout from "../app-components/layout";
 import OrderModal from "../app-components/order_modal";
 import store from "../services/store";
 import { useRouter } from "next/router";
+import EmptyList from "../app-components/empty_list";
 
 const token = store.getState().auth.token;
 
@@ -30,7 +31,7 @@ export class Tailor extends Component {
     this.state = {
       router: props.router.query.product,
       tailor: this.props.tailor,
-      products: this.props.products,
+      products: [],
       loading_pro: false,
       openModal: false,
       product: {},
@@ -67,7 +68,6 @@ export class Tailor extends Component {
       });
   };
 
-  /** 
   getProducts = async () => {
     await axios({
       headers: {
@@ -92,7 +92,7 @@ export class Tailor extends Component {
         console.log(error);
       })
       .finally(() => this.setState({ loading_pro: false }));
-  }; */
+  };
 
   componentDidMount() {
     console.log(this.state.router);
@@ -101,7 +101,12 @@ export class Tailor extends Component {
       this.setState({ openModal: true });
       this.getProduct();
     }
+    this.getProducts();
   }
+
+  truncate = (str) => {
+    return str.length > 100 ? str.substring(0, 100) + "..." : str;
+  };
 
   render() {
     const {
@@ -219,79 +224,83 @@ export class Tailor extends Component {
             <Div
               w={{ xs: "100%", sm: "100%", md: "63%", lg: "63%", xl: "63%" }}
             >
+              <Text textSize="display1" m={{ b: "2rem" }}>
+                My works
+              </Text>
               <Row>
-                {products.length !== 0
-                  ? products.map((p) =>
-                      p.store === tailor._id ? (
-                        <Col
-                          size={{
-                            xs: "12",
-                            sm: "12",
-                            md: "12",
-                            lg: "6",
-                            xl: "6",
+                {products.length !== 0 ? (
+                  products.map((p) =>
+                    p.store === tailor._id ? (
+                      <Col
+                        size={{
+                          xs: "12",
+                          sm: "12",
+                          md: "12",
+                          lg: "6",
+                          xl: "6",
+                        }}
+                      >
+                        <Div
+                          cursor="pointer"
+                          onClick={() => {
+                            this.id = p._id;
+                            this.setState({ openModal: true });
+                            this.getProduct();
                           }}
+                          rounded="md"
+                          overflow="hidden"
+                          m={{ b: "1.5rem" }}
+                          bg="#fff"
+                          border="1px solid"
+                          borderColor="gray300"
+                          position="relative"
+                          hoverShadow="5"
+                          transition="all 0.4s ease-in-out"
                         >
-                          <Div
-                            cursor="pointer"
-                            onClick={() => {
-                              this.id = p._id;
-                              this.setState({ openModal: true });
-                              this.getProduct();
+                          <Image
+                            src={p.productPictures[0].url}
+                            w="100%"
+                            h="150px"
+                            style={{
+                              objectFit: "cover",
+                              objectPosition: "center",
                             }}
-                            rounded="md"
-                            overflow="hidden"
-                            m={{ b: "1.5rem" }}
-                            bg="#fff"
-                            border="1px solid"
-                            borderColor="gray300"
-                            position="relative"
-                            hoverShadow="5"
-                            transition="all 0.4s ease-in-out"
-                          >
-                            <Image
-                              src={p.productPictures[0].url}
-                              w="100%"
-                              h="150px"
-                              style={{
-                                objectFit: "cover",
-                                objectPosition: "center",
-                              }}
-                            />
-                            <Div p="20px">
-                              <Text tag="header" textSize="title">
-                                {p.productName}
+                          />
+                          <Div p="20px">
+                            <Text tag="header" textSize="title">
+                              {p.productName}
+                            </Text>
+                            <Text m={{ b: "1rem", t: "1rem" }}>
+                              {this.truncate(p.productDescription)}
+                            </Text>
+                            <Div
+                              d="flex"
+                              align="center"
+                              justify="space-between"
+                            >
+                              <Text textSize="title">
+                                ₦{p.availableOptions[0].price}
+                                {p.availableOptions[0].percentageDiscount !==
+                                0 ? (
+                                  <Text
+                                    textColor="danger500"
+                                    tag="sup"
+                                    textSize="subheader"
+                                  >
+                                    {p.availableOptions[0].percentageDiscount}%
+                                  </Text>
+                                ) : null}
                               </Text>
-                              <Text m={{ b: "1rem", t: "1rem" }}>
-                                {p.productDescription}
-                              </Text>
-                              <Div
-                                d="flex"
-                                align="center"
-                                justify="space-between"
-                              >
-                                <Text textSize="title">
-                                  ₦{p.availableOptions[0].price}
-                                  {p.availableOptions[0].percentageDiscount !==
-                                  0 ? (
-                                    <Text
-                                      textColor="danger500"
-                                      tag="sup"
-                                      textSize="subheader"
-                                    >
-                                      {p.availableOptions[0].percentageDiscount}
-                                      %
-                                    </Text>
-                                  ) : null}
-                                </Text>
-                                <Button bg="warning800">Book now</Button>
-                              </Div>
+                              <Button bg="warning800">Book now</Button>
                             </Div>
                           </Div>
-                        </Col>
-                      ) : null
-                    )
-                  : null}
+                        </Div>
+                      </Col>
+                    ) : null
+                  )
+                ) : (
+                  <EmptyList />
+                )}
               </Row>
             </Div>
           </Div>
@@ -345,7 +354,6 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       tailor,
-      products,
     },
   };
 }

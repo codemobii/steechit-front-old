@@ -32,29 +32,27 @@ export default function MobileMenu({ isOpen, onClose }) {
         </Div>
       </Link>
       <Div m={{ t: "30px" }}>
+        <Link href="/">
+          <Anchor
+            d="block"
+            textColor="#fff"
+            m={{ b: "1rem" }}
+            fontFamily="primary"
+          >
+            Tailors
+          </Anchor>
+        </Link>
+        <Link href="/fabrics">
+          <Anchor
+            d="block"
+            textColor="#fff"
+            m={{ b: "1rem" }}
+            fontFamily="primary"
+          >
+            Fabrics
+          </Anchor>
+        </Link>
         <Anchor
-          href="https://www.google.com"
-          target="_blank"
-          d="block"
-          textColor="#fff"
-          m={{ b: "1rem" }}
-          fontFamily="primary"
-        >
-          Tailors
-        </Anchor>
-        <Anchor
-          href="https://www.google.com"
-          target="_blank"
-          d="block"
-          textColor="#fff"
-          m={{ b: "1rem" }}
-          fontFamily="primary"
-        >
-          Fabric Stores
-        </Anchor>
-        <Anchor
-          href="https://www.google.com"
-          target="_blank"
           d="block"
           textColor="#fff"
           m={{ b: "1rem" }}
@@ -63,8 +61,7 @@ export default function MobileMenu({ isOpen, onClose }) {
           Logistics
         </Anchor>
         <Anchor
-          href="https://www.google.com"
-          target="_blank"
+          onClick={onClose}
           d="block"
           textColor="#fff"
           m={{ b: "1rem" }}

@@ -73,7 +73,7 @@ export default function Signin() {
           Sign in
         </Text>
         <Input
-          placeholder="Email address"
+          placeholder="Email / Phone"
           m={{ b: "1rem" }}
           fontFamily="primary"
           value={email}

@@ -10,6 +10,7 @@ import {
   Label,
   Radiobox,
   Image,
+  Dropdown,
 } from "atomize";
 import Link from "next/link";
 import Layout from "../app-components/layout";
@@ -25,6 +26,7 @@ export default class Home extends Component {
     this.category = "";
     this.gender = "Both";
     this.category_name = "All category";
+    this.selected_state = "";
     this.state = {
       openMap: false,
       position: [],
@@ -32,6 +34,8 @@ export default class Home extends Component {
       loading: false,
       tailors: this.props.initial_tailors,
       categories: this.props.initial_categories,
+      states: this.props.initial_states,
+      active_filter: "",
     };
   }
 
@@ -55,6 +59,34 @@ export default class Home extends Component {
         this.category !== ""
           ? { productCategories: { $oid: this.category } }
           : null,
+    })
+      .then((res) => {
+        this.setState({ tailors: res.data });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
+  };
+
+  getTailorsStates = async () => {
+    const token = store.getState().auth.token;
+    this.setState({ loading: true });
+    await axios({
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+      proxy: {
+        host: "104.236.174.88",
+        port: 3128,
+      },
+      method: "GET",
+      url: `${process.env.apiUrl}stores/`,
+      params:
+        this.selected_state !== "" ? { state: this.selected_state } : null,
     })
       .then((res) => {
         this.setState({ tailors: res.data });
@@ -85,6 +117,27 @@ export default class Home extends Component {
     })
       .then((res) => {
         this.setState({ tailors: res.data });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
+    await axios({
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+      proxy: {
+        host: "104.236.174.88",
+        port: 3128,
+      },
+      method: "GET",
+      url: `${process.env.apiUrl}states/`,
+    })
+      .then((res) => {
+        this.setState({ states: res.data });
         console.log(res);
       })
       .catch((error) => {
@@ -129,56 +182,152 @@ export default class Home extends Component {
       position,
       filter,
       openMap,
+      active_filter,
     } = this.state;
+
+    const categoriesList = (
+      <Div p="10px">
+        <Label align="center" textWeight="600" m={{ t: "1rem" }}>
+          <Radiobox
+            onChange={() => {
+              this.category = "";
+              this.category_name = "All category";
+              this.setState({ tailors: [], active_filter: "" });
+              this.getTailors();
+            }}
+            checked={this.category === ""}
+            name="count"
+          />
+          All tailors
+        </Label>
+        {this.state.categories.map((c) => (
+          <Label align="center" textWeight="600" m={{ t: "1rem" }}>
+            <Radiobox
+              onChange={() => {
+                this.category = c._id;
+                this.category_name = c.categoryName;
+                this.setState({ tailors: [], active_filter: "" });
+                this.getTailors();
+              }}
+              checked={this.category === c._id}
+              name="count"
+            />
+            {c.categoryName}
+          </Label>
+        ))}
+      </Div>
+    );
+
+    const statesList = (
+      <Div p="10px">
+        <Label align="center" textWeight="600" m={{ t: "1rem" }}>
+          <Radiobox
+            onChange={() => {
+              this.selected_state = "";
+              this.setState({ tailors: [], active_filter: "" });
+              this.getTailors();
+            }}
+            checked={this.selected_state === ""}
+            name="count"
+          />
+          All tailors
+        </Label>
+        {this.state.states.map((c) => (
+          <Label align="center" textWeight="600" m={{ t: "1rem" }}>
+            <Radiobox
+              onChange={() => {
+                this.selected_state = c._id;
+                this.setState({ tailors: [], active_filter: "" });
+                this.getTailorsStates();
+              }}
+              checked={this.selected_state === c._id}
+              name="count"
+            />
+            {c.name}
+          </Label>
+        ))}
+      </Div>
+    );
+
     return (
       <>
         <Layout fixed={true}>
           <Div m={{ r: { xs: "0", sm: "0", md: "0", lg: "45%", xl: "45%" } }}>
-            <Div
-              d="flex"
-              justify="space-between"
-              m={{ b: "1rem" }}
-              p={{ b: "0.5rem" }}
-              border={{ b: "1px solid" }}
-              borderColor="gray500"
-              align="center"
-            >
-              <Button
-                p={{ x: "0" }}
-                bg="transparent"
-                textColor="black800"
-                onClick={() => this.setState({ filter: true })}
-                prefix={
-                  <Icon name="Settings" size="20px" m={{ r: "0.5rem" }} />
-                }
-                align="center"
-              >
-                Filter{" "}
-                <Label
-                  d={{
-                    xs: "none",
-                    sm: "none",
-                    md: "inline-block",
-                    lg: "inline-block",
-                    xl: "inline-block",
+            <Div m={{ b: "1rem", t: "1rem" }}>
+              <Row>
+                <Col
+                  size={{
+                    xs: "6",
+                    sm: "6",
+                    md: "6",
+                    lg: "4",
+                    xl: "4",
                   }}
-                  m={{ l: "5px" }}
                 >
-                  (Category: {this.category_name})
-                </Label>
-              </Button>
-              <Button
-                p={{ x: "0" }}
-                bg="transparent"
-                textColor="black800"
-                onClick={() => this.setState({ openMap: true })}
-                prefix={
-                  <Icon name="Location" size="20px" m={{ r: "0.5rem" }} />
-                }
-                align="center"
-              >
-                Map View
-              </Button>
+                  <Dropdown
+                    isOpen={active_filter === "cate"}
+                    onClick={() => {
+                      if (active_filter !== "cate") {
+                        this.setState({ active_filter: "cate" });
+                      } else {
+                        this.setState({ active_filter: "" });
+                      }
+                    }}
+                    menu={categoriesList}
+                  >
+                    Categories
+                  </Dropdown>
+                </Col>
+                <Col
+                  size={{
+                    xs: "6",
+                    sm: "6",
+                    md: "6",
+                    lg: "4",
+                    xl: "4",
+                  }}
+                >
+                  <Dropdown
+                    isOpen={active_filter === "states"}
+                    onClick={() => {
+                      if (active_filter !== "states") {
+                        this.setState({ active_filter: "states" });
+                      } else {
+                        this.setState({ active_filter: "" });
+                      }
+                    }}
+                    menu={statesList}
+                  >
+                    States
+                  </Dropdown>
+                </Col>
+                <Col
+                  size={{
+                    xs: "12",
+                    sm: "12",
+                    md: "12",
+                    lg: "4",
+                    xl: "4",
+                  }}
+                >
+                  <Button
+                    prefix={
+                      <Icon
+                        name="Expand"
+                        size="16px"
+                        color="white"
+                        m={{ r: "0.5rem" }}
+                      />
+                    }
+                    bg="warning700"
+                    hoverBg="warning800"
+                    p={{ r: "1.5rem", l: "1rem" }}
+                    onClick={() => this.setState({ openMap: true })}
+                  >
+                    Map View
+                  </Button>
+                </Col>
+              </Row>
             </Div>
             <Row>
               {tailors.length === 0 ? (
@@ -431,14 +580,17 @@ export default class Home extends Component {
 export async function getStaticProps() {
   const categories_res = await fetch(`${process.env.apiUrl}categories/`);
   const tailors_res = await fetch(`${process.env.apiUrl}stores`);
+  const states_res = await fetch(`${process.env.apiUrl}states`);
 
   const initial_tailors = await tailors_res.json();
   const initial_categories = await categories_res.json();
+  const initial_states = await states_res.json();
 
   return {
     props: {
       initial_tailors,
       initial_categories,
+      initial_states,
     },
   };
 }

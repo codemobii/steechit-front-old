@@ -525,7 +525,7 @@ export default function AddMeasurement({ isOpen, onClose }) {
                   >
                     <Input
                       onChange={handleFemaleShortSleeveLength}
-                      value={femaleLongSleeveLength}
+                      value={femaleShortSleeveLength}
                       placeholder="Enter Short Sleeve Length"
                     />
                   </Col>

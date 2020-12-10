@@ -4,6 +4,10 @@ import React from "react";
 import Layout from "../app-components/layout";
 
 export default function Fabrics({ products }) {
+  const truncate = (str) => {
+    return str.length > 100 ? str.substring(0, 100) + "..." : str;
+  };
+
   return (
     <Layout title="Tailors | Steechit">
       <Row>
@@ -45,7 +49,7 @@ export default function Fabrics({ products }) {
                         {p.productName}
                       </Text>
                       <Text m={{ b: "1rem", t: "1rem" }}>
-                        {p.productDescription}
+                        {truncate(p.productDescription)}
                       </Text>
                       <Div d="flex" align="center" justify="space-between">
                         <Text textSize="title">

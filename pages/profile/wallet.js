@@ -1,4 +1,4 @@
-import { Button, Div, Image, Tag, Text } from "atomize";
+import { Button, Div, Image, Label, Tag, Text } from "atomize";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -22,6 +22,7 @@ export default function Wallet() {
   const [wallet, setWallet] = useState("");
   const [loading, setLoading] = useState(true);
   const [showFunder, setShowFunder] = useState(false);
+  const [hasStore, setHasStore] = useState(true);
 
   useEffect(() => {
     const getUserItems = async () => {
@@ -41,7 +42,6 @@ export default function Wallet() {
         },
       })
         .then(async (res) => {
-          console.log(res.data);
           setWallet(res.data[0].bal);
           const orders_res = await axios({
             headers: {
@@ -53,11 +53,13 @@ export default function Wallet() {
               port: 3128,
             },
             method: "GET",
-            url: `${process.env.apiUrl}contract/`,
-            data: {
+            url: `${process.env.apiUrl}history/`,
+            params: {
               user: id,
             },
           });
+          console.log(orders_res);
+          setOrders(orders_res.data);
         })
         .catch((error) => {
           console.log(error);
@@ -65,6 +67,27 @@ export default function Wallet() {
         .finally(() => {
           setLoading(false);
         });
+      await axios({
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          Authorization: `Bearer ${token}`,
+        },
+        proxy: {
+          host: "104.236.174.88",
+          port: 3128,
+        },
+        method: "GET",
+        url: `${process.env.apiUrl}stores/`,
+        params: {
+          user: id,
+        },
+      })
+        .then(async (store_res) => {
+          if (store_res.data.length === 0) {
+            setHasStore(false);
+          }
+        })
+        .catch(() => {});
     };
     getUserItems();
   }, [id, token]);
@@ -143,18 +166,20 @@ export default function Wallet() {
                 >
                   Fund
                 </Button>
-                <Button
-                  w="100%"
-                  textColor="black700"
-                  hoverTextColor="black900"
-                  bg="transparent"
-                  hoverBg="info200"
-                  border="1px solid"
-                  borderColor="black700"
-                  hoverBorderColor="black900"
-                >
-                  Withdraw
-                </Button>
+                {hasStore ? (
+                  <Button
+                    w="100%"
+                    textColor="black700"
+                    hoverTextColor="black900"
+                    bg="transparent"
+                    hoverBg="info200"
+                    border="1px solid"
+                    borderColor="black700"
+                    hoverBorderColor="black900"
+                  >
+                    Withdraw
+                  </Button>
+                ) : null}
               </Div>
             </Div>
             <Text m={{ t: "1rem" }} tag="header" textSize="subheader">
@@ -165,27 +190,20 @@ export default function Wallet() {
               <table className="table">
                 <thead>
                   <tr>
-                    <th scope="col">Image</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">S/N</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Date</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.map((o) => (
+                  {orders.map((o, index) => (
                     <tr>
-                      <td data-label="Image">
-                        <Image
-                          w="60px"
-                          h="60px"
-                          objectFit="cover"
-                          src="http://localhost:3001/assets/img/user/user-2.jpg"
-                        />
-                      </td>
-                      <td data-label="Name">The title of the fabric is this</td>
-                      <td data-label="Price">$2,443</td>
-                      <td data-label="Action">
-                        <Tag variantColor="purple">Pending</Tag>
+                      <td data-label="S/N">{index + 1}</td>
+                      <td data-label="Amount">{o.amount}</td>
+                      <td data-label="Type">{o.type}</td>
+                      <td data-label="Date">
+                        {new Date(o.createdAt).toDateString()}
                       </td>
                     </tr>
                   ))}
