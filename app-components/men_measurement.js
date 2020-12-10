@@ -6,7 +6,7 @@ export default function MenMeasurement({ measurement }) {
     <div>
       <Div p="20px">
         <Text m={{ b: "0.5rem" }} tag="header" textSize="title">
-          Shirt
+          Shirt (inches)
         </Text>
         <Row
           p={{ t: "0.5rem", b: "0.5rem" }}
@@ -122,7 +122,7 @@ export default function MenMeasurement({ measurement }) {
         </Row>
 
         <Text m={{ b: "1.5rem", t: "1.5rem" }} tag="header" textSize="title">
-          Pants
+          Pants (inches)
         </Text>
 
         <Row

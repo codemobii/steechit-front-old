@@ -230,7 +230,7 @@ export default class Home extends Component {
             checked={this.selected_state === ""}
             name="count"
           />
-          All tailors
+          All states
         </Label>
         {this.state.states.map((c) => (
           <Label align="center" textWeight="600" m={{ t: "1rem" }}>
