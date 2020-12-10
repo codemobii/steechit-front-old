@@ -1,5 +1,4 @@
 import { Anchor, Container, Div, Text } from "atomize";
-import Link from "next/link";
 import React from "react";
 
 export default function Footer() {
@@ -23,36 +22,33 @@ export default function Footer() {
           </Div>
         </Div>
         <Div d="block" p={{ t: "20px", b: "20px" }}>
-          <Link href="/">
-            <Anchor
-              target="_blank"
-              d="inline-block"
-              m={{ r: "2rem" }}
-              fontFamily="primary"
-            >
-              Tailors
-            </Anchor>
-          </Link>
-          <Link href="/fabrics">
-            <Anchor
-              target="_blank"
-              d="inline-block"
-              m={{ r: "2rem" }}
-              fontFamily="primary"
-            >
-              Fabrics
-            </Anchor>
-          </Link>
-          <Link href="/">
-            <Anchor
-              target="_blank"
-              d="inline-block"
-              m={{ r: "2rem" }}
-              fontFamily="primary"
-            >
-              Logistics
-            </Anchor>
-          </Link>
+          <Anchor
+            href="/"
+            target="_blank"
+            d="inline-block"
+            m={{ r: "2rem" }}
+            fontFamily="primary"
+          >
+            Tailors
+          </Anchor>
+          <Anchor
+            href="/fabrics"
+            target="_blank"
+            d="inline-block"
+            m={{ r: "2rem" }}
+            fontFamily="primary"
+          >
+            Fabrics
+          </Anchor>
+          <Anchor
+            href="/"
+            target="_blank"
+            d="inline-block"
+            m={{ r: "2rem" }}
+            fontFamily="primary"
+          >
+            Logistics
+          </Anchor>
         </Div>
       </Container>
     </Div>
