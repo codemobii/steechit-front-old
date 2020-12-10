@@ -24,7 +24,6 @@ export default function Footer() {
         <Div d="block" p={{ t: "20px", b: "20px" }}>
           <Anchor
             href="/"
-            target="_blank"
             d="inline-block"
             m={{ r: "2rem" }}
             fontFamily="primary"
@@ -33,7 +32,6 @@ export default function Footer() {
           </Anchor>
           <Anchor
             href="/fabrics"
-            target="_blank"
             d="inline-block"
             m={{ r: "2rem" }}
             fontFamily="primary"
@@ -42,7 +40,6 @@ export default function Footer() {
           </Anchor>
           <Anchor
             href="/"
-            target="_blank"
             d="inline-block"
             m={{ r: "2rem" }}
             fontFamily="primary"
