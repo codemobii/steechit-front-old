@@ -1,4 +1,4 @@
-import { Button, Col, Div, Icon, Image, Row, Tag, Text } from "atomize";
+import { Button, Col, Div, Icon, Image, Modal, Row, Tag, Text } from "atomize";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -25,10 +25,10 @@ export default function Orders() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [hasStore, setHasStore] = useState(false);
+  const [noName, setNoName] = useState(false);
 
   useEffect(() => {
     const getUserItems = async () => {
-      console.log(orders);
       await axios({
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -62,6 +62,24 @@ export default function Orders() {
             },
           }).then(async (res_w) => {
             setWallet(res_w.data[0].bal);
+            await axios({
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                Authorization: `Bearer ${token}`,
+              },
+              proxy: {
+                host: "104.236.174.88",
+                port: 3128,
+              },
+              method: "GET",
+              url: `${process.env.apiUrl}users/${id}`,
+            })
+              .then((u_res) => {
+                if (u_res.data.firstName === "") {
+                  setNoName(true);
+                }
+              })
+              .catch(() => {});
             await axios({
               headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -253,6 +271,37 @@ export default function Orders() {
           </>
         )}
       </Div>
+
+      <Modal
+        isOpen={noName}
+        align={{
+          xs: "flex-start",
+          sm: "flex-start",
+          md: "flex-start",
+          lg: "center",
+          xl: "center",
+        }}
+        rounded="md"
+        maxW="25rem"
+        p="20px"
+        bg="#fff"
+        overflow="hidden"
+      >
+        <Text
+          textAlign="center"
+          tag="header"
+          textSize="title"
+          m={{ b: "2rem" }}
+        >
+          Complete your profile
+        </Text>
+
+        <Div d="flex" justify="flex-end">
+          <Link href="/profile/settings">
+            <Button bg="info700">Continue</Button>
+          </Link>
+        </Div>
+      </Modal>
     </ProfileLayout>
   );
 }

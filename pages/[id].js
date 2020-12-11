@@ -260,7 +260,7 @@ export class Tailor extends Component {
                           <Image
                             src={p.productPictures[0].url}
                             w="100%"
-                            h="150px"
+                            h="250px"
                             style={{
                               objectFit: "cover",
                               objectPosition: "center",
@@ -270,29 +270,22 @@ export class Tailor extends Component {
                             <Text tag="header" textSize="title">
                               {p.productName}
                             </Text>
+                            <Text textSize="title">
+                              ₦{p.availableOptions[0].price}
+                              {p.availableOptions[0].percentageDiscount !==
+                              0 ? (
+                                <Text
+                                  textColor="danger500"
+                                  tag="sup"
+                                  textSize="subheader"
+                                >
+                                  {p.availableOptions[0].percentageDiscount}%
+                                </Text>
+                              ) : null}
+                            </Text>
                             <Text m={{ b: "1rem", t: "1rem" }}>
                               {this.truncate(p.productDescription)}
                             </Text>
-                            <Div
-                              d="flex"
-                              align="center"
-                              justify="space-between"
-                            >
-                              <Text textSize="title">
-                                ₦{p.availableOptions[0].price}
-                                {p.availableOptions[0].percentageDiscount !==
-                                0 ? (
-                                  <Text
-                                    textColor="danger500"
-                                    tag="sup"
-                                    textSize="subheader"
-                                  >
-                                    {p.availableOptions[0].percentageDiscount}%
-                                  </Text>
-                                ) : null}
-                              </Text>
-                              <Button bg="warning800">Book now</Button>
-                            </Div>
                           </Div>
                         </Div>
                       </Col>

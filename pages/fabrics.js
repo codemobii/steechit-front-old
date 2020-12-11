@@ -1,57 +1,147 @@
-import { Button, Col, Div, Image, Row, Text } from "atomize";
+import React, { Component } from "react";
+import { Button, Col, Div, Dropdown, Icon, Image, Row, Text } from "atomize";
 import Link from "next/link";
-import React from "react";
 import Layout from "../app-components/layout";
+import Axios from "axios";
 
-export default function Fabrics({ products }) {
-  const truncate = (str) => {
+export default class Fabrics extends Component {
+  constructor(props) {
+    super(props);
+    this.category = "";
+    this.gender = "Both";
+    this.category_name = "All category";
+    this.selected_state = "";
+    this.state = {
+      products: this.props.products,
+      categories: this.props.initial_categories,
+      active_filter: "",
+      loading: false,
+    };
+  }
+
+  truncate = (str) => {
     return str.length > 100 ? str.substring(0, 100) + "..." : str;
   };
 
-  return (
-    <Layout title="Tailors | Steechit">
-      <Row>
-        {products.length !== 0
-          ? products.map((p) => (
-              <Col
-                size={{
-                  xs: "12",
-                  sm: "12",
-                  md: "6",
-                  lg: "4",
-                  xl: "4",
-                }}
-              >
-                <Link href={`/${p.store}?product=${p._id}`}>
-                  <Div
-                    cursor="pointer"
-                    rounded="md"
-                    overflow="hidden"
-                    m={{ b: "1.5rem" }}
-                    bg="#fff"
-                    border="1px solid"
-                    borderColor="gray300"
-                    position="relative"
-                    hoverShadow="5"
-                    transition="all 0.4s ease-in-out"
-                  >
-                    <Image
-                      src={p.productPictures[0].url}
-                      w="100%"
-                      h="150px"
-                      style={{
-                        objectFit: "cover",
-                        objectPosition: "center",
-                      }}
-                    />
-                    <Div p="20px">
-                      <Text tag="header" textSize="title">
-                        {p.productName}
-                      </Text>
-                      <Text m={{ b: "1rem", t: "1rem" }}>
-                        {truncate(p.productDescription)}
-                      </Text>
-                      <Div d="flex" align="center" justify="space-between">
+  getTailors = async () => {
+    this.setState({ loading: true });
+    await Axios({
+      method: "GET",
+      url: `${process.env.apiUrl}products/`,
+      params: this.category !== "" ? { productCategory: this.category } : null,
+    })
+      .then((res) => {
+        this.setState({ products: res.data });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
+  };
+
+  render() {
+    const { products, categories, active_filter, loading } = this.state;
+
+    return (
+      <Layout title="Fabrics | Steechit">
+        <Div
+          d="flex"
+          align="center"
+          m={{ b: "2rem" }}
+          style={{ overflowY: "hidden" }}
+        >
+          <Button
+            m={{ r: "1rem" }}
+            rounded="lg"
+            bg="#fff"
+            textColor="black800"
+            suffix={
+              loading && this.category === "" ? (
+                <Icon
+                  name="Loading"
+                  size="16px"
+                  color="black800"
+                  m={{ l: "1rem" }}
+                />
+              ) : null
+            }
+            onClick={() => {
+              this.category = "";
+              this.category_name = "All category";
+              this.setState({ active_filter: "" });
+              this.getTailors();
+            }}
+          >
+            All categories
+          </Button>
+          {categories.map((c) => (
+            <Button
+              m={{ r: "1rem" }}
+              rounded="lg"
+              bg="#fff"
+              textColor="black800"
+              suffix={
+                loading && this.category_name === c.categoryName ? (
+                  <Icon
+                    name="Loading"
+                    size="16px"
+                    color="black800"
+                    m={{ l: "1rem" }}
+                  />
+                ) : null
+              }
+              onClick={() => {
+                this.category = c._id;
+                this.category_name = c.categoryName;
+                this.setState({ active_filter: "" });
+                this.getTailors();
+              }}
+            >
+              {c.categoryName}
+            </Button>
+          ))}
+        </Div>
+
+        <Row>
+          {products.length !== 0
+            ? products.map((p) => (
+                <Col
+                  size={{
+                    xs: "12",
+                    sm: "12",
+                    md: "6",
+                    lg: "4",
+                    xl: "4",
+                  }}
+                >
+                  <Link href={`/${p.store}?product=${p._id}`}>
+                    <Div
+                      cursor="pointer"
+                      rounded="md"
+                      overflow="hidden"
+                      m={{ b: "1.5rem" }}
+                      bg="#fff"
+                      border="1px solid"
+                      borderColor="gray300"
+                      position="relative"
+                      hoverShadow="5"
+                      transition="all 0.4s ease-in-out"
+                    >
+                      <Image
+                        src={p.productPictures[0].url}
+                        w="100%"
+                        h="250px"
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
+                      />
+                      <Div p="20px">
+                        <Text tag="header" textSize="title">
+                          {p.productName}
+                        </Text>
                         <Text textSize="title">
                           ₦{p.availableOptions[0].price}
                           {p.availableOptions[0].percentageDiscount !== 0 ? (
@@ -64,27 +154,32 @@ export default function Fabrics({ products }) {
                             </Text>
                           ) : null}
                         </Text>
-                        <Button bg="warning800">Book now</Button>
+                        <Text m={{ b: "1rem", t: "1rem" }}>
+                          {this.truncate(p.productDescription)}
+                        </Text>
                       </Div>
                     </Div>
-                  </Div>
-                </Link>
-              </Col>
-            ))
-          : null}
-      </Row>
-    </Layout>
-  );
+                  </Link>
+                </Col>
+              ))
+            : null}
+        </Row>
+      </Layout>
+    );
+  }
 }
 
 export async function getStaticProps() {
   const products_res = await fetch(`${process.env.apiUrl}products`);
+  const categories_res = await fetch(`${process.env.apiUrl}categories/`);
 
   const products = await products_res.json();
+  const initial_categories = await categories_res.json();
 
   return {
     props: {
       products,
+      initial_categories,
     },
   };
 }

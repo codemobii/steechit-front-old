@@ -7,7 +7,9 @@ import {
   Input,
   Label,
   Notification,
+  Radiobox,
   Row,
+  Text,
 } from "atomize";
 import axios from "axios";
 import { get } from "lodash";
@@ -43,6 +45,7 @@ export default function CreateStoreForm({ user }) {
   const [longitude, setLongitude] = useState("");
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
+  const [role, setRole] = useState("0");
 
   useEffect(() => {
     const getPosition = () => {
@@ -187,56 +190,63 @@ export default function CreateStoreForm({ user }) {
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    setLoading(true);
-    try {
-      const res = await axios({
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${token}`,
-        },
-        proxy: {
-          host: "104.236.174.88",
-          port: 3128,
-        },
-        method: "POST",
-        url: `${process.env.apiUrl}stores/`,
-        data: {
-          user: id,
-          storeName: storeName,
-          phone: phone,
-          email: email,
-          storeLogo: {
-            thumb: "",
-            url: imageUrlLogo,
-          },
-          storeBanner: {
-            thumb: "",
-            url: imageUrlBanner,
-          },
-          country: country,
-          state: stateU,
-          geolocation: {
-            long: longitude,
-            lat: latitude,
-          },
-          city: city,
-          address: address,
-          zipCode: zipCode,
-          productCategories: category,
-        },
-      });
-
-      setLoading(false);
-      setMessage("Store created successfully");
+    if (role === "0") {
+      setMessage("Please select store role");
       setShow(true);
+    } else {
+      setLoading(true);
+      try {
+        const res = await axios({
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            Authorization: `Bearer ${token}`,
+          },
+          proxy: {
+            host: "104.236.174.88",
+            port: 3128,
+          },
+          method: "POST",
+          url: `${process.env.apiUrl}stores/`,
+          data: {
+            role_id: role,
+            user: id,
+            storeName: storeName,
+            phone: phone,
+            email: email,
+            storeLogo: {
+              thumb: "",
+              url: imageUrlLogo,
+            },
+            storeBanner: {
+              thumb: "",
+              url: imageUrlBanner,
+            },
+            country: country,
+            state: stateU,
+            geolocation: {
+              long: longitude,
+              lat: latitude,
+            },
+            city: city,
+            address: address,
+            zipCode: zipCode,
+            productCategories: category,
+          },
+        });
 
-      router.push("/profile/store");
-      console.log(res);
-    } catch (e) {
-      const msg = get(e, "response.data.message") || e.message;
-      console.log(msg);
-      setMessage(msg);
-      setShow(true);
+        setLoading(false);
+        setMessage("Store created successfully");
+        setShow(true);
+
+        router.push("/profile/store");
+        console.log(res);
+      } catch (e) {
+        const msg = get(e, "response.data.message") || e.message;
+        console.log(msg);
+        setMessage(msg);
+        setLoading(false);
+        setShow(true);
+      }
     }
   };
 
@@ -323,6 +333,35 @@ export default function CreateStoreForm({ user }) {
                   />
                 </div>
               </Div>
+            </Div>
+          </Col>
+          <Col size="12">
+            <Text>Store type?</Text>
+            <Div d="flex">
+              <Label
+                align="center"
+                textWeight="600"
+                m={{ b: "0.5rem", r: "2rem" }}
+              >
+                <Radiobox
+                  onChange={() => setRole("2")}
+                  checked={role === "2"}
+                  name="count"
+                />
+                Fabric Store
+              </Label>
+              <Label
+                align="center"
+                textWeight="600"
+                m={{ b: "0.5rem", r: "2rem" }}
+              >
+                <Radiobox
+                  onChange={() => setRole("3")}
+                  checked={role === "3"}
+                  name="count"
+                />
+                Tailor
+              </Label>
             </Div>
           </Col>
           <Col

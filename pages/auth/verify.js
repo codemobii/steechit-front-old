@@ -20,7 +20,7 @@ export default function Verify() {
   const verifiedUser = useSelector((state) => state.verificationReducer);
 
   if (verifiedUser.is_verified === true) {
-    router.push("/login");
+    router.push("/?auth=true");
   }
 
   useEffect(() => {
