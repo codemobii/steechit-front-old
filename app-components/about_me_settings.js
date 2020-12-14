@@ -79,6 +79,7 @@ export default function AboutMeSettings({ user }) {
         "https://steechit-image-manager.herokuapp.com/upload",
         formData
       );
+      console.log(formData);
       const Img_url = save.data.link;
       try {
         const res = await axios({

@@ -74,7 +74,7 @@ export default class Fabrics extends Component {
               this.getTailors();
             }}
           >
-            All categories
+            All states
           </Button>
           {categories.map((c) => (
             <Button
@@ -83,7 +83,7 @@ export default class Fabrics extends Component {
               bg="#fff"
               textColor="black800"
               suffix={
-                loading && this.category_name === c.categoryName ? (
+                loading && this.category_name === c.name ? (
                   <Icon
                     name="Loading"
                     size="16px"
@@ -94,12 +94,12 @@ export default class Fabrics extends Component {
               }
               onClick={() => {
                 this.category = c._id;
-                this.category_name = c.categoryName;
+                this.category_name = c.name;
                 this.setState({ active_filter: "" });
                 this.getTailors();
               }}
             >
-              {c.categoryName}
+              {c.name}
             </Button>
           ))}
         </Div>
@@ -109,8 +109,8 @@ export default class Fabrics extends Component {
             ? products.map((p) => (
                 <Col
                   size={{
-                    xs: "12",
-                    sm: "12",
+                    xs: "6",
+                    sm: "6",
                     md: "6",
                     lg: "4",
                     xl: "4",
@@ -132,17 +132,40 @@ export default class Fabrics extends Component {
                       <Image
                         src={p.productPictures[0].url}
                         w="100%"
-                        h="250px"
+                        h={{
+                          xs: "120px",
+                          sm: "120px",
+                          md: "200px",
+                          lg: "250px",
+                          xl: "250px",
+                        }}
                         style={{
                           objectFit: "cover",
                           objectPosition: "center",
                         }}
                       />
-                      <Div p="20px">
-                        <Text tag="header" textSize="title">
+                      <Div p="10px">
+                        <Text
+                          tag="header"
+                          textSize={{
+                            xs: "subheader",
+                            sm: "subheader",
+                            md: "subheader",
+                            lg: "title",
+                            xl: "title",
+                          }}
+                        >
                           {p.productName}
                         </Text>
-                        <Text textSize="title">
+                        <Text
+                          textSize={{
+                            xs: "subheader",
+                            sm: "subheader",
+                            md: "subheader",
+                            lg: "title",
+                            xl: "title",
+                          }}
+                        >
                           ₦{p.availableOptions[0].price}
                           {p.availableOptions[0].percentageDiscount !== 0 ? (
                             <Text
@@ -154,7 +177,16 @@ export default class Fabrics extends Component {
                             </Text>
                           ) : null}
                         </Text>
-                        <Text m={{ b: "1rem", t: "1rem" }}>
+                        <Text
+                          m={{ b: "1rem", t: "1rem" }}
+                          d={{
+                            xs: "none",
+                            sm: "none",
+                            md: "block",
+                            lg: "block",
+                            xl: "block",
+                          }}
+                        >
                           {this.truncate(p.productDescription)}
                         </Text>
                       </Div>
@@ -171,7 +203,7 @@ export default class Fabrics extends Component {
 
 export async function getStaticProps() {
   const products_res = await fetch(`${process.env.apiUrl}products`);
-  const categories_res = await fetch(`${process.env.apiUrl}categories/`);
+  const categories_res = await fetch(`${process.env.apiUrl}states/`);
 
   const products = await products_res.json();
   const initial_categories = await categories_res.json();

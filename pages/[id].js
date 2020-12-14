@@ -233,11 +233,11 @@ export class Tailor extends Component {
                     p.store === tailor._id ? (
                       <Col
                         size={{
-                          xs: "12",
-                          sm: "12",
-                          md: "12",
-                          lg: "6",
-                          xl: "6",
+                          xs: "6",
+                          sm: "6",
+                          md: "6",
+                          lg: "4",
+                          xl: "4",
                         }}
                       >
                         <Div
@@ -260,17 +260,40 @@ export class Tailor extends Component {
                           <Image
                             src={p.productPictures[0].url}
                             w="100%"
-                            h="250px"
+                            h={{
+                              xs: "130px",
+                              sm: "130px",
+                              md: "200px",
+                              lg: "250px",
+                              xl: "250px",
+                            }}
                             style={{
                               objectFit: "cover",
                               objectPosition: "center",
                             }}
                           />
-                          <Div p="20px">
-                            <Text tag="header" textSize="title">
+                          <Div p="10px">
+                            <Text
+                              tag="header"
+                              textSize={{
+                                xs: "subheader",
+                                sm: "subheader",
+                                md: "subheader",
+                                lg: "title",
+                                xl: "title",
+                              }}
+                            >
                               {p.productName}
                             </Text>
-                            <Text textSize="title">
+                            <Text
+                              textSize={{
+                                xs: "subheader",
+                                sm: "subheader",
+                                md: "subheader",
+                                lg: "title",
+                                xl: "title",
+                              }}
+                            >
                               ₦{p.availableOptions[0].price}
                               {p.availableOptions[0].percentageDiscount !==
                               0 ? (
@@ -283,7 +306,16 @@ export class Tailor extends Component {
                                 </Text>
                               ) : null}
                             </Text>
-                            <Text m={{ b: "1rem", t: "1rem" }}>
+                            <Text
+                              m={{ b: "1rem", t: "1rem" }}
+                              d={{
+                                xs: "none",
+                                sm: "none",
+                                md: "block",
+                                lg: "block",
+                                xl: "block",
+                              }}
+                            >
                               {this.truncate(p.productDescription)}
                             </Text>
                           </Div>
