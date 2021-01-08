@@ -208,7 +208,7 @@ export default function CreateStoreForm({ user }) {
           method: "POST",
           url: `${process.env.apiUrl}stores/`,
           data: {
-            role_id: role,
+            role_id: parseFloat(role),
             user: id,
             storeName: storeName,
             phone: phone,
@@ -477,36 +477,7 @@ export default function CreateStoreForm({ user }) {
               />
             </Label>
           </Col>
-          <Col
-            size={{
-              xs: "12",
-              sm: "12",
-              md: "12",
-              lg: "6",
-              xl: "6",
-            }}
-          >
-            <Label d="block" m={{ b: "1rem" }}>
-              Category
-              <select class="select" onChange={handleCategory} value={category}>
-                <option>Select category</option>
-                {categoryState.map((value) => (
-                  <option key={value._id} value={value._id}>
-                    {value.categoryName}
-                  </option>
-                ))}
-              </select>
-            </Label>
-          </Col>
-          <Col
-            size={{
-              xs: "12",
-              sm: "12",
-              md: "12",
-              lg: "6",
-              xl: "6",
-            }}
-          >
+          <Col size="12">
             <Label d="block" m={{ b: "1rem" }}>
               Address
               <Input

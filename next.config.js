@@ -9,6 +9,6 @@ module.exports = {
     domains: ["assets.vercel.com", "storage.googleapis.com"],
   },
   env: {
-    apiUrl: "https://steechit-api.herokuapp.com/",
+    apiUrl: "https://api.steechit.com/",
   },
 };

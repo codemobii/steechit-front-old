@@ -46,8 +46,8 @@ export default function Verify() {
     await dispatch(
       VerificationRequest({
         id: aUser._id,
-        PTN: parseInt(token),
-        code: parseInt(code),
+        PTN: parseFloat(token),
+        code: parseFloat(code),
       })
     );
     setLoading(false);

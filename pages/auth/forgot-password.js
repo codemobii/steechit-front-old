@@ -52,14 +52,14 @@ export default function ForgotPassword() {
               Forgot password
             </Text>
             <Text tag="label" d="block" m={{ b: "1rem" }}>
-              Enter your phone number to reset your password. A password reset
+              Enter your email address to reset your password. A password reset
               code will be send to you.
             </Text>
             <Input
-              placeholder="Phone number"
+              placeholder="Email address"
               m={{ b: "2rem" }}
               fontFamily="primary"
-              type="number"
+              type="email"
               value={phone}
               onChange={handlePhone}
             />

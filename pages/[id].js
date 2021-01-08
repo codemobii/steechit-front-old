@@ -263,9 +263,9 @@ export class Tailor extends Component {
                             h={{
                               xs: "130px",
                               sm: "130px",
-                              md: "200px",
-                              lg: "250px",
-                              xl: "250px",
+                              md: "150px",
+                              lg: "200px",
+                              xl: "200px",
                             }}
                             style={{
                               objectFit: "cover",
