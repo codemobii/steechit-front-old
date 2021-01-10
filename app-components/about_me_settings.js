@@ -123,6 +123,17 @@ export default function AboutMeSettings({ user }) {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     setLoading(true);
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phone: phone,
+      dateOfBirth: dateOfBirth,
+      gender: gender,
+      country: country,
+      state: stateU,
+    };
+    console.log(data);
     try {
       const res = await axios({
         headers: {
@@ -135,16 +146,7 @@ export default function AboutMeSettings({ user }) {
         },
         method: "PUT",
         url: `${process.env.apiUrl}users/${id}`,
-        data: {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          phone: phone,
-          dateOfBirth: dateOfBirth,
-          gender: gender,
-          country: country,
-          state: stateU,
-        },
+        data,
       });
 
       setLoading(false);

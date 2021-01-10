@@ -255,7 +255,7 @@ export default class Home extends Component {
           <Div m={{ r: { xs: "0", sm: "0", md: "0", lg: "45%", xl: "45%" } }}>
             <Div m={{ b: "1rem", t: "1rem" }}>
               <Row>
-                <Col
+                {/**<Col
                   size={{
                     xs: "6",
                     sm: "6",
@@ -277,7 +277,7 @@ export default class Home extends Component {
                   >
                     Categories
                   </Dropdown>
-                </Col>
+                </Col> */}
                 <Col
                   size={{
                     xs: "6",

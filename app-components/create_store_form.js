@@ -195,7 +195,33 @@ export default function CreateStoreForm({ user }) {
       setShow(true);
     } else {
       setLoading(true);
+      const data = {
+        role_id: parseFloat(role),
+        user: id,
+        storeName: storeName,
+        phone: phone,
+        email: email,
+        storeLogo: {
+          thumb: "",
+          url: imageUrlLogo,
+        },
+        storeBanner: {
+          thumb: "",
+          url: imageUrlBanner,
+        },
+        country: country,
+        state: stateU,
+        geolocation: {
+          long: longitude,
+          lat: latitude,
+        },
+        city: city,
+        address: address,
+        zipCode: zipCode,
+        productCategories: category,
+      };
       try {
+        console.log(data);
         const res = await axios({
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -207,31 +233,7 @@ export default function CreateStoreForm({ user }) {
           },
           method: "POST",
           url: `${process.env.apiUrl}stores/`,
-          data: {
-            role_id: parseFloat(role),
-            user: id,
-            storeName: storeName,
-            phone: phone,
-            email: email,
-            storeLogo: {
-              thumb: "",
-              url: imageUrlLogo,
-            },
-            storeBanner: {
-              thumb: "",
-              url: imageUrlBanner,
-            },
-            country: country,
-            state: stateU,
-            geolocation: {
-              long: longitude,
-              lat: latitude,
-            },
-            city: city,
-            address: address,
-            zipCode: zipCode,
-            productCategories: category,
-          },
+          data,
         });
 
         setLoading(false);

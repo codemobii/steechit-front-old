@@ -79,7 +79,7 @@ export class Tailor extends Component {
         port: 3128,
       },
       method: "GET",
-      url: `https://steechit-api.herokuapp.com/products/`,
+      url: `${process.env.apiUrl}products/`,
       params: {
         store: this.state.tailor._id,
       },

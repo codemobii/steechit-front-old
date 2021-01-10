@@ -70,6 +70,23 @@ export default function SellProductForm({ user }) {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     setLoading(true);
+    const data = {
+      productName: productName,
+      productDescription: productDescription,
+      productCategory: productCategory,
+      store: storeID,
+      user: id,
+      availableOptions: {
+        measurement: null,
+        price: price,
+        percentageDiscount: percentageDiscount,
+      },
+      productPictures: images,
+      feedback: {
+        user: id,
+      },
+    };
+    console.log(data);
     try {
       const res = await axios({
         headers: {
@@ -81,23 +98,8 @@ export default function SellProductForm({ user }) {
           port: 3128,
         },
         method: "POST",
-        url: `https://steechit-api.herokuapp.com/products/`,
-        data: {
-          productName: productName,
-          productDescription: productDescription,
-          productCategory: productCategory,
-          store: storeID,
-          user: id,
-          availableOptions: {
-            measurement: null,
-            price: price,
-            percentageDiscount: percentageDiscount,
-          },
-          productPictures: images,
-          feedback: {
-            user: id,
-          },
-        },
+        url: `${process.env.apiUrl}products/`,
+        data,
       });
 
       setLoading(false);
@@ -161,7 +163,7 @@ export default function SellProductForm({ user }) {
         port: 3128,
       },
       method: "GET",
-      url: `https://steechit-api.herokuapp.com/categories/`,
+      url: `${process.env.apiUrl}categories/`,
     });
     setCategoryState(res.data);
   };
@@ -177,13 +179,13 @@ export default function SellProductForm({ user }) {
         port: 3128,
       },
       method: "GET",
-      url: `https://steechit-api.herokuapp.com/stores/`,
+      url: `${process.env.apiUrl}stores/`,
       params: {
         user: id,
       },
     });
-    setStoreID(res.data[0]._id);
     console.log(res.data);
+    setStoreID(res.data[0]._id);
   };
 
   return (
