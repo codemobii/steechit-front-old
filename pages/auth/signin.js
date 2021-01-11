@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import React, { useState } from "react";
 import { LoginRequest } from "../../services/login_action";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
@@ -112,8 +113,8 @@ export default function Signin() {
             />
             Remember me */}
           </Label>
-          <Anchor m={{ t: "-0.5rem" }} href="/auth/forgot-password">
-            Lost password?
+          <Anchor m={{ t: "-0.5rem" }}>
+            <Link href="/auth/forgot-password">Lost password?</Link>
           </Anchor>
         </Div>
         <Button

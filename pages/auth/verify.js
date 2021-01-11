@@ -88,7 +88,7 @@ export default function Verify() {
               onChange={handleCode}
             />
             <Input
-              placeholder="Password"
+              placeholder="Pin"
               type={showPassword ? "text" : "password"}
               m={{ b: "1rem" }}
               value={token}
@@ -113,7 +113,7 @@ export default function Verify() {
               }
             />
             <Input
-              placeholder="Re-enter password"
+              placeholder="Re-enter pin"
               m={{ b: "2rem" }}
               value={_token}
               onChange={handle_Token}
