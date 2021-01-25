@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {
-  Button,
   Col,
+  Container,
   Div,
   Icon,
   Image,
@@ -9,28 +9,36 @@ import {
   Row,
   Text,
 } from "atomize";
+import BlackButton from "../components/buttons/black_button";
+import MainButton from "../components/buttons/main_button";
+import Layout from "../components/layouts/layout";
 import axios from "axios";
 import ReactStars from "react-rating-stars-component";
-import Layout from "../app-components/layout";
-import OrderModal from "../app-components/order_modal";
+import OrderModal from "../components/modals/order_modal";
 import store from "../services/store";
 import { useRouter } from "next/router";
-import EmptyList from "../app-components/empty_list";
+import EmptyList from "../components/parts/empty_list";
+import Link from "next/link";
+import { useSelector } from "react-redux";
 
 const token = store.getState().auth.token;
 
 export default function Fabrics(props) {
   const router = useRouter();
-  return <Tailor {...props} router={router} />;
+  const auth = useSelector((state) => state.auth);
+  const id = auth._id;
+
+  return <StoreId {...props} auth={id} router={router} />;
 }
 
-export class Tailor extends Component {
+export class StoreId extends Component {
   constructor(props) {
     super(props);
     this.id = "";
     this.state = {
       router: props.router.query.product,
       tailor: this.props.tailor,
+      user_id: this.props.auth,
       products: [],
       loading_pro: false,
       openModal: false,
@@ -122,213 +130,174 @@ export class Tailor extends Component {
     } = this.state;
     return (
       <>
-        <Layout title={`${tailor.storeName} | Steechit`}>
-          <Div
-            w="100%"
-            d={{ xs: "block", sm: "block", md: "flex", lg: "flex", xl: "flex" }}
-            align="flex-start"
-            justify="space-between"
+        <Layout isWide={true} title={`${tailor.storeName} | Steechit`}>
+          <Div w="100%" bg="black700" h="120px" />
+          <Container
+            w={{
+              xs: "100%",
+              sm: "720px",
+              md: "960px",
+              lg: "960px",
+              xl: "960px",
+            }}
+            m={{ y: "-50px", x: "auto" }}
           >
             <Div
-              w={{ xs: "100%", sm: "100%", md: "35%", lg: "35%", xl: "35%" }}
               bg="#fff"
-              border="1px solid"
-              borderColor="gray300"
+              w="100%"
+              minH="250px"
+              d="flex"
+              justify="center"
               rounded="md"
-              p={{ t: "10px", b: "30px", r: "10px", l: "10px" }}
-              m={{ b: "2rem" }}
             >
-              <Div
-                bgImg={tailor.storeBanner.url}
-                bgSize="cover"
-                bgPos="center"
-                w="100%"
-                h={{
-                  xs: "100px",
-                  sm: "100px",
-                  md: "100px",
-                  lg: "180px",
-                  xl: "180px",
-                }}
-                rounded="md"
-                bg="#fff"
-              />
-              <Div m={{ t: "-70px" }}>
-                <Div d="flex" justify="center" m={{ b: "20px" }}>
+              <Div m={{ t: "-80px" }} p="20px" textAlign="center">
+                <Div
+                  rounded="circle"
+                  w="130px"
+                  h="130px"
+                  d="flex"
+                  align="center"
+                  justify="center"
+                  bg="black700"
+                  pos="relative"
+                  m="auto"
+                >
                   <Image
                     src={tailor.storeLogo.url}
-                    rounded="lg"
-                    w="130px"
-                    h="130px"
-                    style={{
-                      objectFit: "cover",
-                      borderRadius: "100%",
-                    }}
-                    border="2px solid"
-                    borderColor="#fff"
-                    bg="#fff"
+                    rounded="circle"
+                    w="120px"
+                    h="120px"
+                    bgSize="cover"
+                    pos="center"
                   />
                 </Div>
-                <Text
-                  tag="header"
-                  textAlign="center"
-                  m={{ b: "20px" }}
-                  textSize="heading"
-                >
+                <Text tag="h1" textSize="display1">
                   {tailor.storeName}
                 </Text>
-                <Text tag="header" textAlign="center" textSize="section">
-                  {tailor.address}
-                </Text>
-                <Div d="flex" justify="center">
-                  <ReactStars
-                    count={5}
-                    value={3}
-                    size={24}
-                    activeColor="#ffd700"
-                  />
-                </Div>
-
-                <Div m={{ t: "25px" }} d="flex" justify="center">
-                  <Button
-                    prefix={
-                      <Icon
-                        name="MessageSolid"
-                        size="24px"
-                        color="white"
-                        m={{ r: "0.5rem" }}
-                      />
-                    }
-                    bg="danger700"
-                    hoverBg="danger800"
-                    rounded="circle"
-                    p={{ r: "1.5rem", l: "1rem" }}
-                    hoverShadow="4"
-                    onClick={() => {
-                      if (success) {
-                        this.setState({ showNumber: !showNumber });
-                      } else {
-                        this.setState({
-                          message:
-                            "Please book first, then you can contact tailor to take your measurement and follow up subsequently",
-                          error: true,
-                        });
-                      }
-                    }}
-                  >
-                    {showNumber ? tailor.phone : "Show contact"}
-                  </Button>
+                <Text>{tailor.address}</Text>
+                <Div m={{ t: "20px" }} d="flex" align="center" justify="center">
+                  <Div>
+                    <MainButton
+                      onClick={() => {
+                        if (success) {
+                          this.setState({ showNumber: !showNumber });
+                        } else {
+                          this.setState({
+                            message:
+                              "Please book first, then you can contact tailor to take your measurement and follow up subsequently",
+                            error: true,
+                          });
+                        }
+                      }}
+                      title={showNumber ? tailor.phone : "Show contact"}
+                    />
+                  </Div>
+                  <Div m={{ l: "10px" }}>
+                    <Link
+                      href={`/offer?s_id=${tailor._id}&p_id=create_new_product`}
+                    >
+                      <BlackButton title="Request an offer" />
+                    </Link>
+                  </Div>
                 </Div>
               </Div>
             </Div>
-            <Div
-              w={{ xs: "100%", sm: "100%", md: "63%", lg: "63%", xl: "63%" }}
-            >
-              <Text textSize="display1" m={{ b: "2rem" }}>
-                My works
-              </Text>
-              <Row>
-                {products.length !== 0 ? (
-                  products.map((p) =>
-                    p.store === tailor._id ? (
-                      <Col
-                        size={{
-                          xs: "6",
-                          sm: "6",
-                          md: "6",
-                          lg: "4",
-                          xl: "4",
-                        }}
-                      >
-                        <Div
-                          cursor="pointer"
-                          onClick={() => {
-                            this.id = p._id;
-                            this.setState({ openModal: true });
-                            this.getProduct();
+            <Div m={{ y: "20px" }} w="100%" rounded="md" bg="#fff">
+              <Div
+                w="100%"
+                p="20px"
+                border={{ b: "1px solid" }}
+                borderColor="gray400"
+              >
+                <Text tag="h1" textSize="title">
+                  My works
+                </Text>
+              </Div>
+              <Div p="20px">
+                <Row>
+                  {products.length !== 0 ? (
+                    products.map((p) =>
+                      p.store === tailor._id ? (
+                        <Col
+                          size={{
+                            xs: "12",
+                            sm: "6",
+                            md: "6",
+                            lg: "4",
+                            xl: "4",
                           }}
-                          rounded="md"
-                          overflow="hidden"
-                          m={{ b: "1.5rem" }}
-                          bg="#fff"
-                          border="1px solid"
-                          borderColor="gray300"
-                          position="relative"
-                          hoverShadow="5"
-                          transition="all 0.4s ease-in-out"
                         >
-                          <Image
-                            src={p.productPictures[0].url}
-                            w="100%"
-                            h={{
-                              xs: "130px",
-                              sm: "130px",
-                              md: "150px",
-                              lg: "200px",
-                              xl: "200px",
-                            }}
-                            style={{
-                              objectFit: "cover",
-                              objectPosition: "center",
-                            }}
-                          />
-                          <Div p="10px">
-                            <Text
-                              tag="header"
-                              textSize={{
-                                xs: "subheader",
-                                sm: "subheader",
-                                md: "subheader",
-                                lg: "title",
-                                xl: "title",
-                              }}
+                          <Link
+                            href={`/product?p_id=${p._id}&s_id=${this.state.tailor._id}`}
+                          >
+                            <Div
+                              cursor="pointer"
+                              rounded="md"
+                              overflow="hidden"
+                              m={{ b: "1.5rem" }}
+                              bg="#fff"
+                              border="1px solid"
+                              borderColor="gray300"
+                              position="relative"
+                              hoverShadow="5"
+                              transition="all 0.4s ease-in-out"
                             >
-                              {p.productName}
-                            </Text>
-                            <Text
-                              textSize={{
-                                xs: "subheader",
-                                sm: "subheader",
-                                md: "subheader",
-                                lg: "title",
-                                xl: "title",
-                              }}
-                            >
-                              ₦{p.availableOptions[0].price}
-                              {p.availableOptions[0].percentageDiscount !==
-                              0 ? (
+                              <Image
+                                src={p.productPictures[0].url}
+                                w="100%"
+                                h={{
+                                  xs: "130px",
+                                  sm: "130px",
+                                  md: "150px",
+                                  lg: "200px",
+                                  xl: "200px",
+                                }}
+                                style={{
+                                  objectFit: "cover",
+                                  objectPosition: "center",
+                                }}
+                              />
+                              <Div p="10px">
                                 <Text
-                                  textColor="danger500"
-                                  tag="sup"
-                                  textSize="subheader"
+                                  tag="header"
+                                  textSize={{
+                                    xs: "subheader",
+                                    sm: "subheader",
+                                    md: "subheader",
+                                    lg: "title",
+                                    xl: "title",
+                                  }}
                                 >
-                                  {p.availableOptions[0].percentageDiscount}%
+                                  {p.productName}
                                 </Text>
-                              ) : null}
-                            </Text>
-                            <Text
-                              m={{ b: "1rem", t: "1rem" }}
-                              d={{
-                                xs: "none",
-                                sm: "none",
-                                md: "block",
-                                lg: "block",
-                                xl: "block",
-                              }}
-                            >
-                              {this.truncate(p.productDescription)}
-                            </Text>
-                          </Div>
-                        </Div>
-                      </Col>
-                    ) : null
-                  )
-                ) : (
-                  <EmptyList />
-                )}
-              </Row>
+                                <Text textSize="subheader">
+                                  ₦{p.tailor.materialPrice}
+                                </Text>
+                                <Text
+                                  m={{ b: "1rem", t: "1rem" }}
+                                  d={{
+                                    xs: "none",
+                                    sm: "none",
+                                    md: "block",
+                                    lg: "block",
+                                    xl: "block",
+                                  }}
+                                >
+                                  {this.truncate(p.productDescription)}
+                                </Text>
+                              </Div>
+                            </Div>
+                          </Link>
+                        </Col>
+                      ) : null
+                    )
+                  ) : (
+                    <EmptyList />
+                  )}
+                </Row>
+              </Div>
             </Div>
-          </Div>
+          </Container>
         </Layout>
 
         <OrderModal

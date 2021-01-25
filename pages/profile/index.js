@@ -3,12 +3,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import store from "../../services/store";
-import ProfileLoader from "../../app-components/profile_loader";
-import EmptyList from "../../app-components/empty_list";
-import ProfileLayout from "../../app-components/profile_layout";
+import ProfileLoader from "../../components/parts/profile_loader";
+import ProfileLayout from "../../components/layouts/profile_layout";
 import { useRouter } from "next/router";
 import { profileRequest } from "../../services/profile_action";
 import Link from "next/link";
+import NumberFormat from "react-number-format";
 
 export default function Orders() {
   // Getting auth state and user data for structuring the navbar
@@ -23,8 +23,7 @@ export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [wallet, setWallet] = useState("");
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]);
-  const [hasStore, setHasStore] = useState(false);
+  const [offers, setOffers] = useState([]);
   const [noName, setNoName] = useState(false);
 
   useEffect(() => {
@@ -61,7 +60,8 @@ export default function Orders() {
               user: id,
             },
           }).then(async (res_w) => {
-            setWallet(res_w.data[0].bal);
+            setWallet(res_w.data[0].amount);
+            console.log(res_w.data);
             await axios({
               headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -90,36 +90,31 @@ export default function Orders() {
                 port: 3128,
               },
               method: "GET",
-              url: `${process.env.apiUrl}stores/`,
+              url: `${process.env.apiUrl}offerTailors/`,
               params: {
                 user: id,
               },
-            }).then(async (store_res) => {
-              console.log(store_res);
-              if (store_res.data.length !== 0) {
-                setHasStore(true);
-                await axios({
-                  headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    Authorization: `Bearer ${token}`,
-                  },
-                  proxy: {
-                    host: "104.236.174.88",
-                    port: 3128,
-                  },
-                  method: "GET",
-                  url: `${process.env.apiUrl}products/`,
-                  params: {
-                    user: id,
-                  },
-                })
-                  .then((res_p) => {
-                    setProducts(res_p.data);
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              }
+            }).then(async (tailor_r) => {
+              setOffers(tailor_r.data);
+              await axios({
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  Authorization: `Bearer ${token}`,
+                },
+                proxy: {
+                  host: "104.236.174.88",
+                  port: 3128,
+                },
+                method: "GET",
+                url: `${process.env.apiUrl}offerTailors/`,
+                params: {
+                  user: id,
+                },
+              }).then(async (store_r) => {
+                const storeOffer = store_r.data;
+                setOffers([...offers, ...storeOffer]);
+                console.log(offers);
+              });
             });
           });
         })
@@ -166,25 +161,8 @@ export default function Orders() {
                   bg="gray100"
                 >
                   <Div textAlign="center">
-                    <Icon name="Card" size="50px" color="warning800" />
-                    <Text>Wallet Balance</Text>
-                    <Text textSize="title">₦{wallet}</Text>
-                  </Div>
-                </Div>
-              </Col>
-              <Col size="6">
-                <Div
-                  h="160px"
-                  rounded="lg"
-                  d="flex"
-                  align="center"
-                  justify="center"
-                  m={{ b: "20px" }}
-                  bg="gray100"
-                >
-                  <Div textAlign="center">
                     <Icon name="Bag" size="50px" color="warning800" />
-                    <Text>My Orders</Text>
+                    <Text>My Contracts</Text>
                     <Text textSize="title">{orders.length}</Text>
                   </Div>
                 </Div>
@@ -201,10 +179,33 @@ export default function Orders() {
                 >
                   <Div textAlign="center">
                     <Icon name="Store" size="50px" color="warning800" />
-                    <Text>My Store</Text>
-                    <Text textSize="title">
-                      {hasStore ? products.length : "N/A"}
-                    </Text>
+                    <Text>My Offers</Text>
+                    <Text textSize="title">{offers.length}</Text>
+                  </Div>
+                </Div>
+              </Col>
+              <Col size="6">
+                <Div
+                  h="160px"
+                  rounded="lg"
+                  d="flex"
+                  align="center"
+                  justify="center"
+                  m={{ b: "20px" }}
+                  bg="gray100"
+                >
+                  <Div textAlign="center">
+                    <Icon name="Card" size="50px" color="warning800" />
+                    <Text>Wallet Balance</Text>
+                    <NumberFormat
+                      value={wallet}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₦"}
+                      renderText={(value) => (
+                        <Text textSize="title">{value}</Text>
+                      )}
+                    />
                   </Div>
                 </Div>
               </Col>
@@ -245,7 +246,7 @@ export default function Orders() {
                 <Text tag="header" textSize="title">
                   Sell a product today
                 </Text>
-                <Link href="/profile/store/sell">
+                <Link href="/store/products/create">
                   <Button
                     prefix={
                       <Icon

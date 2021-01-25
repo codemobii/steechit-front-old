@@ -3372,6 +3372,11 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-country-region-selector@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-country-region-selector/-/react-country-region-selector-3.0.1.tgz#d7368e0da8da21779bb19883ca1e829ff6879c97"
+  integrity sha512-yYAkBmc/JBfaytnFKawXYQ5Yf6dsT/j1sx7dLD1eSSPRIGCWVfeY1/BSEw00QYsUFN/C2F0mLNSAvY/XA1a33Q==
+
 react-dom@^16.8.0:
   version "16.14.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
@@ -3408,6 +3413,13 @@ react-move@^6.1.0:
   dependencies:
     "@babel/runtime" "^7.10.3"
     kapellmeister "^3.0.1"
+    prop-types "^15.7.2"
+
+react-number-format@^4.4.4:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.4.4.tgz#2a7f50be404f990ec15855cc6babfeae1be16351"
+  integrity sha512-/MuF1GOs1Z0xBaQie8+TTqCxUTT8xxjc6RqIFVWcWB6FM8GNIenSh2ayzN6Y1J2WMcXUDVwMdDXjweHKVjXm/w==
+  dependencies:
     prop-types "^15.7.2"
 
 react-rating-stars-component@^2.2.0:

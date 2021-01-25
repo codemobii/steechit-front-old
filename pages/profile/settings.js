@@ -4,29 +4,34 @@ import { get } from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import AboutMeSettings from "../../app-components/about_me_settings";
-import ContactSettings from "../../app-components/contact_settings";
-import Layout from "../../app-components/layout";
-import ProfileLoader from "../../app-components/profile_loader";
-import ProfileMobileMenu from "../../app-components/profile_mobile_menu";
-import SettingSidebar from "../../app-components/settings_sidebar";
-import StoreSettings from "../../app-components/store_settings";
-import UpdatePasswordSettings from "../../app-components/update_password_settings";
+import AboutMeSettings from "../../components/forms/about_me_settings";
+import ContactSettings from "../../components/forms/contact_settings";
+import Layout from "../../components/layouts/layout";
+import ProfileLoader from "../../components/parts/profile_loader";
+import ProfileMobileMenu from "../../components/layouts/profile_mobile_menu";
+import SettingSidebar from "../../components/layouts/settings_sidebar";
+import StoreSettings from "../../components/forms/store_settings";
+import UpdatePasswordSettings from "../../components/forms/update_password_settings";
 import { profileRequest } from "../../services/profile_action";
+import ErrorPage from "next/error";
 import store from "../../services/store";
+import Measurement from "../../components/measurement_settings";
 
 export default function Settings() {
   const router = useRouter();
   const title =
-    router.query.q === undefined || router.query.q === "about-me"
+    router.query.action === undefined || router.query.action === "about-me"
       ? "About me"
-      : router.query.q === "contact"
+      : router.query.action === "contact"
       ? "Contact"
-      : router.query.q === "update-password"
+      : router.query.action === "update-password"
       ? "Update Password"
-      : router.query.q === "store"
+      : router.query.action === "store"
       ? "My store"
+      : router.query.action === "measurement"
+      ? "Measurement"
       : null;
+  console.log(router);
 
   // Getting auth state and user data for structuring the navbar
   const auth = useSelector((state) => state.auth);
@@ -64,6 +69,10 @@ export default function Settings() {
     getUser();
   }, [id, token]);
 
+  if (router.query.action === undefined) {
+    return <ErrorPage />;
+  }
+
   return (
     <>
       <Layout title="Settings | Steechit">
@@ -72,6 +81,7 @@ export default function Settings() {
           d={{ xs: "block", sm: "block", md: "flex", lg: "flex", xl: "flex" }}
           align="flex-start"
           justify="space-between"
+          p={{ t: "30px" }}
         >
           <Div
             w={{ xs: "100%", sm: "100%", md: "34%", lg: "34%", xl: "34%" }}
@@ -103,21 +113,23 @@ export default function Settings() {
             <Div p="20px">
               {loading ? (
                 <ProfileLoader />
-              ) : router.query.q === undefined ||
-                router.query.q === "about-me" ? (
+              ) : router.query.action === undefined ||
+                router.query.action === "about-me" ? (
                 <div id="about-me">
                   <AboutMeSettings user={user} />
                 </div>
-              ) : router.query.q === "contact" ? (
+              ) : router.query.action === "contact" ? (
                 <div id="contact">
                   <ContactSettings user={user} />
                 </div>
-              ) : router.query.q === "update-password" ? (
+              ) : router.query.action === "update-password" ? (
                 <div id="update-password">
                   <UpdatePasswordSettings user={user} />
                 </div>
-              ) : router.query.q === "store" ? (
+              ) : router.query.action === "store" ? (
                 <StoreSettings user={user} />
+              ) : router.query.action === "measurement" ? (
+                <Measurement />
               ) : null}
             </Div>
           </Div>

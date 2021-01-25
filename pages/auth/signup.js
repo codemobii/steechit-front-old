@@ -108,6 +108,7 @@ export default function Signup() {
           m={{ b: "1rem" }}
           fontFamily="primary"
           value={phone}
+          type="number"
           onChange={handlePhone}
         />
         <Input

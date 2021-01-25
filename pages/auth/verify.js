@@ -1,7 +1,7 @@
 import { Button, Div, Icon, Input, Notification, Text } from "atomize";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import Layout from "../../app-components/layout";
+import Layout from "../../components/layouts/layout";
 import { VerificationRequest } from "../../services/verification_action";
 import { useRouter } from "next/router";
 

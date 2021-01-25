@@ -3,11 +3,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import store from "../../services/store";
-import ProfileLoader from "../../app-components/profile_loader";
-import EmptyList from "../../app-components/empty_list";
-import ProfileLayout from "../../app-components/profile_layout";
-import FundWallet from "../../app-components/fund_wallet";
+import ProfileLoader from "../../components/parts/profile_loader";
+import EmptyList from "../../components/parts/empty_list";
+import ProfileLayout from "../../components/layouts/profile_layout";
+import FundWallet from "../../components/forms/fund_wallet";
 import { useRouter } from "next/router";
+import NumberFormat from "react-number-format";
 
 export default function Wallet() {
   // Getting auth state and user data for structuring the navbar
@@ -42,7 +43,7 @@ export default function Wallet() {
         },
       })
         .then(async (res) => {
-          setWallet(res.data[0].bal);
+          setWallet(res.data[0].amount);
           const orders_res = await axios({
             headers: {
               "Access-Control-Allow-Origin": "*",
@@ -129,9 +130,17 @@ export default function Wallet() {
                 <Text d="block" tag="label">
                   Wallet balance
                 </Text>
-                <Text tag="h3" textSize="heading">
-                  ₦{wallet}
-                </Text>
+                <NumberFormat
+                  value={wallet}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₦"}
+                  renderText={(value) => (
+                    <Text tag="h3" textSize="heading">
+                      {value}
+                    </Text>
+                  )}
+                />
               </Div>
               <Div
                 d={{
@@ -164,22 +173,8 @@ export default function Wallet() {
                     },
                   }}
                 >
-                  Fund
+                  Fund wallet
                 </Button>
-                {hasStore ? (
-                  <Button
-                    w="100%"
-                    textColor="black700"
-                    hoverTextColor="black900"
-                    bg="transparent"
-                    hoverBg="info200"
-                    border="1px solid"
-                    borderColor="black700"
-                    hoverBorderColor="black900"
-                  >
-                    Withdraw
-                  </Button>
-                ) : null}
               </Div>
             </Div>
             <Text m={{ t: "1rem" }} tag="header" textSize="subheader">

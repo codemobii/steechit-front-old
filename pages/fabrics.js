@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Button, Col, Div, Dropdown, Icon, Image, Row, Text } from "atomize";
 import Link from "next/link";
-import Layout from "../app-components/layout";
+import Layout from "../components/layouts/layout";
 import Axios from "axios";
+import NumberFormat from "react-number-format";
 
 export default class Fabrics extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ export default class Fabrics extends Component {
     })
       .then((res) => {
         this.setState({ products: res.data });
+        console.log(res);
       })
       .catch((error) => {
         console.log(error);
@@ -41,6 +43,10 @@ export default class Fabrics extends Component {
       });
   };
 
+  componentDidMount() {
+    this.getTailors();
+  }
+
   render() {
     const { products, categories, active_filter, loading } = this.state;
 
@@ -49,7 +55,7 @@ export default class Fabrics extends Component {
         <Div
           d="flex"
           align="center"
-          m={{ b: "2rem" }}
+          m={{ y: "2rem" }}
           style={{ overflowY: "hidden" }}
         >
           <Button
@@ -116,7 +122,7 @@ export default class Fabrics extends Component {
                     xl: "4",
                   }}
                 >
-                  <Link href={`/${p.store}?product=${p._id}`}>
+                  <Link href={`/product?p_id=${p._id}&s_id=${p.store}`}>
                     <Div
                       cursor="pointer"
                       rounded="md"
@@ -130,7 +136,11 @@ export default class Fabrics extends Component {
                       transition="all 0.4s ease-in-out"
                     >
                       <Image
-                        src={p.productPictures[0].url}
+                        src={
+                          p.productPictures.length !== 0
+                            ? p.productPictures[0].url
+                            : "ii"
+                        }
                         w="100%"
                         h={{
                           xs: "120px",
@@ -157,26 +167,45 @@ export default class Fabrics extends Component {
                         >
                           {p.productName}
                         </Text>
-                        <Text
-                          textSize={{
-                            xs: "subheader",
-                            sm: "subheader",
-                            md: "subheader",
-                            lg: "title",
-                            xl: "title",
-                          }}
-                        >
-                          ₦{p.availableOptions[0].price}
-                          {p.availableOptions[0].percentageDiscount !== 0 ? (
-                            <Text
-                              textColor="danger500"
-                              tag="sup"
-                              textSize="subheader"
-                            >
-                              {p.availableOptions[0].percentageDiscount}%
-                            </Text>
-                          ) : null}
-                        </Text>
+
+                        {p.fabric.materialPrice && (
+                          <NumberFormat
+                            value={p.fabric.materialPrice}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₦"}
+                            renderText={(value) => (
+                              <Text textSize="subheading">{value}</Text>
+                            )}
+                          />
+                        )}
+
+                        {p.tailor.materialPrice && (
+                          <NumberFormat
+                            value={p.tailor.materialPrice}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₦"}
+                            renderText={(value) => (
+                              <Text textSize="subheading">{value}</Text>
+                            )}
+                          />
+                        )}
+
+                        {p.tailor.sowingPrice && (
+                          <NumberFormat
+                            value={p.tailor.sowingPrice}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₦"}
+                            renderText={(value) => (
+                              <Text tag="h1" textSize="subheading">
+                                {value} (Sowing price)
+                              </Text>
+                            )}
+                          />
+                        )}
+
                         <Text
                           m={{ b: "1rem", t: "1rem" }}
                           d={{

@@ -15,7 +15,7 @@ a {
 }
 
 .map {
-  height: calc(100vh - 95px);
+  height: calc(100vh);
 }
 
 table {

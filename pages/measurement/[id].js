@@ -3,10 +3,10 @@ import Axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import EmptyList from "../../app-components/empty_list";
-import Layout from "../../app-components/layout";
-import MenMeasurement from "../../app-components/men_measurement";
-import ProfileLoader from "../../app-components/profile_loader";
+import EmptyList from "../../components/parts/empty_list";
+import Layout from "../../components/layouts/layout";
+import MenMeasurement from "../../components/men_measurement";
+import ProfileLoader from "../../components/parts/profile_loader";
 import store from "../../services/store";
 
 export default function Measurement() {

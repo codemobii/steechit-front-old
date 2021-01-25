@@ -13,20 +13,28 @@ import {
   Dropdown,
 } from "atomize";
 import Link from "next/link";
-import Layout from "../app-components/layout";
-import MapModal from "../app-components/mobile_map_modal";
-import MapView from "../app-components/map_view";
+import Layout from "../components/layouts/layout";
+import MapModal from "../components/modals/mobile_map_modal";
+import MapView from "../components/map_view";
 import store from "../services/store";
 import axios from "axios";
-import EmptyList from "../app-components/empty_list";
+import EmptyList from "../components/parts/empty_list";
+import { useRouter } from "next/router";
 
-export default class Home extends Component {
+export default function Home(props) {
+  const router = useRouter();
+
+  return <Explore {...props} router={router} />;
+}
+
+export class Explore extends Component {
   constructor(props) {
     super(props);
     this.category = "";
     this.gender = "Both";
     this.category_name = "All category";
     this.selected_state = "";
+    this.explore = props.router.query.explore;
     this.state = {
       openMap: false,
       position: [],
@@ -56,12 +64,13 @@ export default class Home extends Component {
       method: "GET",
       url: `${process.env.apiUrl}stores/`,
       params:
-        this.category !== ""
-          ? { productCategories: { $oid: this.category } }
+        this.explore !== ""
+          ? { type: this.explore === "fb" ? "fabric" : "tailor" }
           : null,
     })
       .then((res) => {
         this.setState({ tailors: res.data });
+        console.log(res);
       })
       .catch((error) => {
         console.log(error);
@@ -101,6 +110,7 @@ export default class Home extends Component {
   };
 
   initialGetTailors = async () => {
+    console.log(this.router);
     const token = store.getState().auth.token;
     this.setState({ loading: true });
     await axios({
@@ -114,8 +124,13 @@ export default class Home extends Component {
       },
       method: "GET",
       url: `${process.env.apiUrl}stores/`,
+      params:
+        this.explore !== undefined
+          ? { type: this.explore === "fb" ? "fabric" : "tailor" }
+          : null,
     })
       .then((res) => {
+        console.log(res);
         this.setState({ tailors: res.data });
       })
       .catch((error) => {
@@ -190,31 +205,39 @@ export default class Home extends Component {
         <Label align="center" textWeight="600" m={{ t: "1rem" }}>
           <Radiobox
             onChange={() => {
-              this.category = "";
-              this.category_name = "All category";
+              this.explore = "";
               this.setState({ tailors: [], active_filter: "" });
               this.getTailors();
             }}
-            checked={this.category === ""}
+            checked={this.explore === "" || undefined}
             name="count"
           />
-          All tailors
+          Explore all
         </Label>
-        {this.state.categories.map((c) => (
-          <Label align="center" textWeight="600" m={{ t: "1rem" }}>
-            <Radiobox
-              onChange={() => {
-                this.category = c._id;
-                this.category_name = c.categoryName;
-                this.setState({ tailors: [], active_filter: "" });
-                this.getTailors();
-              }}
-              checked={this.category === c._id}
-              name="count"
-            />
-            {c.categoryName}
-          </Label>
-        ))}
+        <Label align="center" textWeight="600" m={{ t: "1rem" }}>
+          <Radiobox
+            checked={this.explore === "fb"}
+            onChange={() => {
+              this.explore = "fb";
+              this.setState({ tailors: [], active_filter: "" });
+              this.getTailors();
+            }}
+            name="count"
+          />
+          Fabric Stores
+        </Label>
+        <Label align="center" textWeight="600" m={{ t: "1rem" }}>
+          <Radiobox
+            checked={this.explore === "t"}
+            onChange={() => {
+              this.explore = "t";
+              this.setState({ tailors: [], active_filter: "" });
+              this.getTailors();
+            }}
+            name="count"
+          />
+          Tailors
+        </Label>
       </Div>
     );
 
@@ -255,7 +278,7 @@ export default class Home extends Component {
           <Div m={{ r: { xs: "0", sm: "0", md: "0", lg: "45%", xl: "45%" } }}>
             <Div m={{ b: "1rem", t: "1rem" }}>
               <Row>
-                {/**<Col
+                <Col
                   size={{
                     xs: "6",
                     sm: "6",
@@ -275,9 +298,9 @@ export default class Home extends Component {
                     }}
                     menu={categoriesList}
                   >
-                    Categories
+                    Explore
                   </Dropdown>
-                </Col> */}
+                </Col>
                 <Col
                   size={{
                     xs: "6",
@@ -311,6 +334,16 @@ export default class Home extends Component {
                   }}
                 >
                   <Button
+                    m={{
+                      t: {
+                        xs: "15px",
+                        sm: "15px",
+                        md: "15px",
+                        lg: "0",
+                        xl: "0",
+                      },
+                    }}
+                    w="100%"
                     prefix={
                       <Icon
                         name="Expand"
@@ -460,8 +493,8 @@ export default class Home extends Component {
         <Div
           pos="fixed"
           right="0"
-          top="90px"
-          w="45%"
+          top="0px"
+          w="710px"
           className="map"
           bg="#fff"
           d={{

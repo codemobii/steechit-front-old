@@ -2,7 +2,7 @@ import { Button, Div, Icon, Input, Notification, Text } from "atomize";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import Layout from "../../app-components/layout";
+import Layout from "../../components/layouts/layout";
 import { ForgotPasswordRequest } from "../../services/forgot_password_action";
 
 export default function ForgotPassword() {
