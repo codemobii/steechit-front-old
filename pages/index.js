@@ -209,10 +209,10 @@ export class Explore extends Component {
               this.setState({ tailors: [], active_filter: "" });
               this.getTailors();
             }}
-            checked={this.explore === "" || undefined}
+            checked={this.explore === "" || this.explore === undefined}
             name="count"
           />
-          Explore all
+          All stores
         </Label>
         <Label align="center" textWeight="600" m={{ t: "1rem" }}>
           <Radiobox
@@ -298,7 +298,10 @@ export class Explore extends Component {
                     }}
                     menu={categoriesList}
                   >
-                    Explore
+                    {this.explore === "t" && "Tailors"}
+                    {this.explore === "fb" && "Fabric Stores"}
+                    {(this.explore === "" || this.explore === undefined) &&
+                      "All Stores"}
                   </Dropdown>
                 </Col>
                 <Col

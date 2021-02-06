@@ -71,7 +71,7 @@ export default function StoreSidebar({ storeImg, loading, storeName }) {
                 Dashboard
               </Button>
             </Link>
-            <Link href="/store/contracts">
+            {/* <Link href="/store/contracts">
               <Button
                 w="100%"
                 h="65px"
@@ -102,7 +102,7 @@ export default function StoreSidebar({ storeImg, loading, storeName }) {
               >
                 Contracts
               </Button>
-            </Link>
+            </Link> */}
             <Link href="/store/offers">
               <Button
                 w="100%"

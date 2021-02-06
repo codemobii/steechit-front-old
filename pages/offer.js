@@ -30,7 +30,7 @@ export default function Offer() {
         .then(async (res) => {
           console.log(res);
           setStore_info(res.data);
-          const type = res.data;
+          const type = res.data.type;
           await Axios.get(`${process.env.apiUrl}products/${product_id}`)
             .then(async (res) => {
               setProduct({

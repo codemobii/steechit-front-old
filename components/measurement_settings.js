@@ -7,7 +7,6 @@ import ProfileLoader from "./parts/profile_loader";
 import AddMeasurement from "./forms/add_measurement";
 import { useRouter } from "next/router";
 import EditMeasurementModal from "./modals/edit_measurement_modal";
-import { set } from "lodash";
 
 export default function Measurement() {
   const [loading, setLoading] = useState(true);

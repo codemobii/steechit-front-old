@@ -62,7 +62,7 @@ export default function Measurement() {
 
   return (
     <Layout>
-      <Div bg="#fff" shadow="3" rounded="md">
+      <Div m={{ t: "30px" }} bg="#fff" shadow="3" rounded="md">
         {loading ? (
           <ProfileLoader />
         ) : measurement !== {} ? (

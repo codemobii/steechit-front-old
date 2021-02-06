@@ -23,17 +23,6 @@ export default function Bookings() {
   const [loading, setLoading] = useState(true);
   const [showN, setShowN] = useState("");
 
-  const menuList = (
-    <Div>
-      <Anchor d="block" p="5px 10px">
-        Details
-      </Anchor>
-      <Anchor textColor="danger800" d="block" p="10px">
-        Cancel
-      </Anchor>
-    </Div>
-  );
-
   useEffect(() => {
     const getUserItems = async () => {
       await axios({
@@ -52,8 +41,6 @@ export default function Bookings() {
         },
       })
         .then(async (store_res) => {
-          const storeType = store_res.data.type;
-
           await axios({
             headers: {
               "Access-Control-Allow-Origin": "*",
@@ -64,12 +51,37 @@ export default function Bookings() {
               port: 3128,
             },
             method: "GET",
-            url: `${process.env.apiUrl}${
-              storeType === "fabric" ? "offerFabrics" : "offerTailors"
-            }`,
+            url: `${process.env.apiUrl}offerTailors`,
+            params: {
+              user: id,
+            },
           })
             .then(async (orders_res) => {
               setOrders(orders_res.data);
+
+              await axios({
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  Authorization: `Bearer ${token}`,
+                },
+                proxy: {
+                  host: "104.236.174.88",
+                  port: 3128,
+                },
+                method: "GET",
+                url: `${process.env.apiUrl}offerFabrics`,
+                params: {
+                  user: id,
+                },
+              })
+                .then(async (orderss) => {
+                  const orders_re = orderss.data;
+                  setOrders([...orders, ...orders_re]);
+                  console.log(orders);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
               console.log(orders_res);
             })
             .catch((error) => {
@@ -86,6 +98,85 @@ export default function Bookings() {
     getUserItems();
   }, [id, token, dispatch]);
 
+  // Get the stores
+
+  const getFabricOffers = async () => {
+    setLoading(true);
+    await axios({
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+      proxy: {
+        host: "104.236.174.88",
+        port: 3128,
+      },
+      method: "GET",
+      url: `${process.env.apiUrl}offerFabrics`,
+      params: {
+        user: id,
+      },
+    })
+      .then((res) => {
+        setOrders(res.data);
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  //
+
+  const getTailorOffers = async () => {
+    setLoading(true);
+    await axios({
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+      proxy: {
+        host: "104.236.174.88",
+        port: 3128,
+      },
+      method: "GET",
+      url: `${process.env.apiUrl}offerTailors`,
+      params: {
+        user: id,
+      },
+    })
+      .then((res) => {
+        setOrders(res.data);
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  // Get fabric offers
+  const menuList = (
+    <Div>
+      <Anchor d="block" p="5px 10px" onClick={getTailorOffers}>
+        Offer to tailors
+      </Anchor>
+      <Anchor
+        textColor="danger800"
+        d="block"
+        p="10px"
+        onClick={getFabricOffers}
+      >
+        Offer to fabric-stores
+      </Anchor>
+    </Div>
+  );
+
   return (
     <ProfileLayout title="My Offers | Steechit">
       <Div
@@ -98,6 +189,18 @@ export default function Bookings() {
         <Text tag="header" textSize="title">
           My Offers
         </Text>
+
+        <Dropdown
+          isOpen={showN}
+          onClick={() => {
+            setShowN(!showN);
+          }}
+          border="none"
+          menu={menuList}
+          w="fit-content"
+        >
+          Filter offer list
+        </Dropdown>
       </Div>
       <Div w="100%" p="20px">
         {loading ? (
@@ -109,9 +212,8 @@ export default function Bookings() {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">S/N</th>
+                  <th scope="col">Offer ID</th>
                   <th scope="col">Created on</th>
-                  <th scope="col">Delivery Date</th>
                   <th scope="col">Amount</th>
                   <th scope="col">Status</th>
                   <th scope="col">Action</th>
@@ -120,11 +222,10 @@ export default function Bookings() {
               <tbody>
                 {orders.map((o, i) => (
                   <tr>
-                    <td data-label="S/N">{i + 1}</td>
+                    <td data-label="Offer ID">{o.offerRef}</td>
                     <td data-label="Created on">
-                      {new Date(o.createdAt).toDateString()}
+                      {new Date(o.createdAt).toLocaleString()}
                     </td>
-                    <td data-label="Delivery Date">{o.deliveryDate}</td>
                     <td data-label="Amount">
                       <NumberFormat
                         value={o.consideration}
@@ -139,7 +240,7 @@ export default function Bookings() {
                           !o.decline.is_decline && !o.accept.is_accept
                             ? "warning700"
                             : o.accept.is_accept
-                            ? "success700"
+                            ? "success600"
                             : "danger700"
                         }
                         textColor="white"
@@ -152,21 +253,9 @@ export default function Bookings() {
                       </Tag>
                     </td>
                     <td data-label="Action">
-                      <Dropdown
-                        isOpen={showN === i + 1}
-                        onClick={() => {
-                          if (showN !== i + 1) {
-                            setShowN(i + 1);
-                          } else {
-                            setShowN(0);
-                          }
-                        }}
-                        border="none"
-                        menu={menuList}
-                        w="fit-content"
-                      >
-                        more
-                      </Dropdown>
+                      <Anchor textColor="danger800" d="block" p="10px">
+                        Cancel
+                      </Anchor>
                     </td>
                   </tr>
                 ))}
@@ -209,3 +298,4 @@ export default function Bookings() {
     </ProfileLayout>
   );
 }
+//

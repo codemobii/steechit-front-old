@@ -1,8 +1,14 @@
 import axios from "axios";
 import { get } from "lodash";
 import { RESETPASSWORD } from "./constants";
-export const ResetPasswordRequest = (data) => async (dispatch) => {
-  // console.log(data)
+export const ResetPasswordRequest = ({ code, password }) => async (
+  dispatch
+) => {
+  const data = {
+    code: parseFloat(code),
+    password: password,
+  };
+  console.log(data);
 
   try {
     const res = await axios({

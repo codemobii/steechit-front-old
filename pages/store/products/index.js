@@ -6,7 +6,7 @@ import ProfileLoader from "../../../components/parts/profile_loader";
 import EmptyList from "../../../components/parts/empty_list";
 import store from "../../../services/store";
 import Link from "next/link";
-import DeleteProduct from "../../../components/delete_product";
+import DeleteProduct from "../../../components/modals/delete_product";
 import { useRouter } from "next/router";
 import StoreLayout from "../../../components/layouts/store_layout";
 import NumberFormat from "react-number-format";
@@ -21,7 +21,6 @@ export default function Store() {
   const router = useRouter();
 
   const [products, setProducts] = useState([]);
-  const [verified, setVerified] = useState(false);
   const [hasStore, setHasStore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
@@ -222,7 +221,7 @@ export default function Store() {
                       {type === "fabric" ? (
                         <td data-label="Material Price">
                           <NumberFormat
-                            value={p.materialPrice}
+                            value={p.fabric.materialPrice}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₦"}
@@ -268,10 +267,22 @@ export default function Store() {
                                   Details
                                 </Anchor>
                               </Link>
-                              <Anchor d="block" p="10px">
-                                Edit
-                              </Anchor>
-                              <Anchor textColor="danger800" d="block" p="10px">
+                              <Link
+                                href={`/store/products/${p._id}?action=edit`}
+                              >
+                                <Anchor d="block" p="10px">
+                                  Edit
+                                </Anchor>
+                              </Link>
+                              <Anchor
+                                textColor="danger800"
+                                d="block"
+                                p="10px"
+                                onClick={() => {
+                                  setProduct(p._id);
+                                  setShowDelete(true);
+                                }}
+                              >
                                 Delete
                               </Anchor>
                             </Div>

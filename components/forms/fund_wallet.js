@@ -31,7 +31,7 @@ export default function FundWallet({ isOpen, onClose }) {
     console.log(user.email + user.phone + user.firstName);
     // eslint-disable-next-line no-undef
     FlutterwaveCheckout({
-      public_key: "FLWPUBK_TEST-c4c676322706278c4e45b09eb8ac0e4b-X",
+      public_key: "FLWPUBK-ca94420209e8c53f45d673e4f4d58ac5-X",
       tx_ref: formRef,
       amount: amount,
       currency: "NGN",
@@ -43,8 +43,8 @@ export default function FundWallet({ isOpen, onClose }) {
         name: user.firstName,
       },
       callback: async (d) => {
-        console.log(flw_ref);
-        let trans_id = d.flw_ref;
+        console.log(d);
+        let trans_id = d.transaction_id;
         try {
           await axios({
             headers: {

@@ -18,7 +18,7 @@ export default function OfferWithProduct(props) {
   const product = props.product;
   const store = props.store;
 
-  const type = store.tyoe;
+  const type = store.type;
 
   return (
     <Div
@@ -82,19 +82,25 @@ export default function OfferWithProduct(props) {
               displayType={"text"}
               thousandSeparator={true}
               prefix={"₦"}
-              renderText={(value) => <Text textSize="subheading">{value}</Text>}
-            />
-            <NumberFormat
-              value={product.sPrice}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₦"}
               renderText={(value) => (
-                <Text tag="h1" textSize="subheading">
-                  {value} (Sowing price)
+                <Text textSize="subheading">
+                  {value} (Material Price Per yard)
                 </Text>
               )}
             />
+            {store.type === "tailor" && (
+              <NumberFormat
+                value={product.sPrice}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₦"}
+                renderText={(value) => (
+                  <Text tag="h1" textSize="subheading">
+                    {value} (Sowing price)
+                  </Text>
+                )}
+              />
+            )}
           </Div>
         </Div>
       </Div>
@@ -111,14 +117,25 @@ export default function OfferWithProduct(props) {
           borderColor="gray400"
         >
           <Text tag="h1" textSize="subheading">
-            Make an offer
+            Make an order
           </Text>
         </Div>
         <Div p="20px">
           {type === "fabric" ? (
-            <RequestOfferFormFabric product={product.id} store={store._id} />
+            <>
+              <RequestOfferFormFabric
+                product={product.id}
+                product_info={product}
+                store={store._id}
+              />
+            </>
           ) : (
-            <RequestOfferFormTailor product={product.id} store={store._id} />
+            <RequestOfferFormTailor
+              openOffer={true}
+              product={product.id}
+              productInfo={product}
+              store={store._id}
+            />
           )}
         </Div>
       </Div>

@@ -60,7 +60,8 @@ export default function Wallet() {
             },
           });
           console.log(orders_res);
-          setOrders(orders_res.data);
+          const ordersRes = orders_res.data.reverse();
+          setOrders(ordersRes);
         })
         .catch((error) => {
           console.log(error);
@@ -126,9 +127,43 @@ export default function Wallet() {
               bg="success200"
               rounded="lg"
             >
-              <Div>
+              <Div
+                m={{
+                  b: { xs: "20px", sm: "20px", md: "0", lg: "0", xl: "0" },
+                }}
+              >
                 <Text d="block" tag="label">
-                  Wallet balance
+                  Ledger Balance
+                </Text>
+                <NumberFormat
+                  value={wallet}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₦"}
+                  renderText={(value) => (
+                    <Text tag="h3" textSize="heading">
+                      {value}
+                    </Text>
+                  )}
+                />
+              </Div>
+              <Div
+                p={{
+                  x: { xs: "0", sm: "0", md: "30px", lg: "30px", xl: "30px" },
+                }}
+                border={{
+                  x: {
+                    xs: "0",
+                    sm: "0",
+                    md: "1px solid",
+                    lg: "1px solid",
+                    xl: "1px solid",
+                  },
+                }}
+                borderColor="gray800"
+              >
+                <Text d="block" tag="label">
+                  Available Balance
                 </Text>
                 <NumberFormat
                   value={wallet}
@@ -188,6 +223,7 @@ export default function Wallet() {
                     <th scope="col">S/N</th>
                     <th scope="col">Amount</th>
                     <th scope="col">Type</th>
+                    <td data-label="Amount">Description</td>
                     <th scope="col">Date</th>
                   </tr>
                 </thead>
@@ -196,9 +232,12 @@ export default function Wallet() {
                     <tr>
                       <td data-label="S/N">{index + 1}</td>
                       <td data-label="Amount">{o.amount}</td>
-                      <td data-label="Type">{o.type}</td>
+                      <td data-label="Type">
+                        {o.transactionType === "cr" ? "Credit" : "Debit"}
+                      </td>
+                      <td data-label="Amount">{o.header}</td>
                       <td data-label="Date">
-                        {new Date(o.createdAt).toDateString()}
+                        {new Date(o.createdAt).toLocaleString()}
                       </td>
                     </tr>
                   ))}

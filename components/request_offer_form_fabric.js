@@ -1,7 +1,18 @@
-import { Icon, Input, Label, Modal, Notification, Switch, Text } from "atomize";
+import {
+  Icon,
+  Image,
+  Input,
+  Label,
+  Modal,
+  Notification,
+  Switch,
+  Text,
+} from "atomize";
 import Axios from "axios";
 import { get } from "lodash";
 import moment from "moment";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import MainButton from "./buttons/main_button";
@@ -17,9 +28,10 @@ export default function RequestOfferFormFabric(props) {
   const [errorMsg, setErrorMsg] = useState("Error");
   const [price, setPrice] = useState("");
   const [deliveryDate, setDeliveryDate] = useState(new Date());
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState("1");
   const [loading, setLoading] = useState(false);
   const [unit, setUnit] = useState("");
+  const [done, setDone] = useState(false);
 
   // Handle enter pin
 
@@ -31,10 +43,16 @@ export default function RequestOfferFormFabric(props) {
     }
   };
 
+  const price_n = props.product_info.mPrice;
+
   const auth = useSelector((state) => state.auth);
 
   const token = auth.token;
   const id = auth._id;
+
+  const router = useRouter();
+
+  console.log(props.product_info);
 
   // Handle get measurement
   const handleGetMeasurement = async () => {
@@ -116,12 +134,12 @@ export default function RequestOfferFormFabric(props) {
       },
     })
       .then(async (res) => {
-        const pro_price = parseFloat(price);
-        const wallet_bal = parseFloat(res.data[0].bal);
+        const pro_price = parseFloat(price_n) * parseFloat(quantity);
+        const wallet_bal = parseFloat(res.data[0].amount);
 
         const data = {
           wallet: res.data[0]._id,
-          PTN: parseInt(pin),
+          PTN: pin,
           store: props.store,
           consideration: pro_price,
           deliveryDate: moment(deliveryDate).format("YYYY-MM-DD"),
@@ -133,6 +151,8 @@ export default function RequestOfferFormFabric(props) {
             size: 29,
           },
           qauntity: parseFloat(quantity),
+          openOffer: true,
+          type: "order",
         };
 
         console.log(res);
@@ -154,12 +174,14 @@ export default function RequestOfferFormFabric(props) {
               port: 3128,
             },
             method: "POST",
-            url: `${process.env.apiUrl}offerTailors`,
+            url: `${process.env.apiUrl}offerFabrics`,
             data,
           })
             .then((ress) => {
               setErrorMsg("Offer sent successfully");
               setError(true);
+              setIsOpen(false);
+              setDone(true);
             })
             .catch((er) => {
               const msg = get(er, "response.data.message") || e.message;
@@ -181,15 +203,23 @@ export default function RequestOfferFormFabric(props) {
     <>
       <form>
         <Label d="block" m={{ b: "1rem" }}>
-          Consideration price
+          Yards
           <Input
             placeholder=""
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={quantity}
+            onChange={(e) => {
+              setQuantity(e.target.value);
+            }}
             type="number"
           />
         </Label>
         <Label d="block" m={{ b: "1rem" }}>
+          Price (Per yard)
+          <Text textSize="subheader">
+            {parseFloat(price_n) * parseFloat(quantity)}
+          </Text>
+        </Label>
+        {/* <Label d="block" m={{ b: "1rem" }}>
           Delivery date
           <Input
             placeholder=""
@@ -197,9 +227,9 @@ export default function RequestOfferFormFabric(props) {
             onChange={(e) => setDeliveryDate(e.target.value)}
             type="date"
           />
-        </Label>
+        </Label> */}
 
-        <Label d="block" m={{ b: "1rem" }}>
+        {/** <Label d="block" m={{ b: "1rem" }}>
           Gender
           <select
             onChange={(e) => setGender(e.target.value)}
@@ -220,9 +250,8 @@ export default function RequestOfferFormFabric(props) {
         >
           <Switch checked={share_measurement} isLoading={getting_measurement} />
           Share measurement with tailor
-        </Label>
-        {/** */}
-        {!share_measurement && (
+        </Label> */}
+        {/** !share_measurement && (
           <>
             <Label d="block" m={{ b: "1rem" }}>
               Measurement Unit
@@ -253,16 +282,7 @@ export default function RequestOfferFormFabric(props) {
               </select>
             </Label>{" "}
           </>
-        )}
-        <Label
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          d="block"
-          m={{ b: "1rem" }}
-        >
-          Quantity
-          <Input placeholder="" type="number" />
-        </Label>
+        ) */}
         <MainButton onClick={() => setIsOpen(true)} title="Continue" />
       </form>
       <Modal
@@ -334,6 +354,36 @@ export default function RequestOfferFormFabric(props) {
       >
         {errorMsg}
       </Notification>
+      <Modal
+        isOpen={done}
+        onClose={() => setDone(true)}
+        align={{
+          xs: "flex-start",
+          sm: "flex-start",
+          md: "flex-start",
+          lg: "center",
+          xl: "center",
+        }}
+        rounded="md"
+        maxW="25rem"
+        p="20px"
+        bg="#fff"
+        overflow="hidden"
+        style={{ textAlign: "center" }}
+      >
+        <Image
+          w="100px"
+          h="100px"
+          src="https://cdn4.iconfinder.com/data/icons/colicon/24/checkmark_done_complete-512.png"
+          m={{ x: "auto", b: "30px" }}
+        />
+        <Text tag="h1" textSize="heading" textAlign="center">
+          Kindly the contact this store to follow up on your order
+        </Text>
+        <Link href="/profile/contracts">
+          <MainButton title="Okay" />
+        </Link>
+      </Modal>
     </>
   );
 }

@@ -98,14 +98,20 @@ export default function ProductItem() {
             <Text tag="header" textSize="heading">
               {product.name}
             </Text>
-            <Icon m={{ l: "1rem", r: "1rem" }} name="Minus" size="20px" />
-            <Text tag="header" textSize="subheader">
-              ₦{product.mPrice}
-            </Text>
           </Div>
+
           {store.type === "tailor" && (
             <Text tag="h3" textSize="subheader">
-              ₦{product.sPrice} (Sowing price)
+              Sewing only - ₦{product.sPrice}
+            </Text>
+          )}
+          {store.type === "fabric" ? (
+            <Text textSize="subheader" tag="h3" textSize="subheader">
+              ₦{product.mPrice} (per yard)
+            </Text>
+          ) : (
+            <Text textSize="subheader" tag="h3" textSize="subheader">
+              With fabrics ₦{product.mPrice} (per yard)
             </Text>
           )}
           <Text m={{ t: "20px" }}>{product.description}</Text>
@@ -127,7 +133,7 @@ export default function ProductItem() {
             </Text>
           </Div>
           <Image
-            bgSize="cover"
+            style={{ objectSize: "cover", objectPosition: "center" }}
             w="100%"
             h="200px"
             src={store.storeBanner && store.storeBanner.url}
@@ -139,11 +145,11 @@ export default function ProductItem() {
             <Text m={{ b: "10px" }}>{store.address}</Text>
             <Div d="flex">
               <Link href={`${store_id}`}>
-                <MainButton title="More listings" />
+                <MainButton title="More products" />
               </Link>
               <Link href={`offer?s_id=${store_id}&p_id=${product_id}`}>
                 <Div m={{ l: "10px" }}>
-                  <BlackButton title="Place an offer" />
+                  <BlackButton title="Buy now" />
                 </Div>
               </Link>
             </Div>

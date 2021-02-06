@@ -7,28 +7,27 @@ import { ForgotPasswordRequest } from "../../services/forgot_password_action";
 
 export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
 
   var handlePhone = (e) => {
-    setPhone(e.target.value);
+    setEmail(e.target.value);
   };
   const forgetPassword = useSelector((state) => state.forgetPassword);
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     setLoading(true);
-    await dispatch(ForgotPasswordRequest({ phone }));
+    dispatch(ForgotPasswordRequest({ email }));
     forgetPassword.success === false ? setError(true) : setError(false);
-    setPhone("");
     setLoading(false);
-
-    if (forgetPassword.success === true) {
-      router.push("/auth/reset-password");
-    }
   };
+
+  if (forgetPassword.success === true) {
+    router.push("/auth/reset-password");
+  }
 
   return (
     <>
@@ -60,7 +59,7 @@ export default function ForgotPassword() {
               m={{ b: "2rem" }}
               fontFamily="primary"
               type="email"
-              value={phone}
+              value={email}
               onChange={handlePhone}
             />
             <Button

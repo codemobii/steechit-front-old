@@ -39,7 +39,7 @@ export default function SettingSidebar() {
           border={{ t: "1px solid" }}
           borderColor="gray300"
         >
-          KYC
+          Bio
         </Button>
       </Link>
       <Link href="/profile/settings?action=contact">
@@ -112,6 +112,31 @@ export default function SettingSidebar() {
           borderColor="gray300"
         >
           Update password
+        </Button>
+      </Link>
+
+      <Link href="/profile/settings?action=update-pin">
+        <Button
+          w="100%"
+          h="65px"
+          justify="space-between"
+          suffix={
+            <Icon
+              name="DownArrowCircle"
+              size="24px"
+              style={{ transform: "rotate(-90deg)" }}
+            />
+          }
+          align="center"
+          bg="white"
+          textColor="black800"
+          textSize="paragraph"
+          rounded="xs"
+          p="0"
+          border={{ t: "1px solid" }}
+          borderColor="gray300"
+        >
+          Update payment pin
         </Button>
       </Link>
 

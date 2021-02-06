@@ -11,6 +11,7 @@ export default function StoreMobileMenu() {
       w="100%"
       bg="#fff"
       d={{ xs: "flex", sm: "flex", md: "none", lg: "none", xl: "none" }}
+      justify="center"
       shadow="5"
     >
       <Link href="/store">
@@ -28,7 +29,7 @@ export default function StoreMobileMenu() {
           </Div>
         </Div>
       </Link>
-      <Link href="/store/contracts">
+      {/* <Link href="/store/contracts">
         <Div w="20%" d="flex" h="60px" align="center" justify="center">
           <Div textAlign="center">
             <Icon
@@ -42,7 +43,7 @@ export default function StoreMobileMenu() {
             </Text>
           </Div>
         </Div>
-      </Link>
+      </Link> */}
       <Link href="/store/offers">
         <Div w="20%" d="flex" h="60px" align="center" justify="center">
           <Div textAlign="center">

@@ -10,7 +10,7 @@ export default function ResetPassword() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const router = useRouter();
-  const [code, setEmail] = useState("");
+  const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
@@ -18,11 +18,11 @@ export default function ResetPassword() {
   const resetPassword = useSelector((state) => state.resetPassword);
 
   if (resetPassword.success === true) {
-    router.push("/profile");
+    router.push("/?auth=true");
   }
 
   var handleCode = (e) => {
-    setEmail(e.target.value);
+    setCode(e.target.value);
   };
   var handlePassword = (e) => {
     setPassword(e.target.value);
@@ -64,6 +64,7 @@ export default function ResetPassword() {
               placeholder="Enter 4 digits code sent to you"
               value={code}
               onChange={handleCode}
+              type="number"
               m={{ b: "1rem" }}
             />
             <Input

@@ -16,12 +16,13 @@ import { profileRequest } from "../../services/profile_action";
 import ErrorPage from "next/error";
 import store from "../../services/store";
 import Measurement from "../../components/measurement_settings";
+import UpdatePaymentPin from "../../components/forms/update_payment_pin";
 
 export default function Settings() {
   const router = useRouter();
   const title =
     router.query.action === undefined || router.query.action === "about-me"
-      ? "About me"
+      ? "Bio"
       : router.query.action === "contact"
       ? "Contact"
       : router.query.action === "update-password"
@@ -30,6 +31,8 @@ export default function Settings() {
       ? "My store"
       : router.query.action === "measurement"
       ? "Measurement"
+      : router.query.action === "update-pin"
+      ? "Update Payment Pin"
       : null;
   console.log(router);
 
@@ -130,6 +133,8 @@ export default function Settings() {
                 <StoreSettings user={user} />
               ) : router.query.action === "measurement" ? (
                 <Measurement />
+              ) : router.query.action === "update-pin" ? (
+                <UpdatePaymentPin />
               ) : null}
             </Div>
           </Div>

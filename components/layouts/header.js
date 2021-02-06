@@ -146,11 +146,6 @@ export default function Header({ onOpen }) {
                 }}
                 align="center"
               >
-                <Link href="/?explore=fb">
-                  <Anchor d="block" m={{ r: "30px" }} fontFamily="primary">
-                    Fabrics Stores
-                  </Anchor>
-                </Link>
                 <Link href="/?explore=t">
                   <Anchor d="block" m={{ r: "30px" }} fontFamily="primary">
                     Book Tailors
@@ -161,6 +156,11 @@ export default function Header({ onOpen }) {
                     Buy Materials
                   </Anchor>
                 </Link>
+                {/* <Link href="/logistics">
+                  <Anchor d="block" m={{ r: "30px" }} fontFamily="primary">
+                    Logistics
+                  </Anchor>
+                </Link> */}
                 <Link href="/">
                   <Anchor d="block" m={{ r: "30px" }} fontFamily="primary">
                     About
@@ -204,7 +204,7 @@ export default function Header({ onOpen }) {
                     <MainButton title="Create a product" />
                   </Link>
                 </Div>
-                <Button
+                {/* <Button
                   h="2.5rem"
                   w="2.5rem"
                   bg="transparent"
@@ -213,7 +213,7 @@ export default function Header({ onOpen }) {
                   m={{ l: "1rem" }}
                 >
                   <Icon name="Message" size="24px" color="black" />
-                </Button>
+                </Button> */}
                 <Button
                   h="2.5rem"
                   w="2.5rem"
@@ -303,11 +303,6 @@ export default function Header({ onOpen }) {
               }
               placeholder="Search tailors, fabric store . . ."
             /> */}
-            <Link href="/?explore=fb">
-              <Anchor d="block" p={{ y: "10px" }} fontFamily="primary">
-                Fabrics Stores
-              </Anchor>
-            </Link>
             <Link href="/?explore=t">
               <Anchor d="block" p={{ y: "10px" }} fontFamily="primary">
                 Book Tailors
@@ -318,6 +313,11 @@ export default function Header({ onOpen }) {
                 Buy Materials
               </Anchor>
             </Link>
+            {/* <Link href="/logistics">
+              <Anchor d="block" p={{ y: "10px" }} fontFamily="primary">
+                Logistics
+              </Anchor>
+            </Link> */}
             <Link href="/">
               <Anchor d="block" p={{ y: "10px" }} fontFamily="primary">
                 About

@@ -258,6 +258,7 @@ export default function AddMeasurement({ isOpen, onClose }) {
         setLoading(false);
         setCheckSubmit(true);
         console.log(res);
+        window.location.reload();
       } catch (er) {
         const msg = get(er, "response.data.message") || e.message;
         console.log(msg);
@@ -509,7 +510,7 @@ export default function AddMeasurement({ isOpen, onClose }) {
                 </Col>
               </Row>
               <Text m={{ b: "0.5rem" }} tag="header" textSize="title">
-                Sleeve
+                Sleeve (Inches)
               </Text>
               <Label d="block" m={{ b: "1rem" }}>
                 Short Sleeve
@@ -620,7 +621,10 @@ export default function AddMeasurement({ isOpen, onClose }) {
           ) : genderState === true && gender === "M" ? (
             <>
               <Text m={{ b: "0.5rem" }} tag="header" textSize="title">
-                Shirt
+                Shirt{" "}
+                <Text tag="span" textSize="caption">
+                  (Inches)
+                </Text>
               </Text>
               <Row>
                 <Col
@@ -746,7 +750,10 @@ export default function AddMeasurement({ isOpen, onClose }) {
                 </Col>
               </Row>
               <Text m={{ b: "0.5rem" }} tag="header" textSize="title">
-                Pants
+                Pants{" "}
+                <Text tag="span" textSize="caption">
+                  (Inches)
+                </Text>
               </Text>
               <Row>
                 <Col

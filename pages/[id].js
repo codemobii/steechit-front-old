@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import EmptyList from "../components/parts/empty_list";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import NumberFormat from "react-number-format";
 
 const token = store.getState().auth.token;
 
@@ -131,7 +132,6 @@ export class StoreId extends Component {
     return (
       <>
         <Layout isWide={true} title={`${tailor.storeName} | Steechit`}>
-          <Div w="100%" bg="black700" h="120px" />
           <Container
             w={{
               xs: "100%",
@@ -140,15 +140,15 @@ export class StoreId extends Component {
               lg: "960px",
               xl: "960px",
             }}
-            m={{ y: "-50px", x: "auto" }}
+            m={{ x: "auto", t: "100px" }}
           >
             <Div
               bg="#fff"
               w="100%"
+              rounded="md"
               minH="250px"
               d="flex"
               justify="center"
-              rounded="md"
             >
               <Div m={{ t: "-80px" }} p="20px" textAlign="center">
                 <Div
@@ -167,7 +167,10 @@ export class StoreId extends Component {
                     rounded="circle"
                     w="120px"
                     h="120px"
-                    bgSize="cover"
+                    style={{
+                      objectFit: "cover",
+                      objectPosition: "center",
+                    }}
                     pos="center"
                   />
                 </Div>
@@ -192,16 +195,55 @@ export class StoreId extends Component {
                       title={showNumber ? tailor.phone : "Show contact"}
                     />
                   </Div>
-                  <Div m={{ l: "10px" }}>
-                    <Link
-                      href={`/offer?s_id=${tailor._id}&p_id=create_new_product`}
-                    >
-                      <BlackButton title="Request an offer" />
-                    </Link>
-                  </Div>
+                  {tailor.type !== "fabric" && (
+                    <Div m={{ l: "10px" }}>
+                      <Link
+                        href={`/offer?s_id=${tailor._id}&p_id=create_new_product`}
+                      >
+                        <BlackButton title="Request an offer" />
+                      </Link>
+                    </Div>
+                  )}
                 </Div>
               </Div>
             </Div>
+
+            <Image
+              src={tailor.storeBanner.url}
+              w="100%"
+              bg="black700"
+              h="350px"
+              style={{
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+              m={{ t: "20px" }}
+              rounded="md"
+            />
+
+            {/* About */}
+
+            {tailor.description !== undefined && (
+              <Div m={{ y: "20px" }} w="100%" rounded="md" bg="#fff">
+                <Div
+                  w="100%"
+                  p="20px"
+                  border={{ b: "1px solid" }}
+                  borderColor="gray400"
+                >
+                  <Text tag="h1" textSize="title">
+                    About {tailor.storeName}
+                  </Text>
+                </Div>
+
+                <Div p="20px">
+                  <Text tag="p" textSize="paragraph">
+                    {tailor.description}
+                  </Text>
+                </Div>
+              </Div>
+            )}
+
             <Div m={{ y: "20px" }} w="100%" rounded="md" bg="#fff">
               <Div
                 w="100%"
@@ -210,7 +252,7 @@ export class StoreId extends Component {
                 borderColor="gray400"
               >
                 <Text tag="h1" textSize="title">
-                  My works
+                  Products
                 </Text>
               </Div>
               <Div p="20px">
@@ -270,9 +312,31 @@ export class StoreId extends Component {
                                 >
                                   {p.productName}
                                 </Text>
-                                <Text textSize="subheader">
-                                  ₦{p.tailor.materialPrice}
-                                </Text>
+
+                                {tailor.type === "fabric" ? (
+                                  <NumberFormat
+                                    value={p.fabric.materialPrice}
+                                    displayType={"text"}
+                                    thousandSeparator={true}
+                                    prefix={"₦"}
+                                    renderText={(value) => (
+                                      <Text textSize="subheader">
+                                        {value} (Per yard)
+                                      </Text>
+                                    )}
+                                  />
+                                ) : (
+                                  <NumberFormat
+                                    value={p.tailor.sowingPrice}
+                                    displayType={"text"}
+                                    thousandSeparator={true}
+                                    prefix={"₦"}
+                                    renderText={(value) => (
+                                      <Text textSize="subheader">{value}</Text>
+                                    )}
+                                  />
+                                )}
+
                                 <Text
                                   m={{ b: "1rem", t: "1rem" }}
                                   d={{

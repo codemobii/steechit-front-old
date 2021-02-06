@@ -485,9 +485,20 @@ export default function OfferWithoutProduct(props) {
           ) : (
             <>
               {store_type === "fabric" ? (
-                <RequestOfferFormFabric product={product.id} store={store_id} />
+                <>
+                  <RequestOfferFormFabric
+                    product_info={product}
+                    product={product.id}
+                    store={store_id}
+                  />
+                </>
               ) : (
-                <RequestOfferFormTailor product={product.id} store={store_id} />
+                <RequestOfferFormTailor
+                  openOffer={false}
+                  product={product.id}
+                  productInfo={product}
+                  store={store_id}
+                />
               )}
             </>
           )}

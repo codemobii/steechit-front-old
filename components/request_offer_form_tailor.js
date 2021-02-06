@@ -1,6 +1,7 @@
 import {
   Anchor,
   Icon,
+  Image,
   Input,
   Label,
   Modal,
@@ -12,11 +13,17 @@ import Axios from "axios";
 import { get } from "lodash";
 import moment from "moment";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import MainButton from "./buttons/main_button";
 
 export default function RequestOfferFormTailor(props) {
+  const router = useRouter();
+
+  const sumprice =
+    parseFloat(props.productInfo.mPrice) + parseFloat(props.productInfo.sPrice);
+
   const [isOpen, setIsOpen] = useState(false);
   const [pin, setPin] = useState("");
   const [getting_measurement, setGetting_measurement] = useState(false);
@@ -27,9 +34,10 @@ export default function RequestOfferFormTailor(props) {
   const [errorMsg, setErrorMsg] = useState("Error");
   const [price, setPrice] = useState("");
   const [deliveryDate, setDeliveryDate] = useState(new Date());
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState("1");
   const [noMeasurement, setNoMeasurement] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
 
   // Handle enter pin
 
@@ -45,6 +53,8 @@ export default function RequestOfferFormTailor(props) {
 
   const token = auth.token;
   const id = auth._id;
+
+  console.log(props);
 
   // Handle get measurement
   const handleGetMeasurement = async () => {
@@ -134,7 +144,9 @@ export default function RequestOfferFormTailor(props) {
           wallet: res.data[0]._id,
           PTN: pin,
           store: props.store,
-          consideration: pro_price,
+          consideration: props.openOffer
+            ? parseFloat(sumprice) * parseFloat(quantity)
+            : parseFloat(pro_price) * parseFloat(quantity),
           deliveryDate: moment(deliveryDate).format("YYYY-MM-DD"),
           sample: [props.product],
           user: id,
@@ -144,6 +156,8 @@ export default function RequestOfferFormTailor(props) {
             standard: size,
           },
           qauntity: parseFloat(quantity),
+          openOffer: props.openOffer,
+          type: "offer",
         };
 
         console.log(res);
@@ -171,6 +185,8 @@ export default function RequestOfferFormTailor(props) {
             .then((ress) => {
               setErrorMsg("Offer sent successfully");
               setError(true);
+              setIsOpen(false);
+              setDone(true);
             })
             .catch((er) => {
               const msg = get(er, "response.data.message") || e.message;
@@ -191,15 +207,17 @@ export default function RequestOfferFormTailor(props) {
   return (
     <>
       <form>
-        <Label d="block" m={{ b: "1rem" }}>
-          Consideration price
-          <Input
-            placeholder=""
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            type="number"
-          />
-        </Label>
+        {!props.openOffer && (
+          <Label d="block" m={{ b: "1rem" }}>
+            Consideration price
+            <Input
+              placeholder=""
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              type="number"
+            />
+          </Label>
+        )}
         <Label d="block" m={{ b: "1rem" }}>
           Delivery date
           <Input
@@ -251,6 +269,13 @@ export default function RequestOfferFormTailor(props) {
         >
           Quantity
           <Input placeholder="" type="number" />
+          <Text>
+            Total material price * yards (
+            {props.openOffer
+              ? parseFloat(sumprice) * parseFloat(quantity)
+              : parseFloat(price) * parseFloat(quantity)}
+            )
+          </Text>
         </Label>
         <MainButton onClick={() => setIsOpen(true)} title="Continue" />
       </form>
@@ -323,6 +348,36 @@ export default function RequestOfferFormTailor(props) {
       >
         {errorMsg}
       </Notification>
+      <Modal
+        isOpen={done}
+        onClose={() => setDone(true)}
+        align={{
+          xs: "flex-start",
+          sm: "flex-start",
+          md: "flex-start",
+          lg: "center",
+          xl: "center",
+        }}
+        rounded="md"
+        maxW="25rem"
+        p="20px"
+        bg="#fff"
+        overflow="hidden"
+        style={{ textAlign: "center" }}
+      >
+        <Image
+          w="100px"
+          h="100px"
+          src="https://cdn4.iconfinder.com/data/icons/colicon/24/checkmark_done_complete-512.png"
+          m={{ x: "auto", b: "30px" }}
+        />
+        <Text tag="h1" textSize="heading" textAlign="center">
+          Kindly the contact this store to follow up on your order
+        </Text>
+        <Link href="/profile/offers">
+          <MainButton title="Okay" />
+        </Link>
+      </Modal>
     </>
   );
 }

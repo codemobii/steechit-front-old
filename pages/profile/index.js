@@ -106,7 +106,7 @@ export default function Orders() {
                   port: 3128,
                 },
                 method: "GET",
-                url: `${process.env.apiUrl}offerTailors/`,
+                url: `${process.env.apiUrl}offerFabrics/`,
                 params: {
                   user: id,
                 },
@@ -196,7 +196,7 @@ export default function Orders() {
                 >
                   <Div textAlign="center">
                     <Icon name="Card" size="50px" color="warning800" />
-                    <Text>Wallet Balance</Text>
+                    <Text>Available Balance</Text>
                     <NumberFormat
                       value={wallet}
                       displayType={"text"}

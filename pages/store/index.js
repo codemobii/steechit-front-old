@@ -59,43 +59,10 @@ export default function Orders() {
             params: {
               user: id,
             },
-          }).then(async (res_w) => {
-            setWallet(res_w.data[0].amount);
-            console.log(res_w);
-            await axios({
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                Authorization: `Bearer ${token}`,
-              },
-              proxy: {
-                host: "104.236.174.88",
-                port: 3128,
-              },
-              method: "GET",
-              url: `${process.env.apiUrl}users/${id}`,
-            })
-              .then((u_res) => {
-                if (u_res.data.firstName === "") {
-                  setNoName(true);
-                }
-              })
-              .catch(() => {});
-            await axios({
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                Authorization: `Bearer ${token}`,
-              },
-              proxy: {
-                host: "104.236.174.88",
-                port: 3128,
-              },
-              method: "GET",
-              url: `${process.env.apiUrl}offerTailors/`,
-              params: {
-                user: id,
-              },
-            }).then(async (tailor_r) => {
-              setOffers(tailor_r.data);
+          })
+            .then(async (res_w) => {
+              setWallet(res_w.data[0].amount);
+              console.log(res_w);
               await axios({
                 headers: {
                   "Access-Control-Allow-Origin": "*",
@@ -106,17 +73,35 @@ export default function Orders() {
                   port: 3128,
                 },
                 method: "GET",
-                url: `${process.env.apiUrl}offerTailors/`,
-                params: {
-                  user: id,
-                },
-              }).then(async (store_r) => {
-                const storeOffer = store_r.data;
-                setOffers([...offers, ...storeOffer]);
-                console.log(offers);
+                url: `${process.env.apiUrl}stores/`,
+                params: { user: id },
+              }).then(async (u_res) => {
+                const type = u_res.data[0].type;
+                console.log(type);
+                await axios({
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    Authorization: `Bearer ${token}`,
+                  },
+                  proxy: {
+                    host: "104.236.174.88",
+                    port: 3128,
+                  },
+                  method: "GET",
+                  url: `${process.env.apiUrl}${
+                    type === "fabric" ? "offerFabrics" : "offerTailors"
+                  }/`,
+                  params: {
+                    store: u_res.data._id,
+                  },
+                }).then(async (store_r) => {
+                  const storeOffer = store_r.data;
+                  setOffers(storeOffer);
+                  console.log(store_r);
+                });
               });
-            });
-          });
+            })
+            .catch(() => {});
         })
         .catch((error) => {
           console.log(error);

@@ -347,7 +347,7 @@ export default function SellProductForm({ user, type }) {
               }}
             >
               <Label d="block" m={{ b: "1rem" }}>
-                Material Price
+                Material Price (Per yard)
                 <Input
                   placeholder="Price"
                   value={materialPrice}
@@ -367,7 +367,7 @@ export default function SellProductForm({ user, type }) {
                 }}
               >
                 <Label d="block" m={{ b: "1rem" }}>
-                  Material Price
+                  Material Price (Per yard)
                   <Input
                     placeholder="Price"
                     value={materialPrice}
@@ -385,7 +385,7 @@ export default function SellProductForm({ user, type }) {
                 }}
               >
                 <Label d="block" m={{ b: "1rem" }}>
-                  Sowing Price
+                  Sewing Price
                   <Input
                     placeholder="Price"
                     value={sowingPrice}

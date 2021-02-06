@@ -13,6 +13,21 @@ export default function ProfileMobileMenu() {
       d={{ xs: "flex", sm: "flex", md: "none", lg: "none", xl: "none" }}
       shadow="5"
     >
+      <Link href="/profile">
+        <Div w="25%" d="flex" h="60px" align="center" justify="center">
+          <Div textAlign="center">
+            <Icon
+              style={{ transform: "translateY(10px)" }}
+              name="UserSolid"
+              size="24px"
+              color="black800"
+            />
+            <Text tag="label" d="block">
+              Profile
+            </Text>
+          </Div>
+        </Div>
+      </Link>
       <Link href="/profile/contracts">
         <Div w="25%" d="flex" h="60px" align="center" justify="center">
           <Div textAlign="center">
@@ -28,7 +43,7 @@ export default function ProfileMobileMenu() {
           </Div>
         </Div>
       </Link>
-      <Link href="/profile/store">
+      <Link href="/profile/offers">
         <Div w="25%" d="flex" h="60px" align="center" justify="center">
           <Div textAlign="center">
             <Icon

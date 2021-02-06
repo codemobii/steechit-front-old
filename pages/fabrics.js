@@ -1,5 +1,17 @@
 import React, { Component } from "react";
-import { Button, Col, Div, Dropdown, Icon, Image, Row, Text } from "atomize";
+import {
+  Button,
+  Col,
+  Div,
+  Dropdown,
+  Icon,
+  Image,
+  Input,
+  Label,
+  Radiobox,
+  Row,
+  Text,
+} from "atomize";
 import Link from "next/link";
 import Layout from "../components/layouts/layout";
 import Axios from "axios";
@@ -50,64 +62,99 @@ export default class Fabrics extends Component {
   render() {
     const { products, categories, active_filter, loading } = this.state;
 
-    return (
-      <Layout title="Fabrics | Steechit">
-        <Div
-          d="flex"
-          align="center"
-          m={{ y: "2rem" }}
-          style={{ overflowY: "hidden" }}
-        >
-          <Button
-            m={{ r: "1rem" }}
-            rounded="lg"
-            bg="#fff"
-            textColor="black800"
-            suffix={
-              loading && this.category === "" ? (
-                <Icon
-                  name="Loading"
-                  size="16px"
-                  color="black800"
-                  m={{ l: "1rem" }}
-                />
-              ) : null
-            }
-            onClick={() => {
+    const statesList = (
+      <Div p="10px">
+        <Label align="center" textWeight="600" m={{ t: "1rem" }}>
+          <Radiobox
+            onChange={() => {
               this.category = "";
-              this.category_name = "All category";
+              this.category_name = "";
               this.setState({ active_filter: "" });
               this.getTailors();
             }}
-          >
-            All states
-          </Button>
-          {categories.map((c) => (
-            <Button
-              m={{ r: "1rem" }}
-              rounded="lg"
-              bg="#fff"
-              textColor="black800"
-              suffix={
-                loading && this.category_name === c.name ? (
-                  <Icon
-                    name="Loading"
-                    size="16px"
-                    color="black800"
-                    m={{ l: "1rem" }}
-                  />
-                ) : null
-              }
-              onClick={() => {
+            checked={this.category === ""}
+            name="count"
+          />
+          All states
+        </Label>
+        {categories.map((c) => (
+          <Label align="center" textWeight="600" m={{ t: "1rem" }}>
+            <Radiobox
+              onChange={() => {
                 this.category = c._id;
                 this.category_name = c.name;
                 this.setState({ active_filter: "" });
                 this.getTailors();
               }}
+              checked={this.category === c._id}
+              name="count"
+            />
+            {c.name}
+          </Label>
+        ))}
+      </Div>
+    );
+
+    return (
+      <Layout title="Fabrics | Steechit">
+        <Div d="flex" align="center" m={{ y: "2rem" }} w="100%">
+          <Row w="100%">
+            <Col
+              size={{
+                xs: "12",
+                sm: "12",
+                md: "12",
+                lg: "4",
+                xl: "4",
+              }}
             >
-              {c.name}
-            </Button>
-          ))}
+              <Input
+                p={{ x: "2.5rem" }}
+                d={{
+                  xs: "none",
+                  sm: "none",
+                  md: "none",
+                  lg: "block",
+                  xl: "block",
+                }}
+                prefix={
+                  <Icon
+                    name="Search"
+                    color="gray800"
+                    size="24px"
+                    pos="absolute"
+                    top="50%"
+                    left="0.75rem"
+                    transform="translateY(-50%)"
+                  />
+                }
+                placeholder="Keyword search . . ."
+              />
+            </Col>
+            <Col
+              size={{
+                xs: "6",
+                sm: "6",
+                md: "6",
+                lg: "4",
+                xl: "4",
+              }}
+            >
+              <Dropdown
+                isOpen={active_filter === "states"}
+                onClick={() => {
+                  if (active_filter !== "states") {
+                    this.setState({ active_filter: "states" });
+                  } else {
+                    this.setState({ active_filter: "" });
+                  }
+                }}
+                menu={statesList}
+              >
+                {this.category_name == "" ? "All States" : this.category_name}
+              </Dropdown>
+            </Col>
+          </Row>
         </Div>
 
         <Row>
@@ -175,7 +222,9 @@ export default class Fabrics extends Component {
                             thousandSeparator={true}
                             prefix={"₦"}
                             renderText={(value) => (
-                              <Text textSize="subheading">{value}</Text>
+                              <Text textSize="subheading">
+                                {value} (Per yard)
+                              </Text>
                             )}
                           />
                         )}
@@ -187,20 +236,8 @@ export default class Fabrics extends Component {
                             thousandSeparator={true}
                             prefix={"₦"}
                             renderText={(value) => (
-                              <Text textSize="subheading">{value}</Text>
-                            )}
-                          />
-                        )}
-
-                        {p.tailor.sowingPrice && (
-                          <NumberFormat
-                            value={p.tailor.sowingPrice}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"₦"}
-                            renderText={(value) => (
-                              <Text tag="h1" textSize="subheading">
-                                {value} (Sowing price)
+                              <Text textSize="subheading">
+                                {value} (Per yard)
                               </Text>
                             )}
                           />

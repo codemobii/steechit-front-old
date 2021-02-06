@@ -16,6 +16,7 @@ import { get } from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Editor } from "@tinymce/tinymce-react";
 
 export default function CreateStoreForm({ user }) {
   const auth = useSelector((state) => state.auth);
@@ -48,6 +49,11 @@ export default function CreateStoreForm({ user }) {
   const [message, setMessage] = useState("");
   const [role, setRole] = useState("0");
   const [type, setType] = useState("");
+  const [description, setDescription] = useState("");
+
+  const handleEditorChange = (content, editor) => {
+    setDescription(content);
+  };
 
   useEffect(() => {
     const getPosition = () => {
@@ -222,6 +228,7 @@ export default function CreateStoreForm({ user }) {
         address: address,
         zipCode: zipCode,
         productCategories: category,
+        description: description,
       };
       try {
         console.log(data);
@@ -244,7 +251,6 @@ export default function CreateStoreForm({ user }) {
         setShow(true);
 
         router.push("/store");
-        console.log(res);
       } catch (e) {
         const msg = get(e, "response.data.message") || e.message;
         console.log(msg);
@@ -528,6 +534,28 @@ export default function CreateStoreForm({ user }) {
                 placeholder="Somewhere, somethere"
                 value={address}
                 onChange={handleAddress}
+              />
+            </Label>
+          </Col>
+          <Col size="12">
+            <Label d="block" m={{ b: "1rem" }}>
+              Description
+              <Editor
+                initialValue="<p>Descriptions</p>"
+                init={{
+                  height: 500,
+                  menubar: false,
+                  plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table paste code help wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | formatselect | bold italic backcolor | \
+             alignleft aligncenter alignright alignjustify | \
+             bullist numlist outdent indent | removeformat | help",
+                }}
+                onEditorChange={handleEditorChange}
               />
             </Label>
           </Col>

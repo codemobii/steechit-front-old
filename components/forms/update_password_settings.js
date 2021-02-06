@@ -52,40 +52,36 @@ export default function UpdatePasswordSettings() {
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    if (password === newPassword) {
-      setLoading(true);
-      try {
-        const res = await axios({
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            Authorization: `Bearer ${token}`,
-          },
-          proxy: {
-            host: "104.236.174.88",
-            port: 3128,
-          },
-          method: "PUT",
-          url: `${process.env.apiUrl}users/${id}`,
-          data: {
-            password: newPassword,
-          },
-        });
-        setLoading(false);
+    setLoading(true);
+    try {
+      const res = await axios({
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          Authorization: `Bearer ${token}`,
+        },
+        proxy: {
+          host: "104.236.174.88",
+          port: 3128,
+        },
+        method: "PUT",
+        url: `${process.env.apiUrl}users/${id}`,
+        data: {
+          oldPassword: password,
+          newPassword: newPassword,
+        },
+      });
+      setLoading(false);
 
-        setMessage("Updated successfully");
-        setShow(true);
-        console.log(res);
-      } catch (e) {
-        const msg = get(e, "response.data.message") || e.message;
-        console.log(e);
-
-        setMessage(msg);
-        setShow(true);
-        setLoading(false);
-      }
-    } else {
-      setMessage("Password incorrect");
+      setMessage("Updated successfully");
       setShow(true);
+      console.log(res);
+    } catch (e) {
+      const msg = get(e, "response.data.message") || e.message;
+      console.log(e);
+
+      setMessage(msg);
+      setShow(true);
+      setLoading(false);
     }
   };
 
